@@ -25,7 +25,7 @@ import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
 
 
-@Mod(modid = "SteamCraft", name = "SteamCraft", version = "0.0.1")
+@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.0.1")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
 public class ThaumicExploration {
 
