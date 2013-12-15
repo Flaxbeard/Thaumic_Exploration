@@ -30,7 +30,7 @@ import flaxbeard.thaumicexploration.research.ModResearch;
 public class ThaumicExploration {
 
 	// The instance of your mod that Forge uses.
-	@Instance("ThaumicExploration")
+	
 	
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "flaxbeard.thaumicexploration.client.ClientProxy", serverSide = "flaxbeard.thaumicexploration.common.CommonProxy")
