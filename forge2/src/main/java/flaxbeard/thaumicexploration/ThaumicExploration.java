@@ -43,15 +43,15 @@ public class ThaumicExploration {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		
-		
-	
-
-		ModRecipes.initRecipes();
-		ModResearch.initResearch();
 		proxy.registerRenderers();
 
 		
+	}
+	
+	@EventHandler
+	public void postInit(FMLInitializationEvent event) {
+		ModRecipes.initRecipes();
+		ModResearch.initResearch();
 	}
 
 
