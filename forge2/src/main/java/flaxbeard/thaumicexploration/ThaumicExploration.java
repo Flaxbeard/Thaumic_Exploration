@@ -2,11 +2,13 @@ package flaxbeard.thaumicexploration;
 
 
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -21,16 +23,17 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import flaxbeard.thaumicexploration.common.CommonProxy;
+import flaxbeard.thaumicexploration.item.ItemBrain;
 import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
 
 
-@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.0.1")
+@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.0.1", dependencies="required-after:Thaumcraft")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
 public class ThaumicExploration {
 
 	// The instance of your mod that Forge uses.
-	
+	public static Item pureZombieBrain;
 	
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "flaxbeard.thaumicexploration.client.ClientProxy", serverSide = "flaxbeard.thaumicexploration.common.CommonProxy")
@@ -44,6 +47,7 @@ public class ThaumicExploration {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		proxy.registerRenderers();
+		pureZombieBrain = (new ItemBrain(7006)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:pureZombieBrain");
 	}
 	
 	 @EventHandler

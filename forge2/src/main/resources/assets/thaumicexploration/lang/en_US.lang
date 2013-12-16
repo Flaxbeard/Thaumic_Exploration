@@ -1,21 +1,11 @@
-Thaumonomicon Names-----
-te.tag.Electric Magic Tools=Combining electricity and Magic
-te.tag.Thaumium Drill=Magic drilling
-te.tag.Thaumium Chainsaw=Magic Chopping and attacking
-te.tag.Thaumic Nanosuit Helmet=Nano and revealing
-te.tag.Thaumic Quantum Helmet=Quantum and revealing
-te.tag.Iron Omnitool=All in one!
-te.tag.Diamond Omnitool=All the tools in one V2!
-te.tag.Thaumium Omnitool=All the tools in one V3!
-te.tag.Laser Focus=Concentrated Firebat
+Item Names
+item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
 
-Thaumonomicon Texts-----
-te.text.Electric Magic Tools=Welcome to the realm of magic, associated with electricity! Our researchers worked in association with the Thaumaturges to make their preferred tools compatible with each system.
-te.text.Thaumium Drill=You have discovered a way to infuse Thaumium with mundane electricity. You have managed to bring the diamond drill to a level higher than its previous state.               Nevertheless, these ameliorations do not come without drawbacks : during the magical process, the Drill lost its ability to place torches.      The Thaumium Drill itslef is not near the level reached by the Iridium Drill, so consider it as a mid-tier tool.
-te.text.Thaumium Chainsaw=You have discovered a way to infuse Thaumium with mundane electricity. You have managed to bring the chainsaw to a level higher than its previous state.               Nevertheless, these ameliorations do not come without drawbacks : during the magical process, the Chainsaw lost its ability to shear.
-te.text.Thaumic Nanosuit Helmet=You have discovered a way to infuse advanced technological armor with magic. You have managed to bring the nanosuit helmet to a magic level so important that it now shows nodes and aspects. However, during the magical process, you lost the ability to control the nightvision effect of your helmet.
-te.text.Thaumic Quantum Helmet=You have discovered a way to infuse highly advanced technological armor with magic. You have managed to bring the quantum helmet to a magic level so important that it now shows nodes and aspects. However, during the magical process, you lost the ability to control the nightvision effect and get fed by your helmet.
-te.text.Iron Omnitool=You have discovered a way to combine the Mining Drill and the Chainsaw, resulting in a tool capable of doing everything those two tools could do! It comes to your attention, that since both tools are such low-level, this recipe is to happen in a mundane crafting bench.
-te.text.Diamond Omnitool=You have discovered a way to combine the Diamond Drill and the Diamond Chainsaw, resulting in a tool capable of doing everything those two tools could do! It comes to your attention, that since Diamonds are gems, and crystals are a good catalyst of magic, this recipe is to happen in the Arcane Worktable.
-te.text.Thaumium Omnitool=You have discovered a way to combine the Thaumium Drill and the Thaumium Chainsaw, resulting in a tool capable of doing everything those two tools could do! But do not forget that these tools were already infused with magic, which makes this Infusion quite risky.
-te.text.Laser Focus=You have found a way to modify the Nine Hells focus, therefore provoking a rather ... explosive effect. You have found the perfect tool for focusing the power of the beasts : the mundane mining laser. This recipe is not costy, on the material side, but you cannot say so in the magic side.
+Thaumonomicon Names
+te.name.Curing=Curing
+
+Thaumonomicon Tags
+te.tag.Curing=Purification Ritual
+
+Thaumonomicon Entries
+te.text.Curing=You have discovered that by using a process similar to purifying zombie villagers, you can purify individual components of zombies, such as their brain or flesh. Though you are uncertain of the applications of your findings, you know that they will prove to be exciting.

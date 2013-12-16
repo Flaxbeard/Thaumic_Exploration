@@ -1,14 +1,16 @@
 package flaxbeard.thaumicexploration.research;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.CrucibleRecipe;
+import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
-import us.samcraft.gentlemanturgy.lib.Reference;
+import thaumcraft.common.config.ConfigResearch;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public final class ModResearch {
 
@@ -17,14 +19,8 @@ public final class ModResearch {
 
     	System.out.println("works");
         ResearchItem research;
-        research = new TEResearchItem("Electric Magic Tools", "ARTIFICE", new AspectList(), -2, 1, 0, new ResourceLocation("thaumicexploration:textures/tabs/test.png")).setRound().setAutoUnlock().registerResearchItem();
-        research.setPages(new ResearchPage("blah"));
-        research = new ResearchItem("Curing", "AWESOMENESS", new AspectList().add(Aspect.LIGHT, 2), 2, 3, 3, new ItemStack(Item.appleRed)).setStub().setAutoUnlock().setRound().registerResearchItem();
-        research.setPages(new ResearchPage("esijgoahg"));
-		research = new ResearchItem("SMASHING", "ALCHEMY", new AspectList().add(Aspect.LIGHT, 1).add(Aspect.ARMOR, 3), -2, -1, 0, new ItemStack(Item.pickaxeIron)).setStub().setRound().registerResearchItem();
-		research.setPages(new ResearchPage("0"));
-		research = new ResearchItem("SMOOSHING", "ARTIFICE", new AspectList().add(Aspect.LIGHT, 1).add(Aspect.ARMOR, 3), -2, -1, 0, new ItemStack(Item.pickaxeIron)).setStub().setRound().registerResearchItem();
-		research.setPages(new ResearchPage("0"));
+        research = new TEResearchItem("Curing", "ALCHEMY", new AspectList().add(Aspect.LIGHT, 2), -4, 0, 3, new ItemStack(ThaumicExploration.pureZombieBrain)).setParents("TALLOW","INFUSION").setConcealed().registerResearchItem();
+        research.setPages(new ResearchPage("1"), infusionPage("Cured Zombie Brain"), cruciblePage("Leather"));
         
     }
     
@@ -33,6 +29,14 @@ public final class ModResearch {
 
         ResearchCategories.registerCategory("AWESOMENESS", new ResourceLocation("thaumicexploration:textures/tabs/test.png"), background);	
 		
+	}
+	
+	private static ResearchPage cruciblePage(String name) {
+        return new ResearchPage((CrucibleRecipe) ConfigResearch.recipes.get(name));
+	}
+	
+	private static ResearchPage infusionPage(String name) {
+        return new ResearchPage((InfusionRecipe) ConfigResearch.recipes.get(name));
 	}
 
 }

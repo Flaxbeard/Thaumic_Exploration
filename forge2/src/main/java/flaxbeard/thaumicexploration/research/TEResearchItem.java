@@ -29,7 +29,7 @@ public class TEResearchItem extends ResearchItem {
         @Override
         @SideOnly(Side.CLIENT)
         public String getName() {
-                return StatCollector.translateToLocal(key);
+                return StatCollector.translateToLocal("te.name." + key);
         }
 
         @Override
