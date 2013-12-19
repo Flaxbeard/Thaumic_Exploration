@@ -10,18 +10,18 @@ import thaumcraft.api.research.ResearchPage.PageType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TEResearchItem extends ResearchItem {
+public class TXResearchItem extends ResearchItem {
 
-        public TEResearchItem(String par1, String par2) {
+        public TXResearchItem(String par1, String par2) {
                 super(par1, par2);
         }
 
-        public TEResearchItem(String par1, String par2, AspectList tags, int par3,
+        public TXResearchItem(String par1, String par2, AspectList tags, int par3,
                         int par4, int par5, ItemStack icon) {
                 super(par1, par2, tags, par3, par4, par5, icon);
         }
 
-        public TEResearchItem(String par1, String par2, AspectList tags, int par3,
+        public TXResearchItem(String par1, String par2, AspectList tags, int par3,
                         int par4, int par5, ResourceLocation icon) {
                 super(par1, par2, tags, par3, par4, par5, icon);
         }
@@ -35,7 +35,7 @@ public class TEResearchItem extends ResearchItem {
         @Override
         @SideOnly(Side.CLIENT)
         public String getText() {
-                return StatCollector.translateToLocal("[TE] ")
+                return StatCollector.translateToLocal("[TX] ")
                                 + StatCollector.translateToLocal("te.tag." + key);
         }
 

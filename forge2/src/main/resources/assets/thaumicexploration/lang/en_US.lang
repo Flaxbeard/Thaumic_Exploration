@@ -2,10 +2,13 @@ Item Names
 item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
 
 Thaumonomicon Names
-te.name.Curing=Curing
+te.name.FLESHCURE=Flesh Purification
+te.name.BRAINCURE=Brain Sanitization
 
 Thaumonomicon Tags
-te.tag.Curing=Purification Ritual
+te.tag.FLESHCURE=Mystical Cleansing
+te.tag.BRAINCURE=Rejuvenation Ritual
 
 Thaumonomicon Entries
-te.text.Curing=You have discovered that by using a process similar to purifying zombie villagers, you can purify individual components of zombies, such as their brain or flesh. Though you are uncertain of the applications of your findings, you know that they will prove to be exciting.
+te.text.FLESHCURE=By imbuing rotten flesh with certain aspects, you have found that you are able to remove nearly all traces of disease and decomposition from the flesh, rendering it much more useful. Although this discovery may not be particularly useful, you are sure it will lead to exciting things.
+te.text.BRAINCURE=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations. The brains also serve as a bait for zombified creatures, when dropped or placed on an arcane pedestal.

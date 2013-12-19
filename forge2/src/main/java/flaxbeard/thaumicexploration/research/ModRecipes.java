@@ -28,7 +28,7 @@ public final class ModRecipes {
     }
 
 	private static void initInfusionRecipes() {
-		registerResearchItemI("Cured Zombie Brain", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
+		registerResearchItemI("te.name.Curing", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
 				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
 				new ItemStack(ConfigItems.itemResource, 1, 5), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.potion,1, 16392), new ItemStack(Item.appleGold), 
@@ -47,7 +47,7 @@ public final class ModRecipes {
 
 	private static void initCrucibleRecipes() {
 		
-		registerResearchItem("Leather", new ItemStack(Item.leather), new ItemStack(Item.rottenFlesh, 1, 0), new AspectList().add(Aspect.LIGHT, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
+		registerResearchItem("te.name.Curing", new ItemStack(Item.leather), new ItemStack(Item.rottenFlesh, 1, 0), new AspectList().add(Aspect.LIGHT, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
 //        registerResearchItem(LibResearch.KEY_GASEOUS_LIGHT, new ItemStack(ModItems.gaseousLight), new ItemStack(ConfigItems.itemEssence, 1, 0), new AspectList().add(Aspect.LIGHT, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
 //        registerResearchItem(LibResearch.KEY_GASEOUS_SHADOW, new ItemStack(ModItems.gaseousShadow), new ItemStack(ConfigItems.itemEssence, 1, 0), new AspectList().add(Aspect.DARKNESS, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
 //        registerResearchItem(LibResearch.KEY_SPELL_CLOTH, new ItemStack(ModItems.spellCloth), new ItemStack(ConfigItems.itemResource, 0, 7), new AspectList().add(Aspect.MAGIC, 10).add(Aspect.ENTROPY, 6).add(Aspect.EXCHANGE, 4));

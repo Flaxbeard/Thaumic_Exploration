@@ -2,6 +2,7 @@ package flaxbeard.thaumicexploration;
 
 
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
@@ -15,27 +16,31 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import flaxbeard.thaumicexploration.block.BlockBoundChest;
 import flaxbeard.thaumicexploration.common.CommonProxy;
-import flaxbeard.thaumicexploration.event.TEEventHandler;
+import flaxbeard.thaumicexploration.event.TXEventHandler;
 import flaxbeard.thaumicexploration.item.ItemBrain;
+import flaxbeard.thaumicexploration.packet.TXPacketHandler;
 import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
+import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 
 
 @Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.0.1", dependencies="required-after:Thaumcraft")
-@NetworkMod(clientSideRequired=true, serverSideRequired=false)
+@NetworkMod(clientSideRequired=true, serverSideRequired=false, channels={"tExploration"}, packetHandler = TXPacketHandler.class)
 public class ThaumicExploration {
 
 	// The instance of your mod that Forge uses.
 	public static Item pureZombieBrain;
+	public static Block boundChest;
 	
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "flaxbeard.thaumicexploration.client.ClientProxy", serverSide = "flaxbeard.thaumicexploration.common.CommonProxy")
@@ -48,9 +53,13 @@ public class ThaumicExploration {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		proxy.registerRenderers();
-		MinecraftForge.EVENT_BUS.register(new TEEventHandler());
+		
+		MinecraftForge.EVENT_BUS.register(new TXEventHandler());
+		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundCHest");
+		boundChest = new BlockBoundChest(202, 0).setUnlocalizedName("boundChest").setCreativeTab(CreativeTabs.tabBlock);
+		GameRegistry.registerBlock(boundChest, "boundChest");
 		pureZombieBrain = (new ItemBrain(7006)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:pureZombieBrain");
+		proxy.registerRenderers();
 	}
 	
 	 @EventHandler
