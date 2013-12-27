@@ -30,7 +30,8 @@ public class ItemCrystalArmor extends ItemArmor implements IRepairable, IVisDisc
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-		return this.armorType == 1 ? new ModelCrystalChest() : super.getArmorModel(entityLiving, itemStack, armorSlot);
+		return super.getArmorModel(entityLiving, itemStack, armorSlot);
+		//return this.armorType == 1 ? new ModelCrystalChest() : super.getArmorModel(entityLiving, itemStack, armorSlot);
 	}
 	
 	@Override

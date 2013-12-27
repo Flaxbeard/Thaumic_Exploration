@@ -5,7 +5,6 @@ import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -47,7 +46,11 @@ public class BlockBoundJar extends BlockJar {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
 	{
-	    TileEntity te = world.getBlockTileEntity(x,  y,  z);
+    	if (!world.isRemote) {
+    		System.out.println(((TileEntityBoundJar)world.getBlockTileEntity(x,  y,  z)).id);
+    		System.out.println(((TileEntityBoundJar)world.getBlockTileEntity(x,  y,  z)).myJarData.getJarAmount());
+    	}
+    	TileEntity te = world.getBlockTileEntity(x,  y,  z);
 	    if (te == null || !(te instanceof TileEntityBoundJar))
 	        return false;
 	            

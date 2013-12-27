@@ -23,7 +23,7 @@ public class ItemChestSealLinked extends Item {
 		super(par1);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
-		this.setMaxStackSize(1);
+		this.setMaxStackSize(64);
 	}
 	
     @SideOnly(Side.CLIENT)

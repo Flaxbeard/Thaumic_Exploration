@@ -1,18 +1,63 @@
 package flaxbeard.thaumicexploration.tile;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.tiles.TileJarFillable;
+import flaxbeard.thaumicexploration.data.BoundChestWorldData;
 import flaxbeard.thaumicexploration.data.BoundJarWorldData;
 
 public class TileEntityBoundJar extends TileJarFillable {
-	private BoundJarWorldData myJarData;
+	public BoundJarWorldData myJarData;
+    public int accessTicks = 0;
+    public int id = 0;
+    public int clientColor = 0;
+    
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        NBTTagCompound access = new NBTTagCompound();
+        access.setInteger("accessTicks", this.accessTicks);
+        access.setInteger("color", this.getSealColor());
+        
+        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+    }
+    
+    public void setColor(int color) {
+    	if (this.id > 0) {
+    		myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
+        }
+        if (myJarData != null) {
+        	myJarData.setSealColor(color);
+        }
+    }
+
+    @Override
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    {
+    	NBTTagCompound access = pkt.data;
+    	this.accessTicks = access.getInteger("accessTicks");
+    	this.setColor(access.getInteger("color"));
+    	this.clientColor = access.getInteger("color");
+    	
+        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+    }
 	
+	public int getSealColor() {
+		if (myJarData == null) {
+			myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
+		}
+		return this.myJarData.getSealColor();
+	}
+
 	@Override
 	public int addToContainer(Aspect tt, int am) {
 		this.updateEntity();
 		if (myJarData == null) {
-			myJarData = BoundJarWorldData.get(this.worldObj, "swagn", 0);
+			myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
 		}
 	    if (am == 0) {
 	        return am;
@@ -23,7 +68,9 @@ public class TileEntityBoundJar extends TileJarFillable {
 	      int added = Math.min(am, this.maxAmount - this.amount);
 	      this.amount += added;
 	      am -= added;
-	      myJarData.updateJarContents(tt, this.amount);
+	      if (!this.worldObj.isRemote) {
+	    	  myJarData.updateJarContents(tt, this.amount);
+	      }
 	    }
 		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		return am;
@@ -42,7 +89,9 @@ public class TileEntityBoundJar extends TileJarFillable {
 				this.amount = 0;
 			}
 			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-			myJarData.updateJarContents(tt, this.amount);
+			if (!this.worldObj.isRemote) {
+				myJarData.updateJarContents(tt, this.amount);
+			}
 			return true;
 	    }
 	    return false;
@@ -52,7 +101,7 @@ public class TileEntityBoundJar extends TileJarFillable {
     {
     	if (!this.worldObj.isRemote) {
 	    	if (myJarData == null) {
-				myJarData = BoundJarWorldData.get(this.worldObj, "swagn", 0);
+				myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
 			}
 	    	
 	    	//System.out.println(this.amount);
