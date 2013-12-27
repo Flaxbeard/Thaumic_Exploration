@@ -3,17 +3,24 @@ package flaxbeard.thaumicexploration;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import thaumcraft.api.wands.WandRod;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -25,48 +32,154 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
+import flaxbeard.thaumicexploration.block.BlockBoundJar;
+import flaxbeard.thaumicexploration.block.BlockThinkTankBookshelf;
 import flaxbeard.thaumicexploration.common.CommonProxy;
 import flaxbeard.thaumicexploration.event.TXEventHandler;
+import flaxbeard.thaumicexploration.item.ItemBlankSeal;
 import flaxbeard.thaumicexploration.item.ItemBrain;
+import flaxbeard.thaumicexploration.item.ItemChestSeal;
+import flaxbeard.thaumicexploration.item.ItemChestSealLinked;
+import flaxbeard.thaumicexploration.item.ItemCrystalArmor;
+import flaxbeard.thaumicexploration.item.ItemJarSealLinked;
 import flaxbeard.thaumicexploration.packet.TXPacketHandler;
 import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
+import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
+import flaxbeard.thaumicexploration.tile.TileCrystalAdvanced;
+import flaxbeard.thaumicexploration.tile.TileEntityThinkTankBookshelf;
+import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
 
 
 @Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.0.1", dependencies="required-after:Thaumcraft")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, channels={"tExploration"}, packetHandler = TXPacketHandler.class)
 public class ThaumicExploration {
 
-	// The instance of your mod that Forge uses.
+
 	public static Item pureZombieBrain;
-	public static Block boundChest;
+	public static int pureZombieBrainID;
+	public static Item blankSeal;
+	public static int blankSealID;
+	public static Item chestSeal;
+	public static int chestSealID;
+	public static Item chestSealLinked;
+	public static int chestSealLinkedID;
+	public static Item jarSeal;
+	public static int jarSealID;
+	public static Item jarSealLinked;
+	public static int jarSealLinkedID;
+	public static Item transmutationCore;
+	public static int transmutationCoreID;
+	public static Item amberCore;
+	public static int amberCoreID;
 	
-	// Says where the client and server 'proxy' code is loaded.
+	public static EnumArmorMaterial armorMaterialCrystal;
+	public static Item helmetCrystal;
+	public static int helmetCrystalID;
+	public static Item chestCrystal;
+	public static int chestCrystalID;
+	public static Item legsCrystal;
+	public static int legsCrystalID;
+	public static Item shoesCrystal;
+	public static int shoesCrystalID;
+	
+	public static Block boundChest;
+	public static int boundChestID;
+	public static Block boundJar;
+	public static int boundJarID;
+	public static Block thinkTankBookshelf;
+	public static WandRod WAND_ROD_CRYSTAL;
+	public static WandRod WAND_ROD_AMBER;
+	
+	public static boolean allowBoundInventories;
+	
+	
 	@SidedProxy(clientSide = "flaxbeard.thaumicexploration.client.ClientProxy", serverSide = "flaxbeard.thaumicexploration.common.CommonProxy")
 	public static CommonProxy proxy;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		// Stub Method
+		
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		config.load();
+		
+		
+		//Item IDs
+		pureZombieBrainID = config.getItem("Cured Zombie Brain", 7000).getInt();
+		blankSealID = config.getItem("Blank Tallow Seal", 7001).getInt();
+		chestSealID = config.getItem("Chest Binding Seal", 7002).getInt();
+		chestSealLinkedID = config.getItem("Linked Chest Binding Seal", 7003).getInt();
+		jarSealID = config.getItem("Jar Binding Seal", 7006).getInt();
+		jarSealLinkedID = config.getItem("Linked Jar Binding Seal", 7007).getInt();
+		transmutationCoreID = config.getItem("Transmutation Filter Wand Core", 7004).getInt();
+		amberCoreID = config.getItem("Amber Wand Core", 7005).getInt();
+		
+		//Armor Item IDs
+		helmetCrystalID = config.getItem("Crystal Helmet", 7008).getInt();
+		chestCrystalID = config.getItem("Crystal Chestplate", 7009).getInt();
+		legsCrystalID = config.getItem("Crystal Leggings", 7010).getInt();
+		shoesCrystalID = config.getItem("Crystal Boots", 7011).getInt();
+		
+		//Block IDs
+		boundChestID = config.getBlock("Bound Chest", 700).getInt();
+		boundJarID = config.getBlock("Bound Jar", 701).getInt();
+		
+		allowBoundInventories = config.get("Miscellaneous", "Allow bound inventories", true).getBoolean(true);
+		config.save();
 	}
+	
+	
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		
+		//EventHandler
 		MinecraftForge.EVENT_BUS.register(new TXEventHandler());
-		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundCHest");
-		boundChest = new BlockBoundChest(202, 0).setUnlocalizedName("boundChest").setCreativeTab(CreativeTabs.tabBlock);
+		
+		//Tiles
+		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundChest");
+		GameRegistry.registerTileEntity(TileEntityBoundJar.class, "tileEntityBoundJar");
+		GameRegistry.registerTileEntity(TileCrystalAdvanced.class, "tileEntityCrystalAdvanced");
+		GameRegistry.registerTileEntity(TileEntityThinkTankBookshelf.class, "tileEntityThinkTankBookshelf");
+		
+		//Blocks
+		thinkTankBookshelf = new BlockThinkTankBookshelf(205, Material.wood).setUnlocalizedName("thinkTankBookshelf").setCreativeTab(CreativeTabs.tabBlock);
+		boundChest = new BlockBoundChest(boundChestID, 0).setUnlocalizedName("boundChest").setCreativeTab(CreativeTabs.tabBlock);
+		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar").setCreativeTab(CreativeTabs.tabBlock);
 		GameRegistry.registerBlock(boundChest, "boundChest");
-		pureZombieBrain = (new ItemBrain(7006)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:pureZombieBrain");
+		GameRegistry.registerBlock(boundJar, "boundJar");
+		GameRegistry.registerBlock(thinkTankBookshelf, "thinkTankBookshelf");
+		
+		//Items
+		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
+		amberCore = (new Item(amberCoreID)).setUnlocalizedName("thaumicexploration:amberCore").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodAmber");
+		pureZombieBrain = (new ItemBrain(pureZombieBrainID)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:pureZombieBrain");
+		blankSeal = (new ItemBlankSeal(blankSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealBlank"));
+		chestSeal = (new ItemChestSeal(chestSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealChest"));
+		chestSealLinked = (new ItemChestSealLinked(chestSealLinkedID).setTextureName("thaumicexploration:sealChest"));
+		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealJar"));
+		jarSealLinked = (new ItemJarSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar"));
+		
+		armorMaterialCrystal = EnumHelper.addArmorMaterial("CRYSTAL", 25, new int[] { 2, 6, 5, 2 }, 25);
+		helmetCrystal = (new ItemCrystalArmor(helmetCrystalID, armorMaterialCrystal, 2, 0)).setUnlocalizedName("thaumicexploration:helmetCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
+		chestCrystal = (new ItemCrystalArmor(chestCrystalID, armorMaterialCrystal, 1, 1)).setUnlocalizedName("thaumicexploration:chestCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
+		
+		//Wands
+		WAND_ROD_AMBER = new WandRod("amber",75,new ItemStack(ThaumicExploration.amberCore),1,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
+		WAND_ROD_CRYSTAL = new WandRod("transmutation",25,new ItemStack(ThaumicExploration.transmutationCore),1,new WandRodTransmutationOnUpdate());
+		//WandRod.rods.put("transmutation1", WAND_ROD_CRYSTAL1);
+		
 		proxy.registerRenderers();
 	}
 	
-	 @EventHandler
-     public void postInit(FMLPostInitializationEvent event) {
-			ModRecipes.initRecipes();
-			ModResearch.initResearch();
-     }
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		//Researches, Thaumcraft Recipes
+		ModRecipes.initRecipes();
+		ModResearch.initResearch();
+	}
+	
 
 
 	public void addRecipes()

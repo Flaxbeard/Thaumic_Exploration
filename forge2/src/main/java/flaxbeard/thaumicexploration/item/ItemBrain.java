@@ -1,9 +1,14 @@
 package flaxbeard.thaumicexploration.item;
 
+import java.awt.Color;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBrain extends Item{
 
@@ -22,5 +27,8 @@ public class ItemBrain extends Item{
      public boolean hasCustomEntity(ItemStack stack) {
              return true;
      }
+     
+     
+     
 
 }

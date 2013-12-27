@@ -1,14 +1,69 @@
 Item Names
 item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
+item.thaumicexploration:transmutationCore.name=Transmutative Rod
+item.thaumicexploration:amberCore.name=Amber Rod
+
+Wand Names
+item.Wand.amber.rod=Amber
+item.Wand.transmutation.rod=Transmutative
+
+Blank Seals
+item.thaumicexploration:blankSeal:Pale.name=Pale Blank Seal
+item.thaumicexploration:blankSeal:Orange.name=Orange Blank Seal
+item.thaumicexploration:blankSeal:Magenta.name=Magenta Blank Seal
+item.thaumicexploration:blankSeal:Light Blue.name=Light Blue Blank Seal
+item.thaumicexploration:blankSeal:Yellow.name=Yellow Blank Seal
+item.thaumicexploration:blankSeal:Lime.name=Lime Blank Seal
+item.thaumicexploration:blankSeal:Pink.name=Pink Blank Seal
+item.thaumicexploration:blankSeal:Gray.name=Gray Blank Seal
+item.thaumicexploration:blankSeal:Light Gray.name=Light Gray Blank Seal
+item.thaumicexploration:blankSeal:Cyan.name=Cyan Blank Seal
+item.thaumicexploration:blankSeal:Purple.name=Purple Blank Seal
+item.thaumicexploration:blankSeal:Blue.name=Blue Blank Seal
+item.thaumicexploration:blankSeal:Brown.name=Brown Blank Seal
+item.thaumicexploration:blankSeal:Green.name=Green Blank Seal
+item.thaumicexploration:blankSeal:Red.name=Red Blank Seal
+item.thaumicexploration:blankSeal:Dark.name=Dark Blank Seal
+
+Chest Seals
+item.thaumicexploration:chestSeal:Pale.name=Pale Chest Binding Seal
+item.thaumicexploration:chestSeal:Orange.name=Orange Chest Binding Seal
+item.thaumicexploration:chestSeal:Magenta.name=Magenta Chest Binding Seal
+item.thaumicexploration:chestSeal:Light Blue.name=Light Blue Chest Binding Seal
+item.thaumicexploration:chestSeal:Yellow.name=Yellow Chest Binding Seal
+item.thaumicexploration:chestSeal:Lime.name=Lime Chest Binding Seal
+item.thaumicexploration:chestSeal:Pink.name=Pink Chest Binding Seal
+item.thaumicexploration:chestSeal:Gray.name=Gray Chest Binding Seal
+item.thaumicexploration:chestSeal:Light Gray.name=Light Gray Chest Binding Seal
+item.thaumicexploration:chestSeal:Cyan.name=Cyan Chest Binding Seal
+item.thaumicexploration:chestSeal:Purple.name=Purple Chest Binding Seal
+item.thaumicexploration:chestSeal:Blue.name=Blue Chest Binding Seal
+item.thaumicexploration:chestSeal:Brown.name=Brown Chest Binding Seal
+item.thaumicexploration:chestSeal:Green.name=Green Chest Binding Seal
+item.thaumicexploration:chestSeal:Red.name=Red Chest Binding Seal
+item.thaumicexploration:chestSeal:Dark.name=Dark Chest Binding Seal
+
 
 Thaumonomicon Names
 te.name.FLESHCURE=Flesh Purification
+te.name.CHESTSEAL=Seal of Chest Binding
+te.name.JARSEAL=Seal of Jar Binding
 te.name.BRAINCURE=Brain Sanitization
+te.name.WANDAMBER=Amber Wand Core
+te.name.TRANSMUTATION=Transmutative Wand Core
 
 Thaumonomicon Tags
 te.tag.FLESHCURE=Mystical Cleansing
 te.tag.BRAINCURE=Rejuvenation Ritual
+te.tag.CHESTSEAL=What you need, when you need it
+te.tag.JARSEAL=Essentia, essentia everywhere
+te.tag.WANDAMBER=Regenerative vis storage
+te.tag.TRANSMUTATION=One thing into another
 
 Thaumonomicon Entries
 te.text.FLESHCURE=By imbuing rotten flesh with certain aspects, you have found that you are able to remove nearly all traces of disease and decomposition from the flesh, rendering it much more useful. Although this discovery may not be particularly useful, you are sure it will lead to exciting things.
 te.text.BRAINCURE=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations. The brains also serve as a bait for zombified creatures, when dropped or placed on an arcane pedestal.
+te.text.CHESTSEAL=By enchanting a mundane seal made of tallow, you have discovered a way to bind chests, so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network.
+te.text.JARSEAL=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks.
+te.text.WANDAMBER=You have finally found a practical use for amber, in the form of a wand core. Amber wand cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a slow rate when below 10% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates at twice the rate. In addition, the amber wand core boasts a larger storage capacity than that of greatwood cores.
+te.text.TRANSMUTATION=While experimenting with different materials to filter vis, you have found that diamonds can sporadically convert one form of vis into another. You have found this property to be too unreliable to use for most purposes, but you have found that if infused with certain materials, it can be used as a wand core with unique properties. When draining a node of vis at over 90% capacity, the vis will be converted into other forms of vis.

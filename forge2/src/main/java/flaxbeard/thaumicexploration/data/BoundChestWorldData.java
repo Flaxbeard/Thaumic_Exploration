@@ -24,6 +24,10 @@ public class BoundChestWorldData extends WorldSavedData {
 
         @Override
         public void readFromNBT(NBTTagCompound nbt) {
+        	System.out.println("looking for dem KEEZ");
+        	if (nbt.hasKey("myColor")) {
+        		myColor = nbt.getInteger("myColor");
+        	}
         	NBTTagList nbttaglist = nbt.getTagList("Items");
             this.chestContents = new ItemStack[36];
 
@@ -55,6 +59,7 @@ public class BoundChestWorldData extends WorldSavedData {
             }
 
             nbt.setTag("Items", nbttaglist);
+            nbt.setInteger("myColor", myColor);
         }
         
         public void updateChestContents(ItemStack[] chestItems) {
@@ -67,17 +72,25 @@ public class BoundChestWorldData extends WorldSavedData {
         }
         
         public int getSealColor() {
-        	return 5;
+        	return myColor;
+        }
+        
+        public void setSealColor(int color) {
+        	myColor = color;
         }
         
         
         
+        
         public static BoundChestWorldData get(World world, String ident, int color) {
-                BoundChestWorldData data = (BoundChestWorldData)world.loadItemData(BoundChestWorldData.class, ident);
+        		BoundChestWorldData data = (BoundChestWorldData) world.mapStorage.loadData(BoundChestWorldData.class, ident);
+                
                 if (data == null) {
+                		System.out.println("making new itemdata for " + ident);
                         data = new BoundChestWorldData(ident);
-                        data.myColor = color;
-                        world.setItemData(ident, data);
+                        data.setSealColor(color);
+                        data.markDirty();
+                        world.mapStorage.setData(ident, data);
                 }
                 return data;
         }

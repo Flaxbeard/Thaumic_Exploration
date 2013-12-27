@@ -19,7 +19,7 @@ public class ModelChestOverlay extends ModelBase
 
     public ModelChestOverlay()
     {
-        this.chestLid.addBox(-1.0F, -6.0F, -15.0F, 16, 5, 16, 0.0F);
+        this.chestLid.addBox(0.0F, -5.1F, -14.0F, 14, 5, 14, 0.0F);
         this.chestLid.rotationPointX = 1.0F;
         this.chestLid.rotationPointY = 7.0F;
         this.chestLid.rotationPointZ = 15.0F;

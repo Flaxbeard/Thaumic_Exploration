@@ -2,9 +2,11 @@ package flaxbeard.thaumicexploration.block;
 
 import static net.minecraftforge.common.ForgeDirection.DOWN;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -25,6 +27,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 
 public class BlockBoundChest extends BlockContainer
@@ -72,26 +75,9 @@ public class BlockBoundChest extends BlockContainer
      */
     public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
-        if (par1IBlockAccess.getBlockId(par2, par3, par4 - 1) == this.blockID)
-        {
-            this.setBlockBounds(0.0625F, 0.0F, 0.0F, 0.9375F, 0.875F, 0.9375F);
-        }
-        else if (par1IBlockAccess.getBlockId(par2, par3, par4 + 1) == this.blockID)
-        {
-            this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 1.0F);
-        }
-        else if (par1IBlockAccess.getBlockId(par2 - 1, par3, par4) == this.blockID)
-        {
-            this.setBlockBounds(0.0F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-        }
-        else if (par1IBlockAccess.getBlockId(par2 + 1, par3, par4) == this.blockID)
-        {
-            this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 1.0F, 0.875F, 0.9375F);
-        }
-        else
-        {
-            this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-        }
+
+        this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+        
     }
 
     /**
@@ -108,22 +94,22 @@ public class BlockBoundChest extends BlockContainer
 
         if (l == this.blockID)
         {
-            this.unifyAdjacentChests(par1World, par2, par3, par4 - 1);
+            //this.unifyAdjacentChests(par1World, par2, par3, par4 - 1);
         }
 
         if (i1 == this.blockID)
         {
-            this.unifyAdjacentChests(par1World, par2, par3, par4 + 1);
+            //this.unifyAdjacentChests(par1World, par2, par3, par4 + 1);
         }
 
         if (j1 == this.blockID)
         {
-            this.unifyAdjacentChests(par1World, par2 - 1, par3, par4);
+            //this.unifyAdjacentChests(par1World, par2 - 1, par3, par4);
         }
 
         if (k1 == this.blockID)
         {
-            this.unifyAdjacentChests(par1World, par2 + 1, par3, par4);
+            //this.unifyAdjacentChests(par1World, par2 + 1, par3, par4);
         }
     }
 
@@ -132,10 +118,10 @@ public class BlockBoundChest extends BlockContainer
      */
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack)
     {
-        int l = par1World.getBlockId(par2, par3, par4 - 1);
-        int i1 = par1World.getBlockId(par2, par3, par4 + 1);
-        int j1 = par1World.getBlockId(par2 - 1, par3, par4);
-        int k1 = par1World.getBlockId(par2 + 1, par3, par4);
+        //int l = par1World.getBlockId(par2, par3, par4 - 1);
+        //int i1 = par1World.getBlockId(par2, par3, par4 + 1);
+        //int j1 = par1World.getBlockId(par2 - 1, par3, par4);
+        //int k1 = par1World.getBlockId(par2 + 1, par3, par4);
         byte b0 = 0;
         int l1 = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
@@ -159,40 +145,8 @@ public class BlockBoundChest extends BlockContainer
             b0 = 4;
         }
 
-        if (l != this.blockID && i1 != this.blockID && j1 != this.blockID && k1 != this.blockID)
-        {
             par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 3);
-        }
-        else
-        {
-            if ((l == this.blockID || i1 == this.blockID) && (b0 == 4 || b0 == 5))
-            {
-                if (l == this.blockID)
-                {
-                    par1World.setBlockMetadataWithNotify(par2, par3, par4 - 1, b0, 3);
-                }
-                else
-                {
-                    par1World.setBlockMetadataWithNotify(par2, par3, par4 + 1, b0, 3);
-                }
-
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 3);
-            }
-
-            if ((j1 == this.blockID || k1 == this.blockID) && (b0 == 2 || b0 == 3))
-            {
-                if (j1 == this.blockID)
-                {
-                    par1World.setBlockMetadataWithNotify(par2 - 1, par3, par4, b0, 3);
-                }
-                else
-                {
-                    par1World.setBlockMetadataWithNotify(par2 + 1, par3, par4, b0, 3);
-                }
-
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 3);
-            }
-        }
+        
 
         if (par6ItemStack.hasDisplayName())
         {
@@ -207,36 +161,26 @@ public class BlockBoundChest extends BlockContainer
     {
         
     }
+    
+    
 
     /**
      * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
-        int l = 0;
-
-        if (par1World.getBlockId(par2 - 1, par3, par4) == this.blockID)
-        {
-            ++l;
-        }
-
-        if (par1World.getBlockId(par2 + 1, par3, par4) == this.blockID)
-        {
-            ++l;
-        }
-
-        if (par1World.getBlockId(par2, par3, par4 - 1) == this.blockID)
-        {
-            ++l;
-        }
-
-        if (par1World.getBlockId(par2, par3, par4 + 1) == this.blockID)
-        {
-            ++l;
-        }
-
-        return l > 1 ? false : (this.isThereANeighborChest(par1World, par2 - 1, par3, par4) ? false : (this.isThereANeighborChest(par1World, par2 + 1, par3, par4) ? false : (this.isThereANeighborChest(par1World, par2, par3, par4 - 1) ? false : !this.isThereANeighborChest(par1World, par2, par3, par4 + 1))));
+       return true;
     }
+    
+    public int idDropped(int par1, Random par2Random, int par3)
+    {
+        return Block.chest.blockID;
+    }
+   
+	public int idPicked(World par1World, int par2, int par3, int par4)
+	{
+		return Block.chest.blockID;
+	}
 
     /**
      * Checks the neighbor blocks to see if there is a chest there. Args: world, x, y, z
@@ -260,6 +204,37 @@ public class BlockBoundChest extends BlockContainer
             tileentitychest.updateContainingBlockInfo();
         }
     }
+    
+    public void dropItem(ItemStack itemstack, World par1World, int par2, int par3, int par4) {
+    	if (itemstack != null)
+        {
+            float f = this.random.nextFloat() * 0.8F + 0.1F;
+            float f1 = this.random.nextFloat() * 0.8F + 0.1F;
+            EntityItem entityitem;
+
+            for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem))
+            {
+                int k1 = this.random.nextInt(21) + 10;
+
+                if (k1 > itemstack.stackSize)
+                {
+                    k1 = itemstack.stackSize;
+                }
+
+                itemstack.stackSize -= k1;
+                entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+                float f3 = 0.05F;
+                entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
+                entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
+                entityitem.motionZ = (double)((float)this.random.nextGaussian() * f3);
+
+                if (itemstack.hasTagCompound())
+                {
+                    entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                }
+            }
+        }
+    }
 
     /**
      * Called on server worlds only when the block has been replaced by a different block ID, or the same block with a
@@ -272,38 +247,12 @@ public class BlockBoundChest extends BlockContainer
 
         if (tileentitychest != null)
         {
+            this.dropItem(new ItemStack(ThaumicExploration.blankSeal.itemID, 1, 15-((TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4)).getSealColor()), par1World, par2, par3, par4);
             for (int j1 = 0; j1 < tileentitychest.getSizeInventory(); ++j1)
             {
                 ItemStack itemstack = tileentitychest.getStackInSlot(j1);
-
-                if (itemstack != null)
-                {
-                    float f = this.random.nextFloat() * 0.8F + 0.1F;
-                    float f1 = this.random.nextFloat() * 0.8F + 0.1F;
-                    EntityItem entityitem;
-
-                    for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem))
-                    {
-                        int k1 = this.random.nextInt(21) + 10;
-
-                        if (k1 > itemstack.stackSize)
-                        {
-                            k1 = itemstack.stackSize;
-                        }
-
-                        itemstack.stackSize -= k1;
-                        entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
-                        float f3 = 0.05F;
-                        entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
-                        entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
-                        entityitem.motionZ = (double)((float)this.random.nextGaussian() * f3);
-
-                        if (itemstack.hasTagCompound())
-                        {
-                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-                        }
-                    }
-                }
+                this.dropItem(itemstack, par1World, par2, par3, par4);
+                
             }
 
             par1World.func_96440_m(par2, par3, par4, par5);
@@ -320,7 +269,7 @@ public class BlockBoundChest extends BlockContainer
         if (par1World.isRemote)
         {
            
-            System.out.println("Clientside block says" + ((TileEntityBoundChest)par1World.getBlockTileEntity(par2,par3,par4)).accessTicks);
+            //System.out.println("Clientside block says" + ((TileEntityBoundChest)par1World.getBlockTileEntity(par2,par3,par4)).accessTicks);
             return true;
         }
         else
@@ -374,25 +323,7 @@ public class BlockBoundChest extends BlockContainer
         }
         else
         {
-            if (par1World.getBlockId(par2 - 1, par3, par4) == this.blockID)
-            {
-                object = new InventoryLargeChest("container.chestDouble", (TileEntityBoundChest)par1World.getBlockTileEntity(par2 - 1, par3, par4), (IInventory)object);
-            }
-
-            if (par1World.getBlockId(par2 + 1, par3, par4) == this.blockID)
-            {
-                object = new InventoryLargeChest("container.chestDouble", (IInventory)object, (TileEntityBoundChest)par1World.getBlockTileEntity(par2 + 1, par3, par4));
-            }
-
-            if (par1World.getBlockId(par2, par3, par4 - 1) == this.blockID)
-            {
-                object = new InventoryLargeChest("container.chestDouble", (TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4 - 1), (IInventory)object);
-            }
-
-            if (par1World.getBlockId(par2, par3, par4 + 1) == this.blockID)
-            {
-                object = new InventoryLargeChest("container.chestDouble", (IInventory)object, (TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4 + 1));
-            }
+            
 
             return (IInventory)object;
         }

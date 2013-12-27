@@ -1,7 +1,5 @@
 package flaxbeard.thaumicexploration.tile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,11 +10,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
@@ -29,22 +29,14 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     public BoundChestWorldData myChest;
     
     public int accessTicks = 0;
+    public int id = 0;
+    public int clientColor = 0;
 
     /** Determines if the check for adjacent chests has taken place. */
     public boolean adjacentChestChecked;
 
     /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityBoundChest adjacentChestZNeg;
-
-    /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityBoundChest adjacentChestXPos;
-
-    /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityBoundChest adjacentChestXNeg;
-
-    /** Contains the chest tile located adjacent to this one (if any) */
-    public TileEntityBoundChest adjacentChestZPosition;
-
+    
     /** The current angle of the lid (between 0 and 1) */
     public float lidAngle;
 
@@ -157,8 +149,10 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     
     @Override
     public void onInventoryChanged() {
-    	myChest.updateChestContents(this.chestContents);
-    	this.accessTicks = 400;
+    	if (myChest != null) {
+    		myChest.updateChestContents(this.chestContents);
+    	}
+    	this.accessTicks = 80;
     	this.updateAccessTicks();
     	super.onInventoryChanged();
     }
@@ -197,6 +191,16 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
         NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Items");
         this.chestContents = new ItemStack[this.getSizeInventory()];
 
+        if (par1NBTTagCompound.hasKey("chestID"))
+        {
+            this.id = par1NBTTagCompound.getInteger("chestID");
+        }
+        
+        if (par1NBTTagCompound.hasKey("myAccessTick"))
+        {
+            this.accessTicks = par1NBTTagCompound.getInteger("myAccessTick");
+        }
+        
         if (par1NBTTagCompound.hasKey("CustomName"))
         {
             this.customName = par1NBTTagCompound.getString("CustomName");
@@ -212,6 +216,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
                 this.chestContents[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
+        //System.out.println("SAVING FOR ID" + par1NBTTagCompound.getInteger("chestID"));
     }
 
     /**
@@ -239,6 +244,9 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
         {
             par1NBTTagCompound.setString("CustomName", this.customName);
         }
+        par1NBTTagCompound.setInteger("myAccessTick", this.accessTicks);
+        par1NBTTagCompound.setInteger("chestID", this.id);
+        System.out.println("SAVING FOR ID" + this.id);
     }
 
     /**
@@ -265,65 +273,15 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     public void updateContainingBlockInfo()
     {
         super.updateContainingBlockInfo();
-        this.adjacentChestChecked = false;
+        this.adjacentChestChecked = true;
     }
 
-    private void func_90009_a(TileEntityBoundChest par1TileEntityChest, int par2)
-    {
-        if (par1TileEntityChest.isInvalid())
-        {
-            this.adjacentChestChecked = false;
-        }
-        else if (this.adjacentChestChecked)
-        {
-            switch (par2)
-            {
-                case 0:
-                    if (this.adjacentChestZPosition != par1TileEntityChest)
-                    {
-                        this.adjacentChestChecked = false;
-                    }
-
-                    break;
-                case 1:
-                    if (this.adjacentChestXNeg != par1TileEntityChest)
-                    {
-                        this.adjacentChestChecked = false;
-                    }
-
-                    break;
-                case 2:
-                    if (this.adjacentChestZNeg != par1TileEntityChest)
-                    {
-                        this.adjacentChestChecked = false;
-                    }
-
-                    break;
-                case 3:
-                    if (this.adjacentChestXPos != par1TileEntityChest)
-                    {
-                        this.adjacentChestChecked = false;
-                    }
-            }
-        }
-    }
+    
 
     /**
      * Performs the check for adjacent chests to determine if this chest is double or not.
      */
-    public void checkForAdjacentChests()
-    {
-        if (!this.adjacentChestChecked)
-        {
-            this.adjacentChestChecked = true;
-            this.adjacentChestZNeg = null;
-            this.adjacentChestXPos = null;
-            this.adjacentChestXNeg = null;
-            this.adjacentChestZPosition = null;
-
-          
-        }
-    }
+   
 
     private boolean func_94044_a(int par1, int par2, int par3)
     {
@@ -338,22 +296,24 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     public void updateEntity()
     {
         super.updateEntity();
-        this.checkForAdjacentChests();
         ++this.ticksSinceSync;
         if (this.accessTicks > 0 && !this.worldObj.isRemote) {
         	//System.out.println(accessTicks);
         	--this.accessTicks;
-        	System.out.println(this.accessTicks + " is what the server thinks it is");
+        	//System.out.println(this.accessTicks + " is what the server thinks it is");
         	this.updateAccessTicks();
         }
         float f;
-        myChest = BoundChestWorldData.get(this.worldObj, "one", 0);
+        if (this.id > 0) {
+        	myChest = BoundChestWorldData.get(this.worldObj, "id" + this.id, 0);
+        }
         if (myChest != null) {
         	if (this.chestContents != myChest.getChestContents()) {
-        		this.accessTicks = 400;
+        		this.accessTicks = 80;
         		this.updateAccessTicks();
         	}
         	this.chestContents = myChest.getChestContents();
+        	
         }
         if (!this.worldObj.isRemote && this.numUsingPlayers != 0 && (this.ticksSinceSync + this.xCoord + this.yCoord + this.zCoord) % 200 == 0)
         {
@@ -382,20 +342,12 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
         f = 0.1F;
         double d0;
 
-        if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
+        if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F)
         {
             double d1 = (double)this.xCoord + 0.5D;
             d0 = (double)this.zCoord + 0.5D;
 
-            if (this.adjacentChestZPosition != null)
-            {
-                d0 += 0.5D;
-            }
 
-            if (this.adjacentChestXPos != null)
-            {
-                d1 += 0.5D;
-            }
 
             this.worldObj.playSoundEffect(d1, (double)this.yCoord + 0.5D, d0, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
         }
@@ -420,20 +372,12 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
 
             float f2 = 0.5F;
 
-            if (this.lidAngle < f2 && f1 >= f2 && this.adjacentChestZNeg == null && this.adjacentChestXNeg == null)
+            if (this.lidAngle < f2 && f1 >= f2)
             {
                 d0 = (double)this.xCoord + 0.5D;
                 double d2 = (double)this.zCoord + 0.5D;
 
-                if (this.adjacentChestZPosition != null)
-                {
-                    d2 += 0.5D;
-                }
-
-                if (this.adjacentChestXPos != null)
-                {
-                    d0 += 0.5D;
-                }
+                
 
                 this.worldObj.playSoundEffect(d0, (double)this.yCoord + 0.5D, d2, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
@@ -444,33 +388,65 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
             }
         }
     }
+    
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        NBTTagCompound access = new NBTTagCompound();
+        access.setInteger("accessTicks", this.accessTicks);
+        access.setInteger("color", this.getSealColor());
+        
+        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+    }
+    
+    public void setColor(int color) {
+    	if (this.id > 0) {
+        	myChest = BoundChestWorldData.get(this.worldObj, "id" + this.id, 0);
+        }
+        if (myChest != null) {
+        	myChest.setSealColor(color);
+        }
+    }
+
+    @Override
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    {
+    	NBTTagCompound access = pkt.data;
+    	this.accessTicks = access.getInteger("accessTicks");
+    	this.setColor(access.getInteger("color"));
+    	this.clientColor = access.getInteger("color");
+    	//System.out.println("suxes u got " + this.accessTicks);
+        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+    }
 
     private void updateAccessTicks() {
-		if (!this.worldObj.isRemote) {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-	        DataOutputStream outputStream = new DataOutputStream(bos);
-	
-	        try
-	        {
-	            outputStream.writeByte(1);
-	            outputStream.writeInt(this.worldObj.provider.dimensionId);
-	            outputStream.writeInt(this.xCoord);
-	            outputStream.writeInt(this.yCoord);
-	            outputStream.writeInt(this.zCoord);
-	            outputStream.writeInt(this.accessTicks);
-	        }
-	        catch (Exception ex)
-	        {
-	            ex.printStackTrace();
-	        }
-	
-	        Packet250CustomPayload packet = new Packet250CustomPayload();
-	        packet.channel = "tExploration";
-	        packet.data = bos.toByteArray();
-	        packet.length = bos.size();
-	        PacketDispatcher.sendPacketToAllPlayers(packet);
-	        System.out.println("sent");
-		}
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    	//this.mar
+//		if (!this.worldObj.isRemote) {
+//			ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+//	        DataOutputStream outputStream = new DataOutputStream(bos);
+//	
+//	        try
+//	        {
+//	            outputStream.writeByte(1);
+//	            outputStream.writeInt(this.worldObj.provider.dimensionId);
+//	            outputStream.writeInt(this.xCoord);
+//	            outputStream.writeInt(this.yCoord);
+//	            outputStream.writeInt(this.zCoord);
+//	            outputStream.writeInt(this.accessTicks);
+//	        }
+//	        catch (Exception ex)
+//	        {
+//	            ex.printStackTrace();
+//	        }
+//	
+//	        Packet250CustomPayload packet = new Packet250CustomPayload();
+//	        packet.channel = "tExploration";
+//	        packet.data = bos.toByteArray();
+//	        packet.length = bos.size();
+//	        PacketDispatcher.sendPacketToAllPlayers(packet);
+//	        System.out.println("sent");
+//		}
 	}
 
 	/**
@@ -533,7 +509,6 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     {
         super.invalidate();
         this.updateContainingBlockInfo();
-        this.checkForAdjacentChests();
     }
 
     public int getChestType()
@@ -565,7 +540,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
 	public int getAccessTicks() {
 		// TODO Auto-generated method stub
 		if (this.worldObj.isRemote) {
-			System.out.println("TileEntity thinks that it is" + this.accessTicks);
+			//System.out.println("TileEntity thinks that it is" + this.accessTicks);
 		}
 		return this.accessTicks;
 		

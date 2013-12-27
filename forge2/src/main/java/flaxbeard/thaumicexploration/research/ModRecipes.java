@@ -28,9 +28,19 @@ public final class ModRecipes {
     }
 
 	private static void initInfusionRecipes() {
-		registerResearchItemI("te.name.Curing", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
+		registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, 32767), 3, 
 				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
-				new ItemStack(ConfigItems.itemResource, 1, 5), new ItemStack(Item.appleGold), 
+				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.potion,1, 16392), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.speckledMelon));
+		registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, 32767), 3, 
+				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
+				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.speckledMelon), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.speckledMelon));
+		registerResearchItemI("ADVANCEDGOLEM", new ItemStack(ConfigItems.itemGolemPlacer, 1, 32767), 3, 
+				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
+				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.potion,1, 16392), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.speckledMelon));
 	}
@@ -41,13 +51,16 @@ public final class ModRecipes {
 	}
 
 	private static void initCraftingRecipes() {
-		// TODO Auto-generated method stub
+		for (int i=0;i<15;i++) {
+			GameRegistry.addRecipe(new ItemStack(ThaumicExploration.blankSeal, 1, i), " X ", "XZX", " X ", 'X', new ItemStack(ConfigItems.itemResource,1,4), 'Z', new ItemStack(Item.dyePowder,1,i));
+		}
+		
+		registerCraftingRecipe("BLANKSEAL", new ItemStack(ThaumicExploration.blankSeal, 1, 32767), " X ", "XZX", " X ", 'X', new ItemStack(ConfigItems.itemResource,1,4), 'Z', new ItemStack(Item.dyePowder,1,32767));
 		
 	}
 
 	private static void initCrucibleRecipes() {
-		
-		registerResearchItem("te.name.Curing", new ItemStack(Item.leather), new ItemStack(Item.rottenFlesh, 1, 0), new AspectList().add(Aspect.LIGHT, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
+		registerCrucibleRecipe("FLESHCURE","FLESHCURE", new ItemStack(Item.leather), new ItemStack(Item.rottenFlesh), new AspectList().add(Aspect.MAGIC, 2).add(Aspect.FLESH, 2));
 //        registerResearchItem(LibResearch.KEY_GASEOUS_LIGHT, new ItemStack(ModItems.gaseousLight), new ItemStack(ConfigItems.itemEssence, 1, 0), new AspectList().add(Aspect.LIGHT, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
 //        registerResearchItem(LibResearch.KEY_GASEOUS_SHADOW, new ItemStack(ModItems.gaseousShadow), new ItemStack(ConfigItems.itemEssence, 1, 0), new AspectList().add(Aspect.DARKNESS, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
 //        registerResearchItem(LibResearch.KEY_SPELL_CLOTH, new ItemStack(ModItems.spellCloth), new ItemStack(ConfigItems.itemResource, 0, 7), new AspectList().add(Aspect.MAGIC, 10).add(Aspect.ENTROPY, 6).add(Aspect.EXCHANGE, 4));
@@ -60,20 +73,27 @@ public final class ModRecipes {
 	        ConfigResearch.recipes.put(name, recipe);
 	}
 	
-	private static void registerResearchItem(String name, ItemStack output, Object... stuff) {
+	private static void registerCraftingRecipe(String name, ItemStack output, Object... stuff) {
 	        GameRegistry.addRecipe(output, stuff);
 	        List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 	        if(name != null && name.length() != 0)
 	                ConfigResearch.recipes.put(name, recipeList.get(recipeList.size() - 1));
 	}
 	
-	private static void registerResearchItem(String name, ItemStack output, ItemStack input, AspectList aspects) {
+
+	
+	private static void registerCrucibleRecipe(String name, String research, ItemStack output, ItemStack input, AspectList aspects) {
 	        CrucibleRecipe recipe = ThaumcraftApi.addCrucibleRecipe(name, output, input, aspects);
-	        ConfigResearch.recipes.put(name, recipe);
+	        ConfigResearch.recipes.put(research, recipe);
 	}
 	
 	private static void registerResearchItemI(String name, Object output, int instability, AspectList aspects, ItemStack input, ItemStack... stuff) {
          InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe(name, output, instability, aspects, input, stuff);
          ConfigResearch.recipes.put(name, recipe);
+	}
+	
+	private static void registerResearchItemI(String name, String research, Object output, int instability, AspectList aspects, ItemStack input, ItemStack... stuff) {
+        InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe(name, output, instability, aspects, input, stuff);
+        ConfigResearch.recipes.put(research, recipe);
 	}
 }
