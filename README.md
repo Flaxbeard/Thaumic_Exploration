@@ -1,5 +1,6 @@
 Thaumic_Exploration
 ===================
+Releases can be found here: https://github.com/Flaxbeard/Thaumic_Exploration/releases
 
 Thaumic Exploration is a WIP add-on for Thaumcraft 4 that adds a variety of new content. Currently, Thaumic Exploration is in early alpha. 
 
