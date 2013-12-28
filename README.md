@@ -1,4 +1,4 @@
-Thaumic_Exploration
+Thaumic Exploration
 ===================
 Releases can be found here: https://github.com/Flaxbeard/Thaumic_Exploration/releases
 
