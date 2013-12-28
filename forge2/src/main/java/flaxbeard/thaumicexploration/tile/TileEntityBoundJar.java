@@ -124,6 +124,12 @@ public class TileEntityBoundJar extends TileJarFillable {
     	}
     	super.updateEntity();
     }
+
+	public void emptyJar() {
+		if (!this.worldObj.isRemote) {
+			this.myJarData.updateJarContents(null, 0);
+		}
+	}
 	
 	
 }

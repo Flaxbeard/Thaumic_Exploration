@@ -156,10 +156,10 @@ public class ThaumicExploration {
 		amberCore = (new Item(amberCoreID)).setUnlocalizedName("thaumicexploration:amberCore").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodAmber");
 		pureZombieBrain = (new ItemBrain(pureZombieBrainID)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:pureZombieBrain");
 		blankSeal = (new ItemBlankSeal(blankSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealBlank"));
-		chestSeal = (new ItemChestSeal(chestSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealChest"));
-		chestSealLinked = (new ItemChestSealLinked(chestSealLinkedID).setTextureName("thaumicexploration:sealChest"));
-		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealJar"));
-		jarSealLinked = (new ItemJarSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar"));
+		chestSeal = (new ItemChestSeal(chestSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
+		chestSealLinked = (new ItemChestSealLinked(chestSealLinkedID).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
+		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
+		jarSealLinked = (new ItemJarSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
 		
 		armorMaterialCrystal = EnumHelper.addArmorMaterial("CRYSTAL", 25, new int[] { 2, 6, 5, 2 }, 25);
 		helmetCrystal = (new ItemCrystalArmor(helmetCrystalID, armorMaterialCrystal, 2, 0)).setUnlocalizedName("thaumicexploration:helmetCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");

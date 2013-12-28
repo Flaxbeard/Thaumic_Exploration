@@ -12,6 +12,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
+import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ConfigResearch;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -38,11 +39,14 @@ public final class ModRecipes {
 				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.speckledMelon), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.speckledMelon));
-		registerResearchItemI("ADVANCEDGOLEM", new ItemStack(ConfigItems.itemGolemPlacer, 1, 32767), 3, 
-				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
-				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
-				new ItemStack(Item.potion,1, 16392), new ItemStack(Item.appleGold), 
-				new ItemStack(Item.speckledMelon));
+		
+		//Change Advanced golem recipe to require a pure brain
+        InfusionRecipe recipe = (InfusionRecipe) ConfigResearch.recipes.get("AdvancedGolem");
+        ConfigResearch.recipes.remove(ConfigResearch.recipes.get("AdvancedGolem"));
+        ItemStack[] components = {new ItemStack(Item.redstone), new ItemStack(Item.glowstone), new ItemStack(Item.gunpowder), new ItemStack(ConfigBlocks.blockJar, 1, 0), new ItemStack(ThaumicExploration.pureZombieBrain) };
+        recipe.components = components;
+        InfusionRecipe recipe2 = ThaumcraftApi.addInfusionCraftingRecipe("ADVANCEDGOLEM", recipe.recipeOutput, recipe.instability, recipe.aspects, recipe.recipeInput, recipe.components);
+		ConfigResearch.recipes.put("AdvancedGolem", recipe2);
 	}
 
 	private static void initArcaneRecipes() {

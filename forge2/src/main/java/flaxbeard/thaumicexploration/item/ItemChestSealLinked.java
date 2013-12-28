@@ -109,7 +109,7 @@ public class ItemChestSealLinked extends Item {
     
     @Override
     public String getUnlocalizedName(ItemStack item) {
-            return "item.thaumicexploration:chestSeal:" + itemNames[15-item.getItemDamage()];
+    	return this.getUnlocalizedName() + ":" + itemNames[15-item.getItemDamage()];
     }
     
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {

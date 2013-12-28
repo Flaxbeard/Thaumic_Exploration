@@ -4,21 +4,29 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.BlockJar;
+import thaumcraft.common.blocks.ItemJarFilled;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.ItemEssence;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import flaxbeard.thaumicexploration.ThaumicExploration;
+import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 
+
 public class BlockBoundJar extends BlockJar {
+
+	private Random random;
 
 	public BlockBoundJar(int i) {
 		super(i);
@@ -41,6 +49,35 @@ public class BlockBoundJar extends BlockJar {
     public int idDropped(int par1, Random par2Random, int par3)
     {
         return ConfigBlocks.blockJar.blockID;
+    }
+    
+    public int quantityDropped(Random par1Random)
+    {
+        return 0;
+    }
+    
+    @Override
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    {
+		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+
+		if ((te != null) && ((te instanceof TileEntityBoundJar)))
+		{
+			((TileEntityBoundJar)te).emptyJar();
+			
+	    	ItemStack drop = new ItemStack(ConfigItems.itemJarFilled);
+	    	if (((TileEntityBoundJar)te).amount > 0) {
+	        	((ItemJarFilled)drop.getItem()).setAspects(drop, new AspectList().add(((TileEntityBoundJar)te).aspect, ((TileEntityBoundJar)te).amount));
+        	}
+	    	else
+	    	{
+	    		drop = new ItemStack(ConfigBlocks.blockJar);
+	    	}
+  		dropBlockAsItem_do(par1World, par2, par3, par4, drop);
+  		
+	}
+    
+	//super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
     
     @Override
