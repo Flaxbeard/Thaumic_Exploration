@@ -3,7 +3,6 @@ package flaxbeard.thaumicexploration.item;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
@@ -14,7 +13,6 @@ import net.minecraft.util.StatCollector;
 import thaumcraft.api.IRepairable;
 import thaumcraft.api.IVisDiscounter;
 import thaumcraft.common.config.ConfigItems;
-import vazkii.tinkerer.client.lib.LibResources;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,10 +30,10 @@ public class ItemCrystalArmor extends ItemArmor implements IRepairable, IVisDisc
 		//return this.armorType == 1 ? new ModelCrystalChest() : super.getArmorModel(entityLiving, itemStack, armorSlot);
 	}
 	
-	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
-		return slot == 2 ? LibResources.MODEL_ARMOR_ICHOR_2 : LibResources.MODEL_ARMOR_ICHOR_1;
-	}
+//	@Override
+//	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+//		return slot == 2 ? LibResources.MODEL_ARMOR_ICHOR_2 : LibResources.MODEL_ARMOR_ICHOR_1;
+//	}
 	
 	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack) {

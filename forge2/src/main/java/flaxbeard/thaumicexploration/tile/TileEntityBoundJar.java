@@ -21,6 +21,10 @@ public class TileEntityBoundJar extends TileJarFillable {
     {
         NBTTagCompound access = new NBTTagCompound();
         access.setInteger("accessTicks", this.accessTicks);
+        access.setInteger("amount", this.amount);
+        if (this.aspect != null) {
+        	access.setString("aspect", this.aspect.getTag());
+        }
         access.setInteger("color", this.getSealColor());
         
         return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
@@ -40,6 +44,10 @@ public class TileEntityBoundJar extends TileJarFillable {
     {
     	NBTTagCompound access = pkt.data;
     	this.accessTicks = access.getInteger("accessTicks");
+    	this.amount = access.getInteger("amount");
+    	if (access.getString(("aspect")) != null) {
+    		this.aspect = Aspect.getAspect(access.getString("aspect"));
+    	}
     	this.setColor(access.getInteger("color"));
     	this.clientColor = access.getInteger("color");
     	
