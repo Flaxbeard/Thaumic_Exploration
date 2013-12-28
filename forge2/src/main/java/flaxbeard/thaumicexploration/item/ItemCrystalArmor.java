@@ -2,10 +2,6 @@ package flaxbeard.thaumicexploration.item;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import flaxbeard.thaumicexploration.client.render.model.ModelCrystalChest;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +15,8 @@ import thaumcraft.api.IRepairable;
 import thaumcraft.api.IVisDiscounter;
 import thaumcraft.common.config.ConfigItems;
 import vazkii.tinkerer.client.lib.LibResources;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCrystalArmor extends ItemArmor implements IRepairable, IVisDiscounter{
 
