@@ -43,7 +43,9 @@ public class BoundJarWorldData extends WorldSavedData {
         public void writeToNBT(NBTTagCompound nbt) {
             nbt.setInteger("myColor", myColor);
             nbt.setInteger("aspectAmount", aspectAmount);
-            nbt.setString("myAspect", myAspect.getTag());
+            if (myAspect != null) {
+            	nbt.setString("myAspect", myAspect.getTag());
+            }
         }
         
         public void updateJarContents(Aspect aspect, int amount) {

@@ -43,6 +43,24 @@ item.thaumicexploration:chestSeal:Green.name=Green Chest Binding Seal
 item.thaumicexploration:chestSeal:Red.name=Red Chest Binding Seal
 item.thaumicexploration:chestSeal:Dark.name=Dark Chest Binding Seal
 
+Jar Seals
+item.thaumicexploration:jarSeal:Pale.name=Pale Jar Binding Seal
+item.thaumicexploration:jarSeal:Orange.name=Orange Jar Binding Seal
+item.thaumicexploration:jarSeal:Magenta.name=Magenta Jar Binding Seal
+item.thaumicexploration:jarSeal:Light Blue.name=Light Blue Jar Binding Seal
+item.thaumicexploration:jarSeal:Yellow.name=Yellow Jar Binding Seal
+item.thaumicexploration:jarSeal:Lime.name=Lime Jar Binding Seal
+item.thaumicexploration:jarSeal:Pink.name=Pink Jar Binding Seal
+item.thaumicexploration:jarSeal:Gray.name=Gray Jar Binding Seal
+item.thaumicexploration:jarSeal:Light Gray.name=Light Gray Jar Binding Seal
+item.thaumicexploration:jarSeal:Cyan.name=Cyan Jar Binding Seal
+item.thaumicexploration:jarSeal:Purple.name=Purple Jar Binding Seal
+item.thaumicexploration:jarSeal:Blue.name=Blue Jar Binding Seal
+item.thaumicexploration:jarSeal:Brown.name=Brown Jar Binding Seal
+item.thaumicexploration:jarSeal:Green.name=Green Jar Binding Seal
+item.thaumicexploration:jarSeal:Red.name=Red Jar Binding Seal
+item.thaumicexploration:jarSeal:Dark.name=Dark Jar Binding Seal
+
 
 Thaumonomicon Names
 te.name.FLESHCURE=Flesh Purification
@@ -63,7 +81,7 @@ te.tag.TRANSMUTATION=One thing into another
 Thaumonomicon Entries
 te.text.FLESHCURE=By imbuing rotten flesh with certain aspects, you have found that you are able to remove nearly all traces of disease and decomposition from the flesh, rendering it much more useful. Although this discovery may not be particularly useful, you are sure it will lead to exciting things.
 te.text.BRAINCURE=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations. The brains also serve as a bait for zombified creatures, when dropped or placed on an arcane pedestal.
-te.text.CHESTSEAL=By enchanting a mundane seal made of tallow, you have discovered a way to bind chests, so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network.
-te.text.JARSEAL=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks.
+te.text.CHESTSEAL=By enchanting a mundane seal made of tallow, you have discovered a way to bind chests, so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network. Note that only empty chests are able to be bound.
+te.text.JARSEAL=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.
 te.text.WANDAMBER=You have finally found a practical use for amber, in the form of a wand core. Amber wand cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a slow rate when below 10% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates at twice the rate. In addition, the amber wand core boasts a larger storage capacity than that of greatwood cores.
 te.text.TRANSMUTATION=While experimenting with different materials to filter vis, you have found that diamonds can sporadically convert one form of vis into another. You have found this property to be too unreliable to use for most purposes, but you have found that if infused with certain materials, it can be used as a wand core with unique properties. When draining a node of vis at over 90% capacity, the vis will be converted into other forms of vis.

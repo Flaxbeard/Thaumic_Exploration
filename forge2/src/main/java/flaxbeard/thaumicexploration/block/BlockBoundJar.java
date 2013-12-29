@@ -74,7 +74,8 @@ public class BlockBoundJar extends BlockJar {
 	    		drop = new ItemStack(ConfigBlocks.blockJar);
 	    	}
   		dropBlockAsItem_do(par1World, par2, par3, par4, drop);
-  		
+  		drop = new ItemStack(ThaumicExploration.blankSeal, 1, 15-((TileEntityBoundJar)te).getSealColor());
+  		dropBlockAsItem_do(par1World, par2, par3, par4, drop);
 	}
     
 	//super.breakBlock(par1World, par2, par3, par4, par5, par6);
@@ -110,9 +111,10 @@ public class BlockBoundJar extends BlockJar {
 		    }
 		    amount = phial.getAspects(helditem).getAmount(aspect);
 	    }
-        if (helditem != null && jar.amount <= (jar.maxAmount - 8) && (jar.aspect == null || (jar.aspect != null && jar.aspect == aspect && amount >= 8)))
+        if (helditem != null && jar.amount <= (jar.maxAmount - 8) && ((jar.aspect != null && jar.aspect != aspect && jar.amount == 0) || jar.aspect == null || (jar.aspect != null && jar.aspect == aspect && amount >= 8)))
         {
             player.getHeldItem().stackSize--;
+            jar.aspect = aspect;
             jar.addToContainer(aspect, amount);
             player.inventory.addItemStackToInventory(new ItemStack(ConfigItems.itemEssence, 1 ,0));
             world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);

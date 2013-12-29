@@ -30,6 +30,11 @@ public class TileEntityBoundJar extends TileJarFillable {
         return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
     }
     
+	public int getAccessTicks() {
+		return this.accessTicks;
+		
+	}
+    
     public void setColor(int color) {
     	if (this.id > 0) {
     		myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
@@ -53,8 +58,32 @@ public class TileEntityBoundJar extends TileJarFillable {
     	
         worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
     }
-	
+    
+    public void readCustomNBT(NBTTagCompound nbttagcompound)
+    {
+      this.aspect = Aspect.getAspect(nbttagcompound.getString("Aspect"));
+      this.amount = nbttagcompound.getShort("Amount");
+      this.facing = nbttagcompound.getByte("facing");
+      if (nbttagcompound.hasKey("jarID"))
+      {
+          this.id = nbttagcompound.getInteger("jarID");
+      }
+    }
+    
+    public void writeCustomNBT(NBTTagCompound nbttagcompound)
+    {
+      if (this.aspect != null) {
+        nbttagcompound.setString("Aspect", this.aspect.getTag());
+      }
+      nbttagcompound.setShort("Amount", (short)this.amount);
+      nbttagcompound.setByte("facing", (byte)this.facing);
+      nbttagcompound.setInteger("jarID", this.id);
+    }
+    
 	public int getSealColor() {
+		if (this.worldObj.isRemote) {
+			return this.clientColor;
+		}
 		if (myJarData == null) {
 			myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
 		}
@@ -80,6 +109,7 @@ public class TileEntityBoundJar extends TileJarFillable {
 	    	  myJarData.updateJarContents(tt, this.amount);
 	      }
 	    }
+    	this.accessTicks = 80;
 		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		return am;
 	}
@@ -96,6 +126,7 @@ public class TileEntityBoundJar extends TileJarFillable {
 				this.aspect = null;
 				this.amount = 0;
 			}
+        	this.accessTicks = 80;
 			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			if (!this.worldObj.isRemote) {
 				myJarData.updateJarContents(tt, this.amount);
@@ -108,6 +139,10 @@ public class TileEntityBoundJar extends TileJarFillable {
     public void updateEntity()
     {
     	if (!this.worldObj.isRemote) {
+            if (this.accessTicks > 0 && !this.worldObj.isRemote) {
+            	--this.accessTicks;
+            	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            }
 	    	if (myJarData == null) {
 				myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
 			}
@@ -115,9 +150,13 @@ public class TileEntityBoundJar extends TileJarFillable {
 	    	//System.out.println(this.amount);
 			if (this.amount != myJarData.getJarAmount()) {
 				this.amount = myJarData.getJarAmount();
+            	this.accessTicks = 80;
+            	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (this.aspect != myJarData.getJarAspect()) {
 				this.aspect = myJarData.getJarAspect();
+            	this.accessTicks = 80;
+            	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 	
 			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);

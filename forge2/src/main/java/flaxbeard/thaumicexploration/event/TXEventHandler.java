@@ -3,25 +3,20 @@ package flaxbeard.thaumicexploration.event;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-import thaumcraft.common.config.ConfigBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.data.TXWorldDataInfoWorldData;
-import flaxbeard.thaumicexploration.item.ItemBlankSeal;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 
@@ -73,7 +68,7 @@ public class TXEventHandler {
 			//System.out.println(event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) + " " + ThaumicExploration.boundJar.blockID);
 			if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ConfigBlocks.blockJar.blockID && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 0) {
 				//System.out.println("itsa jar mario");
-				if (event.entityPlayer.inventory.getCurrentItem() != null){ 
+				if (event.entityPlayer.inventory.getCurrentItem() != null && ((TileJarFillable)event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z)).aspectFilter == null && ((TileJarFillable)event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z)).amount == 0){ 
 					if (event.entityPlayer.inventory.getCurrentItem().itemID == ThaumicExploration.jarSeal.itemID) {
 						type = 4;
 					}
@@ -122,6 +117,7 @@ public class TXEventHandler {
 	        packet.channel = "tExploration";
 	        packet.data = bos.toByteArray();
 	        packet.length = bos.size();
+	        //PacketDispatcher.sendPacketToServer(packet);
 	        PacketDispatcher.sendPacketToAllPlayers(packet);
 	        //System.out.println("sent");
 		}

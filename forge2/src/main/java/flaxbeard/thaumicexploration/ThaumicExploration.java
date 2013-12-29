@@ -41,19 +41,19 @@ import flaxbeard.thaumicexploration.item.ItemBrain;
 import flaxbeard.thaumicexploration.item.ItemChestSeal;
 import flaxbeard.thaumicexploration.item.ItemChestSealLinked;
 import flaxbeard.thaumicexploration.item.ItemCrystalArmor;
-import flaxbeard.thaumicexploration.item.ItemJarSealLinked;
+import flaxbeard.thaumicexploration.item.focus.ItemFocusNecromancy;
 import flaxbeard.thaumicexploration.packet.TXPacketHandler;
 import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
+import flaxbeard.thaumicexploration.tile.TileCrystalAdvanced;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
-import flaxbeard.thaumicexploration.tile.TileCrystalAdvanced;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTankBookshelf;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
 import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
 
 
-@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.0.1", dependencies="required-after:Thaumcraft")
+@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.1.1", dependencies="required-after:Thaumcraft")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, channels={"tExploration"}, packetHandler = TXPacketHandler.class)
 public class ThaumicExploration {
 
@@ -136,7 +136,7 @@ public class ThaumicExploration {
 	public void load(FMLInitializationEvent event) {
 		//EventHandler
 		MinecraftForge.EVENT_BUS.register(new TXEventHandler());
-		
+
 		//Tiles
 		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundChest");
 		GameRegistry.registerTileEntity(TileEntityBoundJar.class, "tileEntityBoundJar");
@@ -145,8 +145,9 @@ public class ThaumicExploration {
 		
 		//Blocks
 		thinkTankBookshelf = new BlockThinkTankBookshelf(205, Material.wood).setUnlocalizedName("thinkTankBookshelf").setCreativeTab(CreativeTabs.tabBlock);
-		boundChest = new BlockBoundChest(boundChestID, 0).setUnlocalizedName("boundChest").setCreativeTab(CreativeTabs.tabBlock);
-		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar").setCreativeTab(CreativeTabs.tabBlock);
+		boundChest = new BlockBoundChest(boundChestID, 0).setUnlocalizedName("boundChest");
+		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
+		
 		GameRegistry.registerBlock(boundChest, "boundChest");
 		GameRegistry.registerBlock(boundJar, "boundJar");
 		GameRegistry.registerBlock(thinkTankBookshelf, "thinkTankBookshelf");
@@ -159,11 +160,11 @@ public class ThaumicExploration {
 		chestSeal = (new ItemChestSeal(chestSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
 		chestSealLinked = (new ItemChestSealLinked(chestSealLinkedID).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
 		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
-		jarSealLinked = (new ItemJarSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
+		jarSealLinked = (new ItemChestSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
 		
 		armorMaterialCrystal = EnumHelper.addArmorMaterial("CRYSTAL", 25, new int[] { 2, 6, 5, 2 }, 25);
 		helmetCrystal = (new ItemCrystalArmor(helmetCrystalID, armorMaterialCrystal, 2, 0)).setUnlocalizedName("thaumicexploration:helmetCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
-		chestCrystal = (new ItemCrystalArmor(chestCrystalID, armorMaterialCrystal, 1, 1)).setUnlocalizedName("thaumicexploration:chestCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
+		chestCrystal = (new ItemFocusNecromancy(chestCrystalID)).setUnlocalizedName("thaumicexploration:chestCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
 		
 		//Wands
 		WAND_ROD_AMBER = new WandRod("amber",75,new ItemStack(ThaumicExploration.amberCore),1,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
