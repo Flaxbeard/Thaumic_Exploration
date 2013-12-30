@@ -3,7 +3,6 @@ package flaxbeard.thaumicexploration;
 
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
@@ -23,19 +22,22 @@ import net.minecraftforge.event.ForgeSubscribe;
 import thaumcraft.api.wands.WandRod;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
 import flaxbeard.thaumicexploration.block.BlockBoundJar;
-import flaxbeard.thaumicexploration.block.BlockThinkTankBookshelf;
+import flaxbeard.thaumicexploration.block.BlockThinkTank;
 import flaxbeard.thaumicexploration.common.CommonProxy;
 import flaxbeard.thaumicexploration.event.TXEventHandler;
+import flaxbeard.thaumicexploration.gui.TXGuiHandler;
 import flaxbeard.thaumicexploration.item.ItemBlankSeal;
 import flaxbeard.thaumicexploration.item.ItemBrain;
 import flaxbeard.thaumicexploration.item.ItemChestSeal;
@@ -48,7 +50,7 @@ import flaxbeard.thaumicexploration.research.ModResearch;
 import flaxbeard.thaumicexploration.tile.TileCrystalAdvanced;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
-import flaxbeard.thaumicexploration.tile.TileEntityThinkTankBookshelf;
+import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
 import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
 
@@ -56,6 +58,9 @@ import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
 @Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.1.1", dependencies="required-after:Thaumcraft")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, channels={"tExploration"}, packetHandler = TXPacketHandler.class)
 public class ThaumicExploration {
+	
+    @Instance("ThaumicExploration")
+    public static ThaumicExploration instance;
 
 
 	public static Item pureZombieBrain;
@@ -90,6 +95,7 @@ public class ThaumicExploration {
 	public static Block boundJar;
 	public static int boundJarID;
 	public static Block thinkTankBookshelf;
+	public static Block thinkTankBookshelf2;
 	public static WandRod WAND_ROD_CRYSTAL;
 	public static WandRod WAND_ROD_AMBER;
 	
@@ -134,6 +140,7 @@ public class ThaumicExploration {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		NetworkRegistry.instance().registerGuiHandler(instance, new TXGuiHandler());
 		//EventHandler
 		MinecraftForge.EVENT_BUS.register(new TXEventHandler());
 
@@ -141,16 +148,18 @@ public class ThaumicExploration {
 		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundChest");
 		GameRegistry.registerTileEntity(TileEntityBoundJar.class, "tileEntityBoundJar");
 		GameRegistry.registerTileEntity(TileCrystalAdvanced.class, "tileEntityCrystalAdvanced");
-		GameRegistry.registerTileEntity(TileEntityThinkTankBookshelf.class, "tileEntityThinkTankBookshelf");
+		GameRegistry.registerTileEntity(TileEntityThinkTank.class, "tileEntityThinkTank");
 		
 		//Blocks
-		thinkTankBookshelf = new BlockThinkTankBookshelf(205, Material.wood).setUnlocalizedName("thinkTankBookshelf").setCreativeTab(CreativeTabs.tabBlock);
+		thinkTankBookshelf = new BlockThinkTank(205, false).setUnlocalizedName("thinkTankBookshelf").setCreativeTab(CreativeTabs.tabBlock).setTextureName("glass");;
+		thinkTankBookshelf2 = new BlockThinkTank(206, true).setUnlocalizedName("thinkTankBookshelf").setTextureName("glass");;
 		boundChest = new BlockBoundChest(boundChestID, 0).setUnlocalizedName("boundChest");
 		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
 		
 		GameRegistry.registerBlock(boundChest, "boundChest");
 		GameRegistry.registerBlock(boundJar, "boundJar");
 		GameRegistry.registerBlock(thinkTankBookshelf, "thinkTankBookshelf");
+		GameRegistry.registerBlock(thinkTankBookshelf2, "thinkTankBookshelf2");
 		
 		//Items
 		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");
