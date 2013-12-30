@@ -5,9 +5,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import thaumcraft.common.config.ConfigBlocks;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,11 +15,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import cpw.mods.fml.common.FMLCommonHandler;
+import thaumcraft.common.config.ConfigBlocks;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import flaxbeard.thaumicexploration.ThaumicExploration;
-import flaxbeard.thaumicexploration.data.TXWorldDataInfoWorldData;
+import flaxbeard.thaumicexploration.data.TXWorldData;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 // cpw.mods.fml.common.Side;
@@ -70,7 +67,7 @@ public class TXPacketHandler implements IPacketHandler
 				if (type == 1) {
 					
 					world.setBlock(x, y, z, ThaumicExploration.boundChest.blockID, world.getBlockMetadata(x, y, z),1);
-					int nextID = TXWorldDataInfoWorldData.get(world).getNextBoundChestID();
+					int nextID = TXWorldData.get(world).getNextBoundChestID();
 					((TileEntityBoundChest) world.getBlockTileEntity(x,y, z)).id = nextID;
 					((TileEntityBoundChest) world.getBlockTileEntity(x,y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
 					player.inventory.decrStackSize(player.inventory.currentItem, 1);
@@ -121,7 +118,7 @@ public class TXPacketHandler implements IPacketHandler
 						}
 			
 					}
-					int nextID = TXWorldDataInfoWorldData.get(world).getNextBoundJarID();
+					int nextID = TXWorldData.get(world).getNextBoundJarID();
 					((TileEntityBoundJar) world.getBlockTileEntity(x,y, z)).id = nextID;
 					((TileEntityBoundJar) world.getBlockTileEntity(x,y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
 					player.inventory.decrStackSize(player.inventory.currentItem, 1);

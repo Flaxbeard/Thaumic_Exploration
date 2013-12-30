@@ -7,18 +7,18 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
 
-public class TXWorldDataInfoWorldData extends WorldSavedData {
+public class TXWorldData extends WorldSavedData {
 
         private static final String IDENTIFIER = "teWorldData";
         
         private int nextBoundChestID = 1;
         private int nextBoundJarID = 1;
         
-        public TXWorldDataInfoWorldData() {
+        public TXWorldData() {
                 super(IDENTIFIER);
         }
         
-        public TXWorldDataInfoWorldData(String identifier) {
+        public TXWorldData(String identifier) {
                 super(identifier);
         }
 
@@ -47,10 +47,10 @@ public class TXWorldDataInfoWorldData extends WorldSavedData {
             return nextBoundJarID++;
     }
         
-        public static TXWorldDataInfoWorldData get(World world) {
-                TXWorldDataInfoWorldData data = (TXWorldDataInfoWorldData)world.loadItemData(TXWorldDataInfoWorldData.class, IDENTIFIER);
+        public static TXWorldData get(World world) {
+        	TXWorldData data = (TXWorldData)world.loadItemData(TXWorldData.class, IDENTIFIER);
                 if (data == null) {
-                        data = new TXWorldDataInfoWorldData();
+                        data = new TXWorldData();
                         world.setItemData(IDENTIFIER, data);
                 }
                 return data;

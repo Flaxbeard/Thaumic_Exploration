@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,10 +22,14 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.IWandFocus;
 import thaumcraft.client.codechicken.core.vec.Vector3;
 import thaumcraft.common.items.wands.ItemWandCasting;
+import flaxbeard.thaumicexploration.ai.EntityAIArrowAttackNecromancy;
+import flaxbeard.thaumicexploration.ai.EntityAIAttackOnCollideReplacement;
+import flaxbeard.thaumicexploration.ai.EntityAINearestAttackableTargetNecromancy;
+import flaxbeard.thaumicexploration.data.NecromancyMobProperties;
 
 public class ItemFocusNecromancy extends Item implements IWandFocus {
 
-	private static final AspectList visUsage = new AspectList().add(Aspect.AIR, 5).add(Aspect.ENTROPY, 5);
+	private static final AspectList visUsage = new AspectList().add(Aspect.AIR, 1);
 	
 	public ItemFocusNecromancy(int par1) {
 		super(par1);
@@ -68,7 +71,7 @@ public class ItemFocusNecromancy extends Item implements IWandFocus {
 					targetItem = item;
 					break;
 				}
-				if (entityStack.itemID == Item.rottenFlesh.itemID) {
+				if (entityStack.itemID == Item.rottenFlesh.itemID || entityStack.itemID == Item.bone.itemID) {
 					foundItem = true;
 					currentItem = entityStack.itemID;
 					targetItem = item;
@@ -96,43 +99,87 @@ public class ItemFocusNecromancy extends Item implements IWandFocus {
 			}
 		}
 		if (progress >= 65) {
-			System.out.println("generate mob");
 			stack.stackTagCompound.setInteger("progress",0);
 			ItemStack stack2 = targetItem.getDataWatcher().getWatchableObjectItemStack(10);
+			
 			ItemStack newStack = stack2;
 			newStack.stackSize--;
 			targetItem.setEntityItemStack(newStack);
-			EntityZombie mob = new EntityZombie(targetItem.worldObj);
-			mob.setPosition(targetItem.posX, targetItem.posY, targetItem.posZ);
-			System.out.println(mob.targetTasks.taskEntries.get(1).toString());
-			List<EntityAITaskEntry> tasksToRemove = new ArrayList<EntityAITaskEntry>();
-			for ( Object entry : mob.targetTasks.taskEntries)
-			{
-				EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
-				if (entry2.action instanceof EntityAINearestAttackableTarget)
-				{
-					tasksToRemove.add((EntityAITaskEntry) entry);
+			if (!targetItem.worldObj.isRemote) {
+				if (stack2.itemID == Item.rottenFlesh.itemID) {
+					EntityZombie mob = new EntityZombie(targetItem.worldObj);
+					mob.setPosition(targetItem.posX, targetItem.posY, targetItem.posZ);
+					List<EntityAITaskEntry> tasksToRemove = new ArrayList<EntityAITaskEntry>();
+					for ( Object entry : mob.targetTasks.taskEntries)
+					{
+						EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
+						if (entry2.action instanceof EntityAINearestAttackableTarget)
+						{
+							tasksToRemove.add((EntityAITaskEntry) entry);
+						}
+					}
+					for (EntityAITaskEntry entry : tasksToRemove)
+					{
+						mob.targetTasks.removeTask(entry.action);
+					}
+					for ( Object entry : mob.tasks.taskEntries)
+					{
+						EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
+						if (entry2.action instanceof EntityAIAttackOnCollide)
+						{
+							tasksToRemove.add((EntityAITaskEntry) entry);
+						}
+					}
+					for (EntityAITaskEntry entry : tasksToRemove)
+					{
+						mob.tasks.removeTask(entry.action);
+					}
+					mob.tasks.addTask(2, new EntityAIAttackOnCollideReplacement(mob, EntityZombie.class, 1.0D, false));
+					mob.targetTasks.addTask(0, new EntityAINearestAttackableTargetNecromancy(mob, EntityZombie.class, 0, true)); 
+					if(NecromancyMobProperties.get(mob) == null)
+					{
+						NecromancyMobProperties.register(mob);
+					}
+					targetItem.worldObj.spawnEntityInWorld(mob);
+				}
+				else if (stack2.itemID == Item.bone.itemID) {
+					EntityEnderman mob = new EntityEnderman(targetItem.worldObj);
+					mob.setPosition(targetItem.posX, targetItem.posY, targetItem.posZ);
+					List<EntityAITaskEntry> tasksToRemove = new ArrayList<EntityAITaskEntry>();
+					for ( Object entry : mob.targetTasks.taskEntries)
+					{
+						EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
+						if (entry2.action instanceof EntityAINearestAttackableTarget)
+						{
+							tasksToRemove.add((EntityAITaskEntry) entry);
+						}
+					}
+					for (EntityAITaskEntry entry : tasksToRemove)
+					{
+						mob.targetTasks.removeTask(entry.action);
+					}
+					for ( Object entry : mob.tasks.taskEntries)
+					{
+						EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
+						if (entry2.action instanceof EntityAIAttackOnCollide)
+						{
+							tasksToRemove.add((EntityAITaskEntry) entry);
+						}
+					}
+					for (EntityAITaskEntry entry : tasksToRemove)
+					{
+						mob.tasks.removeTask(entry.action);
+					}
+					mob.setCurrentItemOrArmor(0, new ItemStack(Item.bow));
+					mob.tasks.addTask(2, new EntityAIArrowAttackNecromancy(mob, 1.0D, 20, 60, 15.0F));
+					mob.targetTasks.addTask(0, new EntityAINearestAttackableTargetNecromancy(mob, EntityZombie.class, 0, true)); 
+					if(NecromancyMobProperties.get(mob) == null)
+					{
+						NecromancyMobProperties.register(mob);
+					}
+					targetItem.worldObj.spawnEntityInWorld(mob);
 				}
 			}
-			for (EntityAITaskEntry entry : tasksToRemove)
-			{
-				mob.targetTasks.removeTask(entry.action);
-			}
-			for ( Object entry : mob.tasks.taskEntries)
-			{
-				EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
-				if (entry2.action instanceof EntityAIAttackOnCollide)
-				{
-					tasksToRemove.add((EntityAITaskEntry) entry);
-				}
-			}
-			for (EntityAITaskEntry entry : tasksToRemove)
-			{
-				mob.tasks.removeTask(entry.action);
-			}
-			mob.tasks.addTask(2, new EntityAIAttackOnCollide(mob, EntityMob.class, 1.0D, false));
-			mob.targetTasks.addTask(0, new EntityAINearestAttackableTarget(mob, EntityMob.class, 0, true)); 
-			targetItem.worldObj.spawnEntityInWorld(mob);
 		}
 	}
 

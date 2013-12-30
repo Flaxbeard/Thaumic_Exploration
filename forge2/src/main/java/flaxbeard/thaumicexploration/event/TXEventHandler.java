@@ -16,7 +16,7 @@ import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import flaxbeard.thaumicexploration.ThaumicExploration;
-import flaxbeard.thaumicexploration.data.TXWorldDataInfoWorldData;
+import flaxbeard.thaumicexploration.data.TXWorldData;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 
@@ -27,7 +27,7 @@ public class TXEventHandler {
 	
 	@ForgeSubscribe
 	public void handleWorldLoad(WorldEvent.Load event) {
-		TXWorldDataInfoWorldData.get(event.world);
+		TXWorldData.get(event.world);
 	}
 	
 	@ForgeSubscribe
