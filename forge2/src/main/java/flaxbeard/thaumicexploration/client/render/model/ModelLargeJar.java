@@ -9,6 +9,7 @@ public class ModelLargeJar
 {
   ModelRenderer Core;
   ModelRenderer Brine;
+  ModelRenderer Lid;
   
   public ModelLargeJar()
   {
@@ -28,6 +29,12 @@ public class ModelLargeJar
     this.Brine.setTextureSize(64, 32);
     this.Brine.mirror = true;
     setRotation(this.Brine, 0.0F, 0.0F, 0.0F);
+    
+    this.Lid = new ModelRenderer(this, 0, 24);
+    this.Lid.addBox(-3.0F, -4.0F, -3.0F, 6, 2, 6);
+    this.Lid.setRotationPoint(0.0F, -14.0F, 0.0F);
+    this.Lid.setTextureSize(64, 32);
+    this.Lid.mirror = true;
   }
   
   public void renderBrine()
@@ -40,10 +47,17 @@ public class ModelLargeJar
   
   public void renderAll()
   {
+
     GL11.glEnable(3042);
     GL11.glBlendFunc(770, 771);
     this.Core.render(0.0625F);
     GL11.glDisable(3042);
+  }
+  
+  public void renderLid()
+  {
+		this.Lid.render(0.0625F);
+	    
   }
   
   private void setRotation(ModelRenderer model, float x, float y, float z)

@@ -1,13 +1,13 @@
-Item Names
+----Item Names----
 item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
 item.thaumicexploration:transmutationCore.name=Transmutative Rod
 item.thaumicexploration:amberCore.name=Amber Rod
 
-Wand Names
+----Wand Names----
 item.Wand.amber.rod=Amber
 item.Wand.transmutation.rod=Transmutative
 
-Blank Seals
+----Blank Seals----
 item.thaumicexploration:blankSeal:Pale.name=Pale Blank Seal
 item.thaumicexploration:blankSeal:Orange.name=Orange Blank Seal
 item.thaumicexploration:blankSeal:Magenta.name=Magenta Blank Seal
@@ -25,7 +25,7 @@ item.thaumicexploration:blankSeal:Green.name=Green Blank Seal
 item.thaumicexploration:blankSeal:Red.name=Red Blank Seal
 item.thaumicexploration:blankSeal:Dark.name=Dark Blank Seal
 
-Chest Seals
+----Chest Seals----
 item.thaumicexploration:chestSeal:Pale.name=Pale Chest Binding Seal
 item.thaumicexploration:chestSeal:Orange.name=Orange Chest Binding Seal
 item.thaumicexploration:chestSeal:Magenta.name=Magenta Chest Binding Seal
@@ -43,7 +43,7 @@ item.thaumicexploration:chestSeal:Green.name=Green Chest Binding Seal
 item.thaumicexploration:chestSeal:Red.name=Red Chest Binding Seal
 item.thaumicexploration:chestSeal:Dark.name=Dark Chest Binding Seal
 
-Jar Seals
+----Jar Seals----
 item.thaumicexploration:jarSeal:Pale.name=Pale Jar Binding Seal
 item.thaumicexploration:jarSeal:Orange.name=Orange Jar Binding Seal
 item.thaumicexploration:jarSeal:Magenta.name=Magenta Jar Binding Seal
@@ -61,7 +61,10 @@ item.thaumicexploration:jarSeal:Green.name=Green Jar Binding Seal
 item.thaumicexploration:jarSeal:Red.name=Red Jar Binding Seal
 item.thaumicexploration:jarSeal:Dark.name=Dark Jar Binding Seal
 
-Thaumonomicon Names
+----Block Names----
+tile.thaumicexploration:thinkTankJar.name=Think Tank
+
+----Thaumonomicon Names----
 te.name.FLESHCURE=Flesh Purification
 te.name.CHESTSEAL=Seal of Chest Binding
 te.name.JARSEAL=Seal of Jar Binding
@@ -69,7 +72,7 @@ te.name.BRAINCURE=Brain Sanitization
 te.name.WANDAMBER=Amber Wand Core
 te.name.TRANSMUTATION=Transmutative Wand Core
 
-Thaumonomicon Tags
+----Thaumonomicon Tags----
 te.tag.FLESHCURE=Mystical Cleansing
 te.tag.BRAINCURE=Rejuvenation Ritual
 te.tag.CHESTSEAL=What you need, when you need it
@@ -77,7 +80,7 @@ te.tag.JARSEAL=Essentia, essentia everywhere
 te.tag.WANDAMBER=Regenerative vis storage
 te.tag.TRANSMUTATION=One thing into another
 
-Thaumonomicon Entries
+----Thaumonomicon Entries----
 te.text.FLESHCURE=By imbuing rotten flesh with certain aspects, you have found that you are able to remove nearly all traces of disease and decomposition from the flesh, rendering it much more useful. Although this discovery may not be particularly useful, you are sure it will lead to exciting things.
 te.text.BRAINCURE=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations. The brains also serve as a bait for zombified creatures, when dropped or placed on an arcane pedestal.
 te.text.CHESTSEAL=By enchanting a mundane seal made of tallow, you have discovered a way to bind chests, so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network. Note that only empty chests are able to be bound.

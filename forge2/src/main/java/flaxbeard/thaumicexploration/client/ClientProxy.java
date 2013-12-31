@@ -1,6 +1,10 @@
 package flaxbeard.thaumicexploration.client;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import flaxbeard.thaumicexploration.ThaumicExploration;
+import flaxbeard.thaumicexploration.client.render.ItemRenderThinkTank;
 import flaxbeard.thaumicexploration.client.render.TileEntityBoundChestRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityBoundJarRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityThinkTankRender;
@@ -16,9 +20,10 @@ public class ClientProxy extends CommonProxy
     {
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoundJar.class, new TileEntityBoundJarRender());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoundChest.class, new TileEntityBoundChestRender());
-    	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityThinkTank.class, new TileEntityThinkTankRender());
+    	 TileEntitySpecialRenderer renderThinkTank = new TileEntityThinkTankRender();
+    	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityThinkTank.class, renderThinkTank);
     	
-    	 
+    	 MinecraftForgeClient.registerItemRenderer(ThaumicExploration.thinkTankJar.blockID, new ItemRenderThinkTank(renderThinkTank, new TileEntityThinkTank()));
     }
 
 }

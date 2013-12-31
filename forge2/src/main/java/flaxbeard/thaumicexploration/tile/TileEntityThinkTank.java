@@ -15,12 +15,19 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.config.Config;
 import thaumcraft.common.config.ConfigItems;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.block.BlockThinkTank;
+import flaxbeard.thaumicexploration.data.BoundJarWorldData;
 
 public class TileEntityThinkTank extends TileEntity implements ISidedInventory
 {
@@ -28,12 +35,7 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
     private static final int[] slots_bottom = new int[] {2, 1};
     private static final int[] slots_sides = new int[] {1};
     
-    public float field_40063_b;
-    public float field_40061_d;
-    public float field_40059_f;
-    public float field_40066_q;
-    public float rota;
-    public float rotb;
+
     long lastsigh = System.currentTimeMillis() + 1500L;
     protected static Random rand = new Random();
     /**
@@ -53,6 +55,12 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
     public int furnaceCookTime;
     private String field_94130_e = "thaumicExploration.test";
 	private boolean canSpaz;
+	public float pageFlipPrev;
+	public float pageFlip;
+	public float field_70374_e;
+	public int space = 1;
+	public int warmedUpNumber;
+	public int rotationTicks;
 
     /**
      * Returns the number of slots in the inventory.
@@ -69,6 +77,11 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
     {
         return this.furnaceItemStacks[par1];
     }
+    
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox() {
+	        return AxisAlignedBB.getAABBPool().getAABB(this.xCoord - 1 - this.space, this.yCoord - 1, this.zCoord - 1 - this.space, this.xCoord + 1 + this.space, this.yCoord + 1, this.zCoord + 1 + this.space);
+	}
 
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
@@ -187,6 +200,38 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
         {
             this.field_94130_e = par1NBTTagCompound.getString("CustomName");
         }
+        
+        if (par1NBTTagCompound.hasKey("WarmUpTicks"))
+        {
+            this.warmedUpNumber = par1NBTTagCompound.getShort("WarmUpTicks");
+        }
+        
+        
+    }
+    
+    @Override
+    public Packet getDescriptionPacket()
+    {
+    	super.getDescriptionPacket();
+        NBTTagCompound access = new NBTTagCompound();
+        access.setInteger("warmedUpNumber", this.warmedUpNumber);
+        access.setInteger("rotationTicks", this.rotationTicks);
+        access.setInteger("space", this.space);
+        
+        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+    }
+    
+
+    @Override
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    {
+    	super.onDataPacket(net, pkt);
+    	NBTTagCompound access = pkt.data;
+    	this.warmedUpNumber = access.getInteger("warmedUpNumber");
+    	this.rotationTicks = access.getInteger("rotationTicks");
+    	this.space = access.getInteger("space");
+    	
+        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
     }
 
     /**
@@ -196,6 +241,7 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setShort("BurnTime", (short)this.furnaceBurnTime);
+        par1NBTTagCompound.setShort("WarmUpTicks", (short)this.warmedUpNumber);
         par1NBTTagCompound.setShort("CookTime", (short)this.furnaceCookTime);
         NBTTagList nbttaglist = new NBTTagList();
 
@@ -268,9 +314,31 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
      */
     public void updateEntity()
     {
+    	if (!this.worldObj.isRemote)
+    		System.out.println(this.enoughSpace());
         boolean flag = this.furnaceBurnTime > 0;
         boolean flag1 = false;
+        if (!this.worldObj.isRemote) {
+        	if (this.canSmelt())
+			{
 
+	        	if (this.warmedUpNumber < 40) {
+	        		this.warmedUpNumber++;
+	        		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+	        	}
+	
+			}
+			if (!this.canSmelt() && this.warmedUpNumber > 0)
+			{
+				this.warmedUpNumber--;
+				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+			}
+			
+			
+        }
+        if (this.warmedUpNumber > 0) {
+        	this.rotationTicks++;
+        }
         if (!this.worldObj.isRemote)
         {
 
@@ -298,9 +366,11 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
         }
         if (this.worldObj.isRemote)
         {
+
+			
+    	
           this.canSpaz = true;
           Entity entity = null;
-          this.rotb = this.rota;
           if (entity == null)
           {
             entity = this.worldObj.getClosestPlayer(this.xCoord + 0.5F, this.yCoord + 0.5F, this.zCoord + 0.5F, 6.0D);
@@ -309,43 +379,6 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
               this.worldObj.playSound(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, "thaumcraft:brain", 0.15F, 0.8F + this.worldObj.rand.nextFloat() * 0.4F, false);
               this.lastsigh = (System.currentTimeMillis() + 5000L + this.worldObj.rand.nextInt(25000));
             }
-          }
-          if (entity != null)
-          {
-            double d = entity.posX - (this.xCoord + 0.5F);
-            double d1 = entity.posZ - (this.zCoord + 0.5F);
-            this.field_40066_q = ((float)Math.atan2(d1, d));
-            this.field_40059_f += 0.1F;
-            if ((this.field_40059_f < 0.5F) || (rand.nextInt(40) == 0))
-            {
-              float f3 = this.field_40061_d;
-              do
-              {
-                this.field_40061_d += rand.nextInt(4) - rand.nextInt(4);
-              } while (f3 == this.field_40061_d);
-            }
-          }
-          else
-          {
-            this.field_40066_q += 0.01F;
-          }
-          while (this.rota >= 3.141593F) {
-            this.rota -= 6.283185F;
-          }
-          while (this.rota < -3.141593F) {
-            this.rota += 6.283185F;
-          }
-          while (this.field_40066_q >= 3.141593F) {
-            this.field_40066_q -= 6.283185F;
-          }
-          while (this.field_40066_q < -3.141593F) {
-            this.field_40066_q += 6.283185F;
-          }
-          for (float f = this.field_40066_q - this.rota; f >= 3.141593F; f -= 6.283185F) {
-          while (f < -3.141593F) {
-            f += 6.283185F;
-          }
-          this.rota += f * 0.04F;
           }
         }
 
@@ -360,6 +393,10 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
      */
     private boolean canSmelt()
     {
+    	if (!this.enoughSpace())
+    	{
+    		return false;
+    	}
         if (this.furnaceItemStacks[0] == null)
         {
             return false;
@@ -368,6 +405,7 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
         {
         	if (this.furnaceItemStacks[0].itemID == Item.book.itemID) {
 	        	ItemStack itemstack = new ItemStack(ConfigItems.itemResource, 1, 9);
+	        	//itemstack = new ItemStack(ConfigItems.itemResearchNotes, 1, 42);
 	            if (this.furnaceItemStacks[1] == null) return true;
 	            if (!this.furnaceItemStacks[1].isItemEqual(itemstack)) return false;
 	            int result = furnaceItemStacks[1].stackSize + itemstack.stackSize;
@@ -375,6 +413,7 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
         	}
         	else if (this.furnaceItemStacks[0].itemID == Item.enchantedBook.itemID) {
         		ItemStack itemstack = new ItemStack(ConfigItems.itemResource, 2, 9);
+        		//itemstack = new ItemStack(ConfigItems.itemResearchNotes, 1, 42);
 	            if (this.furnaceItemStacks[1] == null) return true;
 	            if (!this.furnaceItemStacks[1].isItemEqual(itemstack)) return false;
 	            int result = furnaceItemStacks[1].stackSize + itemstack.stackSize;
@@ -386,12 +425,47 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
         	}
         }
     }
+    
+    public boolean enoughSpace() {
+		boolean enoughSpace = true;
+		boolean muchSpace = true;
+		String whyNotEnoughSpace = " happy days";
+		for (int x = -2; x<3;x++) {
+			for (int z = -2; z<3;z++) {
+				for (int y = -1; y<2;y++) {
+					if (this.worldObj.getBlockMaterial(this.xCoord + x, this.yCoord + y, this.zCoord + z) != Config.airyMaterial && this.worldObj.getBlockMaterial(this.xCoord + x, this.yCoord + y, this.zCoord + z) != Material.air && !Block.blocksList[this.worldObj.getBlockId(this.xCoord+x, this.yCoord+y, this.zCoord+z)].isBlockReplaceable(this.worldObj, this.xCoord+x, this.yCoord+y, this.zCoord+z)) {
+						if (!(this.xCoord + x == this.xCoord && this.zCoord +z ==  this.zCoord && (this.yCoord+y == this.yCoord || this.yCoord+y == this.yCoord - 1))) {
+							if (Math.abs(x) > 1 || Math.abs(z) > 1) {
+								muchSpace = false;
+							}
+							else
+							{
+								enoughSpace = false;
+							}
+							whyNotEnoughSpace = Block.blocksList[this.worldObj.getBlockId(this.xCoord+x, this.yCoord+y, this.zCoord+z)].toString();
+						}
+					}
+				}
+			}
+		}
+		if (this.worldObj.getBlockId(this.xCoord, this.yCoord-1, this.zCoord) != Block.bookShelf.blockID) {
+			enoughSpace = false;
+		}
+		int oldSpace = this.space;
+		this.space = muchSpace ? 1 : 0;
+		if (this.space != oldSpace) {
+			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+		}
+		System.out.println(this.space);
+    	return enoughSpace;
+    }
 
     /**
      * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
      */
     public void smeltItem()
     {
+        
         if (this.canSmelt())
         {
         	double rand = Math.random();
@@ -404,14 +478,15 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
         		}
         	}
         	if (this.furnaceItemStacks[0].itemID == Item.book.itemID) {
-        		if (rand < 0.15) {
+        		if (rand <= 0.1) {
         			genFrag = true;
         			numberFrags = 1;
         		}
         	}
         	if (genFrag) {
+
 	            ItemStack itemstack = new ItemStack(ConfigItems.itemResource, numberFrags, 9);
-	
+	            //itemstack = new ItemStack(ConfigItems.itemResearchNotes, 1, 42);
 	            if (this.furnaceItemStacks[1] == null)
 	            {
 	                this.furnaceItemStacks[1] = itemstack.copy();

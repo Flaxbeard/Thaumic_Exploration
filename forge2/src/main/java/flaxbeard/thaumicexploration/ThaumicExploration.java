@@ -3,6 +3,7 @@ package flaxbeard.thaumicexploration;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.block.StepSound;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
@@ -94,8 +95,7 @@ public class ThaumicExploration {
 	public static int boundChestID;
 	public static Block boundJar;
 	public static int boundJarID;
-	public static Block thinkTankBookshelf;
-	public static Block thinkTankBookshelf2;
+	public static Block thinkTankJar;
 	public static WandRod WAND_ROD_CRYSTAL;
 	public static WandRod WAND_ROD_AMBER;
 	
@@ -151,15 +151,14 @@ public class ThaumicExploration {
 		GameRegistry.registerTileEntity(TileEntityThinkTank.class, "tileEntityThinkTank");
 		
 		//Blocks
-		thinkTankBookshelf = new BlockThinkTank(205, false).setUnlocalizedName("thinkTankBookshelf").setCreativeTab(CreativeTabs.tabBlock).setTextureName("glass");;
-		thinkTankBookshelf2 = new BlockThinkTank(206, true).setUnlocalizedName("thinkTankBookshelf").setTextureName("glass");;
-		boundChest = new BlockBoundChest(boundChestID, 0).setUnlocalizedName("boundChest");
+		thinkTankJar = new BlockThinkTank(205, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicExploration:blankTexture");
+	
+		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(new StepSound("wood", 1.0F, 1.0F)).setUnlocalizedName("boundChest");
 		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
 		
 		GameRegistry.registerBlock(boundChest, "boundChest");
 		GameRegistry.registerBlock(boundJar, "boundJar");
-		GameRegistry.registerBlock(thinkTankBookshelf, "thinkTankBookshelf");
-		GameRegistry.registerBlock(thinkTankBookshelf2, "thinkTankBookshelf2");
+		GameRegistry.registerBlock(thinkTankJar, "thinkTankJar");
 		
 		//Items
 		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:rodTransmutation");

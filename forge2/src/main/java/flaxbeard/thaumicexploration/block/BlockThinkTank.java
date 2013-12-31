@@ -2,6 +2,8 @@ package flaxbeard.thaumicexploration.block;
 
 import java.util.Random;
 
+import thaumcraft.common.blocks.JarStepSound;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -45,8 +47,11 @@ public class BlockThinkTank extends BlockContainer
 
     public BlockThinkTank(int par1, boolean par2)
     {
-        super(par1, Material.rock);
+        super(par1, Material.glass);
         this.isActive = par2;
+        setStepSound(new JarStepSound("jar", 1.0F, 1.0F));
+        setHardness(0.3F);
+        setLightValue(0.66F);
     }
 
     /**
@@ -54,7 +59,7 @@ public class BlockThinkTank extends BlockContainer
      */
     public int idDropped(int par1, Random par2Random, int par3)
     {
-        return Block.furnaceIdle.blockID;
+        return ThaumicExploration.thinkTankJar.blockID;
     }
 
     /**
@@ -103,16 +108,7 @@ public class BlockThinkTank extends BlockContainer
         }
     }
 
-    @SideOnly(Side.CLIENT)
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int par1, int par2)
-    {
-    	return this.blockIcon;
-        //return par1 == 1 ? this.furnaceIconTop : (par1 == 0 ? this.furnaceIconTop : (par1 != par2 ? this.blockIcon : this.furnaceIconFront));
-    }
     
     public boolean isOpaqueCube()
     {
@@ -132,18 +128,7 @@ public class BlockThinkTank extends BlockContainer
         return -1;
     }
 
-    @SideOnly(Side.CLIENT)
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    public void registerIcons(IconRegister par1IconRegister)
-    {
-        this.blockIcon = par1IconRegister.registerIcon(this.getTextureName() + "Side");
-        this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "furnace_front_on" : "furnace_front_off");
-        this.furnaceIconTop = par1IconRegister.registerIcon(this.getTextureName() + "Top");
-    }
 
     /**
      * Called upon block activation (right click on the block.)
@@ -176,14 +161,7 @@ public class BlockThinkTank extends BlockContainer
         TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
         keepFurnaceInventory = true;
 
-        if (par0)
-        {
-            par1World.setBlock(par2, par3, par4, ThaumicExploration.thinkTankBookshelf.blockID);
-        }
-        else
-        {
-            par1World.setBlock(par2, par3, par4, ThaumicExploration.thinkTankBookshelf2.blockID);
-        }
+
 
         keepFurnaceInventory = false;
         par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
@@ -200,39 +178,7 @@ public class BlockThinkTank extends BlockContainer
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
-    {
-        if (this.isActive)
-        {
-            int l = par1World.getBlockMetadata(par2, par3, par4);
-            float f = (float)par2 + 0.5F;
-            float f1 = (float)par3 + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
-            float f2 = (float)par4 + 0.5F;
-            float f3 = 0.52F;
-            float f4 = par5Random.nextFloat() * 0.6F - 0.3F;
-
-            if (l == 4)
-            {
-                par1World.spawnParticle("smoke", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-                par1World.spawnParticle("flame", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-            }
-            else if (l == 5)
-            {
-                par1World.spawnParticle("smoke", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-                par1World.spawnParticle("flame", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-            }
-            else if (l == 2)
-            {
-                par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
-                par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
-            }
-            else if (l == 3)
-            {
-                par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-                par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-            }
-        }
-    }
+    
 
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
@@ -348,6 +294,11 @@ public class BlockThinkTank extends BlockContainer
     {
         return Container.calcRedstoneFromInventory((IInventory)par1World.getBlockTileEntity(par2, par3, par4));
     }
+    
+    public int quantityDropped(Random par1Random)
+    {
+        return 1;
+    }
 
     @SideOnly(Side.CLIENT)
 
@@ -356,6 +307,6 @@ public class BlockThinkTank extends BlockContainer
      */
     public int idPicked(World par1World, int par2, int par3, int par4)
     {
-        return Block.furnaceIdle.blockID;
+        return ThaumicExploration.thinkTankJar.blockID;
     }
 }
