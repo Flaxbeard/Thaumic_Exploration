@@ -27,16 +27,14 @@ public final class ModResearch {
         research.setPages(new ResearchPage("1"), cruciblePage("FLESHCURE"));
         research = new TXResearchItem("BRAINCURE", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -3, 10, 7, new ItemStack(ThaumicExploration.pureZombieBrain)).setParents("JARBRAIN","FLESHCURE").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
         research.setPages(new ResearchPage("1") );
+        research = new TXResearchItem("THINKTANK", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2, 12, 7, new ItemStack(ThaumicExploration.thinkTankJar)).setParents("BRAINCURE","RESEARCHER2").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
+        research.setPages(new ResearchPage("1") );
         
         //Wandcraft
         research = new TXResearchItem("WANDAMBER", "THAUMATURGY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -11, 2, 7, new ItemStack(ThaumicExploration.amberCore)).setParents("ROD_obsidian","ROD_reed","ROD_blaze","ROD_ice","ROD_quartz","ROD_bone").setConcealed().registerResearchItem();
         research.setPages(new ResearchPage("1") );
         
-
-        
-       
-
-        
+        //Sealery
         ResourceLocation chestSeal = new ResourceLocation("thaumicexploration:textures/tabs/chestSeals.png");
         ResourceLocation jarSeal = new ResourceLocation("thaumicexploration:textures/tabs/jarSeals.png");
         if (ThaumicExploration.allowBoundInventories) {
