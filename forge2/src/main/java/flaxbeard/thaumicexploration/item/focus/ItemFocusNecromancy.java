@@ -3,6 +3,7 @@ package flaxbeard.thaumicexploration.item.focus;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAITaskEntry;
@@ -22,6 +23,9 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.IWandFocus;
 import thaumcraft.client.codechicken.core.vec.Vector3;
 import thaumcraft.common.items.wands.ItemWandCasting;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.ai.EntityAIArrowAttackNecromancy;
 import flaxbeard.thaumicexploration.ai.EntityAIAttackOnCollideReplacement;
 import flaxbeard.thaumicexploration.ai.EntityAINearestAttackableTargetNecromancy;
@@ -30,9 +34,17 @@ import flaxbeard.thaumicexploration.data.NecromancyMobProperties;
 public class ItemFocusNecromancy extends Item implements IWandFocus {
 
 	private static final AspectList visUsage = new AspectList().add(Aspect.AIR, 1);
+	private static Icon orn;
+	private static Icon depth;
+	
 	
 	public ItemFocusNecromancy(int par1) {
 		super(par1);
+	}
+	
+	@Override
+	public Icon getFocusDepthLayerIcon() {
+		return depth;
 	}
 
 	@Override
@@ -191,7 +203,7 @@ public class ItemFocusNecromancy extends Item implements IWandFocus {
 
 	@Override
 	public int getFocusColor() {
-		return 0x9C00BE;
+		return 0xFFFFFF;
 	}
 
 	@Override
@@ -203,12 +215,16 @@ public class ItemFocusNecromancy extends Item implements IWandFocus {
 	public boolean isVisCostPerTick() {
 		return true;
 	}
-
-	@Override
-	public Icon getFocusDepthLayerIcon() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister ir)
+	{
+		super.registerIcons(ir);
+		this.orn = ir.registerIcon("thaumicexploration:necromancyOrn");
+		this.depth = ir.registerIcon("thaumicexploration:necromancyDepth");
+		System.out.println(ThaumicExploration.focusNecromancy.getUnlocalizedName().replaceAll("item.", "") + "Orn");
 	}
+
 
 	@Override
 	public Icon getOrnament() {

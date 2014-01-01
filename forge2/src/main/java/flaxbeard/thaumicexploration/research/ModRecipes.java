@@ -1,7 +1,9 @@
 package flaxbeard.thaumicexploration.research;
 
+import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -20,13 +22,34 @@ import flaxbeard.thaumicexploration.ThaumicExploration;
 
 
 public final class ModRecipes {
+	
+    static ItemStack empty = new ItemStack(ConfigBlocks.blockHole, 1, 15);
 
     public static void initRecipes() {
         initCraftingRecipes();
         initArcaneRecipes();
         initInfusionRecipes();
         initCrucibleRecipes();
+        initConstructRecipes();
     }
+    
+    private static void initConstructRecipes() {
+    	
+    	 registerResearchItemC("BUILDTHINKTANK", Arrays.asList(new Object[] { 
+    			 new AspectList(), 
+    			 Integer.valueOf(3), Integer.valueOf(3), Integer.valueOf(3), 
+    			 Arrays.asList(new ItemStack[] { 
+    					 empty, empty, empty, 
+    					 empty, empty, empty, 
+    					 empty, empty, empty, 
+    					 empty, empty, empty, 
+    					 empty, new ItemStack(ThaumicExploration.thinkTankJar), empty, 
+    					 empty, empty, empty, 
+    					 empty, empty, empty, 
+    					 empty, new ItemStack(Block.bookShelf), empty, 
+    					 empty, empty, empty}) }));
+    }
+
 
 	private static void initInfusionRecipes() {
 		registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, 32767), 3, 
@@ -34,6 +57,11 @@ public final class ModRecipes {
 				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.potion,1, 16392), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.speckledMelon));
+		registerResearchItemI("THINKTANK", new ItemStack(ThaumicExploration.thinkTankJar), 3, 
+				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
+				new ItemStack(ThaumicExploration.thinkTankJar),new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemInkwell,1,0), 
+				new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemThaumonomicon), 
+				new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemThaumometer));
 		registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, 32767), 3, 
 				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
 				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
@@ -99,5 +127,11 @@ public final class ModRecipes {
 	private static void registerResearchItemI(String name, String research, Object output, int instability, AspectList aspects, ItemStack input, ItemStack... stuff) {
         InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe(name, output, instability, aspects, input, stuff);
         ConfigResearch.recipes.put(research, recipe);
+	}
+	
+
+	private static void registerResearchItemC(String string, List<Object> asList) {
+		ConfigResearch.recipes.put(string, asList);
+		
 	}
 }

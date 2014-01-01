@@ -8,6 +8,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -38,7 +39,7 @@ public class TXEventHandler {
 		if (event.entityPlayer.worldObj.blockExists(event.x, event.y, event.z)) {
 			//System.out.println(event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) + " " + ThaumicExploration.boundChest.blockID);
 			if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == Block.chest.blockID) {
-				//System.out.println("chest");
+
 				if (event.entityPlayer.inventory.getCurrentItem() != null){ 
 					if (event.entityPlayer.inventory.getCurrentItem().itemID == ThaumicExploration.chestSeal.itemID) {
 						type = 1;

@@ -35,15 +35,15 @@ public class TXResearchItem extends ResearchItem {
         @Override
         @SideOnly(Side.CLIENT)
         public String getText() {
-                return StatCollector.translateToLocal("[TX] ")
-                                + StatCollector.translateToLocal("te.tag." + key);
+                return StatCollector.translateToLocal("te.researchPrefix")
+                                + " " + StatCollector.translateToLocal("te.tag." + key);
         }
 
         @Override
         public ResearchItem setPages(ResearchPage... par) {
                 for (ResearchPage page : par) {
                         if (page.type == PageType.TEXT)
-                                page.text = "te.text." + key;
+                                page.text = "te.text." + key + "." + page.text;
 
                         if (page.type == PageType.INFUSION_CRAFTING) {
                                 if (parentsHidden == null || parentsHidden.length == 0)

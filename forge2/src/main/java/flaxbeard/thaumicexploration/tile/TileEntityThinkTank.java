@@ -429,7 +429,6 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
     public boolean enoughSpace() {
 		boolean enoughSpace = true;
 		boolean muchSpace = true;
-		String whyNotEnoughSpace = " happy days";
 		for (int x = -2; x<3;x++) {
 			for (int z = -2; z<3;z++) {
 				for (int y = -1; y<2;y++) {
@@ -442,7 +441,7 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
 							{
 								enoughSpace = false;
 							}
-							whyNotEnoughSpace = Block.blocksList[this.worldObj.getBlockId(this.xCoord+x, this.yCoord+y, this.zCoord+z)].toString();
+						
 						}
 					}
 				}
