@@ -96,6 +96,12 @@ te.name.JARSEAL=Seal of Jar Binding
 te.tag.JARSEAL=Essentia, essentia everywhere
 te.text.JARSEAL.1=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.
 
+--Everfull Urn
+te.name.URN=Everfull Urn
+te.tag.URN=It seems familiar...
+te.text.URN.1=You have read much about a mystical 'Everfull Urn' in your research, a mystical device created by the great Thaumaturgist Azanor that could fill an infinite amount of buckets. You have finally been able to devise a device that can do that and more. Your everfull urn can not only supply water to an infinite amount of buckets, it can also be pumped out of the top to an external tank. By including an arcane ear in the infusion, you have also allowed the urn to fill any nearby crucible, and extinguish nearby players that are on fire.
+
+
 --Amber Wand Core
 te.name.WANDAMBER=Amber Wand Core
 te.tag.WANDAMBER=Regenerative vis storage

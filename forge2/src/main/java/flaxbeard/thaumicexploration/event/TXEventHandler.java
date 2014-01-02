@@ -7,12 +7,17 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -61,8 +66,27 @@ public class TXEventHandler {
 					}
 				}
 			}
-		}
 		
+//			else if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ThaumicExploration.everfullUrn.blockID) {
+//				System.out.println("swegin");
+//				if (event.entityPlayer.inventory.getCurrentItem() != null){ 
+//					if (event.entityPlayer.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
+//						System.out.println("its happening");
+//						((IFluidContainerItem)event.entityPlayer.inventory.getCurrentItem().getItem()).fill(event.entityPlayer.inventory.getCurrentItem(), new FluidStack(FluidRegistry.WATER, 1000), true);
+//						type = 7;
+//						event.setCanceled(true);
+//					}
+//					else if (event.entityPlayer.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
+//						System.out.println("its happenin");
+//						//event.entityPlayer.inventory.decrStackSize(event.entityPlayer.inventory.currentItem, 1);
+//						//event.entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));
+//						event.setCanceled(true);
+//						type = 7;
+//						
+//					}
+//				}
+//			}
+		}
 
 
 		if (event.entityPlayer.worldObj.blockExists(event.x, event.y, event.z)) {

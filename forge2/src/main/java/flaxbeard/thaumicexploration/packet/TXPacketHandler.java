@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -15,6 +16,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import thaumcraft.common.config.ConfigBlocks;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
@@ -50,6 +54,7 @@ public class TXPacketHandler implements IPacketHandler
             packetID = inputStream.readByte();
             dimension = inputStream.readInt();
             World world = DimensionManager.getWorld(dimension);
+
 
             if (packetID == 1)
             {
@@ -166,6 +171,17 @@ public class TXPacketHandler implements IPacketHandler
 
 						player.inventory.addItemStackToInventory(linkedSeal);
 						player.inventory.decrStackSize(player.inventory.currentItem, 1);
+					}
+				}
+				else if (type == 7) {
+					if (player.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
+						System.out.println("its happening");
+						((IFluidContainerItem)player.inventory.getCurrentItem().getItem()).fill(player.inventory.getCurrentItem(), new FluidStack(FluidRegistry.WATER, 1000), true);
+					}
+					else if (player.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
+						System.out.println("its happenin");
+						player.inventory.decrStackSize(player.inventory.currentItem, 1);
+						player.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));
 					}
 				}
             }

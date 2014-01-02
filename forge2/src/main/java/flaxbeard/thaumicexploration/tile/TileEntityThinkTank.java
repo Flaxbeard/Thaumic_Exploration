@@ -314,8 +314,6 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
      */
     public void updateEntity()
     {
-    	if (!this.worldObj.isRemote)
-    		System.out.println(this.enoughSpace());
         boolean flag = this.furnaceBurnTime > 0;
         boolean flag1 = false;
         if (!this.worldObj.isRemote) {
@@ -455,7 +453,6 @@ public class TileEntityThinkTank extends TileEntity implements ISidedInventory
 		if (this.space != oldSpace) {
 			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		}
-		System.out.println(this.space);
     	return enoughSpace;
     }
 

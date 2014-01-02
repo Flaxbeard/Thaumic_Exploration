@@ -21,6 +21,7 @@ import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import thaumcraft.api.wands.WandRod;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -35,6 +36,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
 import flaxbeard.thaumicexploration.block.BlockBoundJar;
+import flaxbeard.thaumicexploration.block.BlockEverfullUrn;
 import flaxbeard.thaumicexploration.block.BlockThinkTank;
 import flaxbeard.thaumicexploration.common.CommonProxy;
 import flaxbeard.thaumicexploration.event.TXEventHandler;
@@ -43,14 +45,13 @@ import flaxbeard.thaumicexploration.item.ItemBlankSeal;
 import flaxbeard.thaumicexploration.item.ItemBrain;
 import flaxbeard.thaumicexploration.item.ItemChestSeal;
 import flaxbeard.thaumicexploration.item.ItemChestSealLinked;
-import flaxbeard.thaumicexploration.item.ItemCrystalArmor;
 import flaxbeard.thaumicexploration.item.focus.ItemFocusNecromancy;
 import flaxbeard.thaumicexploration.packet.TXPacketHandler;
 import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
-import flaxbeard.thaumicexploration.tile.TileCrystalAdvanced;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
+import flaxbeard.thaumicexploration.tile.TileEntityEverfullUrn;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
 import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
@@ -96,8 +97,11 @@ public class ThaumicExploration {
 	public static Block boundJar;
 	public static int boundJarID;
 	public static Block thinkTankJar;
+	public static Block everfullUrn;
 	public static WandRod WAND_ROD_CRYSTAL;
 	public static WandRod WAND_ROD_AMBER;
+	
+	public static int everfullUrnRenderID;
 	
 	public static CreativeTabs tab;
 	
@@ -144,6 +148,8 @@ public class ThaumicExploration {
 	public void load(FMLInitializationEvent event) {
 		NetworkRegistry.instance().registerGuiHandler(instance, new TXGuiHandler());
 		
+		everfullUrnRenderID = RenderingRegistry.getNextAvailableRenderId();
+		
 		//Creative Tab
 		tab = new TXTab(CreativeTabs.getNextID(), "thaumicExploration");
 		
@@ -153,11 +159,12 @@ public class ThaumicExploration {
 		//Tiles
 		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundChest");
 		GameRegistry.registerTileEntity(TileEntityBoundJar.class, "tileEntityBoundJar");
-		GameRegistry.registerTileEntity(TileCrystalAdvanced.class, "tileEntityCrystalAdvanced");
 		GameRegistry.registerTileEntity(TileEntityThinkTank.class, "tileEntityThinkTank");
+		GameRegistry.registerTileEntity(TileEntityEverfullUrn.class, "tileEntityEverfullUrn");
 		
 		//Blocks
 		thinkTankJar = new BlockThinkTank(205, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
+		everfullUrn = new BlockEverfullUrn(1535).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
 	
 		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(new StepSound("wood", 1.0F, 1.0F)).setUnlocalizedName("boundChest");
 		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
@@ -165,6 +172,7 @@ public class ThaumicExploration {
 		GameRegistry.registerBlock(boundChest, "boundChest");
 		GameRegistry.registerBlock(boundJar, "boundJar");
 		GameRegistry.registerBlock(thinkTankJar, "thinkTankJar");
+		GameRegistry.registerBlock(everfullUrn, "everfullUrn");
 		
 		//Items
 		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");

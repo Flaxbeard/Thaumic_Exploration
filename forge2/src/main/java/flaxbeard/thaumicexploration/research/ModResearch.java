@@ -42,7 +42,10 @@ public final class ModResearch {
              research = new TXResearchItem("THINKTANK", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2, 12, 7, new ItemStack(ThaumicExploration.thinkTankJar)).setParents("BRAINCURE","RESEARCHER2").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
              research.setPages(new ResearchPage("1"), infusionPage("THINKTANK"), new ResearchPage("2"), constructPage("BUILDTHINKTANK"));
         }
-       
+        
+        //Misc
+        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("ARCANEEAR").setConcealed().registerResearchItem();
+        research.setPages(new ResearchPage("1") );
         
         //Wandcraft
         research = new TXResearchItem("WANDAMBER", "THAUMATURGY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -11, 2, 7, new ItemStack(ThaumicExploration.amberCore)).setParents("ROD_obsidian","ROD_reed","ROD_blaze","ROD_ice","ROD_quartz","ROD_bone").setConcealed().registerResearchItem();
