@@ -65,6 +65,7 @@ item.thaumicexploration:jarSeal:Dark.name=Dark Jar Binding Seal
 
 ----Block Names----
 tile.thaumicexploration:thinkTankJar.name=Think Tank
+tile.thaumicexploration:everfullUrn.name=Everfull Urn
 
 ----Thaumonomicon Entries----
 te.researchPrefix=[TX]

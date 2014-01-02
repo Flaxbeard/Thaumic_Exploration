@@ -44,7 +44,7 @@ public final class ModResearch {
         }
         
         //Misc
-        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("ARCANEEAR").setConcealed().registerResearchItem();
+        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
         research.setPages(new ResearchPage("1") );
         
         //Wandcraft
