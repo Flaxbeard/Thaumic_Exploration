@@ -54,16 +54,24 @@ public class TXPacketHandler implements IPacketHandler
             packetID = inputStream.readByte();
             dimension = inputStream.readInt();
             World world = DimensionManager.getWorld(dimension);
+            
 
 
-            if (packetID == 1)
+            if (packetID == 1 && world != null)
             {
 
             	int x = inputStream.readInt();
             	int y = inputStream.readInt();
             	int z = inputStream.readInt();
             	byte type = inputStream.readByte();
-            	EntityPlayer player = (EntityPlayer) world.getEntityByID(inputStream.readInt());
+            	
+            	
+            	
+            	int readInt = inputStream.readInt();
+            	
+            	if (world.getEntityByID(readInt) != null) {
+            		EntityPlayer player = (EntityPlayer) world.getEntityByID(readInt);
+            		
             	
             	TileEntity te = world.getBlockTileEntity(x, y, z);
             	
@@ -75,7 +83,8 @@ public class TXPacketHandler implements IPacketHandler
 					int nextID = TXWorldData.get(world).getNextBoundChestID();
 					((TileEntityBoundChest) world.getBlockTileEntity(x,y, z)).id = nextID;
 					((TileEntityBoundChest) world.getBlockTileEntity(x,y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
-					player.inventory.decrStackSize(player.inventory.currentItem, 1);
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.decrStackSize(player.inventory.currentItem, 1);
 					world.markBlockForUpdate(x, y, z);
 				}
 				else if (type == 2) {
@@ -85,7 +94,8 @@ public class TXPacketHandler implements IPacketHandler
 					((TileEntityBoundChest) world.getBlockTileEntity(x, y, z)).id = nextID;
 					((TileEntityBoundChest) world.getBlockTileEntity(x, y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
 					world.markBlockForUpdate(x, y, z);
-					player.inventory.decrStackSize(player.inventory.currentItem, 1);
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.decrStackSize(player.inventory.currentItem, 1);
 				}
 	
 				else if (type == 3) {
@@ -103,7 +113,8 @@ public class TXPacketHandler implements IPacketHandler
 						linkedSeal.setTagCompound(tag);
 
 						player.inventory.addItemStackToInventory(linkedSeal);
-						player.inventory.decrStackSize(player.inventory.currentItem, 1);
+						if (!player.capabilities.isCreativeMode)
+							player.inventory.decrStackSize(player.inventory.currentItem, 1);
 					}
 				}
 				else if (type == 4) {
@@ -126,7 +137,8 @@ public class TXPacketHandler implements IPacketHandler
 					int nextID = TXWorldData.get(world).getNextBoundJarID();
 					((TileEntityBoundJar) world.getBlockTileEntity(x,y, z)).id = nextID;
 					((TileEntityBoundJar) world.getBlockTileEntity(x,y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
-					player.inventory.decrStackSize(player.inventory.currentItem, 1);
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.decrStackSize(player.inventory.currentItem, 1);
 					world.markBlockForUpdate(x, y, z);
 				}
 				else if (type == 5) {
@@ -151,7 +163,8 @@ public class TXPacketHandler implements IPacketHandler
 					((TileEntityBoundJar) world.getBlockTileEntity(x, y, z)).id = nextID;
 					((TileEntityBoundJar) world.getBlockTileEntity(x, y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
 					world.markBlockForUpdate(x, y, z);
-					player.inventory.decrStackSize(player.inventory.currentItem, 1);
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.decrStackSize(player.inventory.currentItem, 1);
 					}
 				}
 	
@@ -170,7 +183,8 @@ public class TXPacketHandler implements IPacketHandler
 						linkedSeal.setTagCompound(tag);
 
 						player.inventory.addItemStackToInventory(linkedSeal);
-						player.inventory.decrStackSize(player.inventory.currentItem, 1);
+						if (!player.capabilities.isCreativeMode)
+							player.inventory.decrStackSize(player.inventory.currentItem, 1);
 					}
 				}
 				else if (type == 7) {
@@ -180,10 +194,12 @@ public class TXPacketHandler implements IPacketHandler
 					}
 					else if (player.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
 						System.out.println("its happenin");
+						
 						player.inventory.decrStackSize(player.inventory.currentItem, 1);
 						player.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));
 					}
 				}
+            }
             }
      
         }

@@ -27,37 +27,37 @@ public final class ModResearch {
         ResearchItem research;
         
         //Curing
-        research = new TXResearchItem("FLESHCURE", "ALCHEMY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -4, 0, 3, new ItemStack(Item.rottenFlesh)).setParents("TALLOW").setConcealed().registerResearchItem();
+        research = new TXResearchItem("FLESHCURE", "ALCHEMY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.FLESH, 1).add(Aspect.EXCHANGE, 1), -4, 0, 3, new ItemStack(Item.rottenFlesh)).setParents("TALLOW").setConcealed().registerResearchItem();
         research.setPages(new ResearchPage("1"), cruciblePage("FLESHCURE"));
         if (Loader.isModLoaded("ThaumicTinkerer")) {
-        	 research = new TXResearchItem("BRAINCURE", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -4, 10, 7, new ItemStack(ThaumicExploration.pureZombieBrain)).setParents("JARBRAIN","FLESHCURE","INFUSION").setConcealed().registerResearchItem();
-             research.setPages(new ResearchPage("1") );
-             research = new TXResearchItem("THINKTANK", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -3, 12, 7, new ItemStack(ThaumicExploration.thinkTankJar)).setParents("BRAINCURE","RESEARCHER2").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
+        	 research = new TXResearchItem("BRAINCURE", "ARTIFICE", new AspectList().add(Aspect.MIND, 1).add(Aspect.ORDER, 1).add(Aspect.MAN, 1).add(Aspect.UNDEAD, 1), -4, 10, 7, new ItemStack(ThaumicExploration.pureZombieBrain)).setParents("JARBRAIN","FLESHCURE","INFUSION").setConcealed().registerResearchItem();
+             research.setPages(new ResearchPage("1"), infusionPage("BRAINCURE"));
+             research = new TXResearchItem("THINKTANK", "ARTIFICE", new AspectList().add(Aspect.UNDEAD, 2).add(Aspect.MIND, 2).add(Aspect.SENSES, 1), -3, 12, 7, new ItemStack(ThaumicExploration.thinkTankJar)).setParents("BRAINCURE","RESEARCHER2").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
              research.setPages(new ResearchPage("1"), infusionPage("THINKTANK"), new ResearchPage("2"), constructPage("BUILDTHINKTANK"));
         }
         else
         {
-        	 research = new TXResearchItem("BRAINCURE", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -3, 10, 7, new ItemStack(ThaumicExploration.pureZombieBrain)).setParents("JARBRAIN","FLESHCURE").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
-             research.setPages(new ResearchPage("1") );
-             research = new TXResearchItem("THINKTANK", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2, 12, 7, new ItemStack(ThaumicExploration.thinkTankJar)).setParents("BRAINCURE","RESEARCHER2").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
+        	 research = new TXResearchItem("BRAINCURE", "ARTIFICE", new AspectList().add(Aspect.MIND, 1).add(Aspect.ORDER, 1).add(Aspect.MAN, 1).add(Aspect.UNDEAD, 1), -3, 10, 7, new ItemStack(ThaumicExploration.pureZombieBrain)).setParents("JARBRAIN","FLESHCURE").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
+             research.setPages(new ResearchPage("1"),infusionPage("BRAINCURE") );
+             research = new TXResearchItem("THINKTANK", "ARTIFICE", new AspectList().add(Aspect.UNDEAD, 2).add(Aspect.MIND, 2).add(Aspect.SENSES, 1), -2, 12, 7, new ItemStack(ThaumicExploration.thinkTankJar)).setParents("BRAINCURE","RESEARCHER2").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
              research.setPages(new ResearchPage("1"), infusionPage("THINKTANK"), new ResearchPage("2"), constructPage("BUILDTHINKTANK"));
         }
         
         //Misc
-        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
-        research.setPages(new ResearchPage("1") );
+        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.VOID, 1).add(Aspect.WATER, 2), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
+        research.setPages(new ResearchPage("1"), infusionPage("URN") );
         
         //Wandcraft
-        research = new TXResearchItem("WANDAMBER", "THAUMATURGY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.ORDER, 1).add(Aspect.EXCHANGE, 1), -11, 2, 7, new ItemStack(ThaumicExploration.amberCore)).setParents("ROD_obsidian","ROD_reed","ROD_blaze","ROD_ice","ROD_quartz","ROD_bone").setConcealed().registerResearchItem();
-        research.setPages(new ResearchPage("1") );
+        research = new TXResearchItem("WANDAMBER", "THAUMATURGY", new AspectList().add(Aspect.TOOL, 1).add(Aspect.AURA, 2).add(Aspect.TRAP, 1).add(Aspect.MAGIC, 2), -11, 2, 7, new ItemStack(ThaumicExploration.amberCore)).setParents("ROD_obsidian","ROD_reed","ROD_blaze","ROD_ice","ROD_quartz","ROD_bone").setConcealed().registerResearchItem();
+        research.setPages(new ResearchPage("1"), infusionPage("WANDAMBER"));
         
         //Sealery
         ResourceLocation chestSeal = new ResourceLocation("thaumicexploration:textures/tabs/chestSeals.png");
         ResourceLocation jarSeal = new ResourceLocation("thaumicexploration:textures/tabs/jarSeals.png");
         if (ThaumicExploration.allowBoundInventories) {
-        	research = new TXResearchItem("CHESTSEAL", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 2).add(Aspect.TRAVEL, 2).add(Aspect.ELDRITCH, 1).add(Aspect.VOID,2), 5, 0, 3, chestSeal).setConcealed().setParentsHidden("MIRROR","TALLOW").registerResearchItem();
+        	research = new TXResearchItem("CHESTSEAL", "ARTIFICE", new AspectList().add(Aspect.ELDRITCH, 2).add(Aspect.TRAP, 1).add(Aspect.TRAVEL, 2).add(Aspect.VOID,1), 5, 0, 3, chestSeal).setConcealed().setParentsHidden("MIRROR","TALLOW").registerResearchItem();
         	research.setPages(new ResearchPage("1"),recipePage("BLANKSEAL"),infusionPage("CHESTSEAL"));
-        	research = new TXResearchItem("JARSEAL", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 2).add(Aspect.TRAVEL, 2).add(Aspect.ELDRITCH, 1).add(Aspect.VOID,2), 7, 0, 3, jarSeal).setConcealed().setParents("CHESTSEAL").registerResearchItem();
+        	research = new TXResearchItem("JARSEAL", "ARTIFICE", new AspectList().add(Aspect.ELDRITCH, 2).add(Aspect.TRAP, 1).add(Aspect.MAGIC, 1).add(Aspect.TRAVEL,2), 7, 0, 3, jarSeal).setConcealed().setParents("CHESTSEAL").registerResearchItem();
         	research.setPages(new ResearchPage("1"),infusionPage("JARSEAL"));
         }
     }

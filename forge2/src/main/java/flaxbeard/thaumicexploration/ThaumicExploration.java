@@ -36,6 +36,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
 import flaxbeard.thaumicexploration.block.BlockBoundJar;
+import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
 import flaxbeard.thaumicexploration.block.BlockEverfullUrn;
 import flaxbeard.thaumicexploration.block.BlockThinkTank;
 import flaxbeard.thaumicexploration.common.CommonProxy;
@@ -51,6 +52,7 @@ import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
+import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
 import flaxbeard.thaumicexploration.tile.TileEntityEverfullUrn;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
@@ -98,6 +100,7 @@ public class ThaumicExploration {
 	public static int boundJarID;
 	public static Block thinkTankJar;
 	public static Block everfullUrn;
+	public static Block crucibleSouls;
 	public static WandRod WAND_ROD_CRYSTAL;
 	public static WandRod WAND_ROD_AMBER;
 	
@@ -161,10 +164,12 @@ public class ThaumicExploration {
 		GameRegistry.registerTileEntity(TileEntityBoundJar.class, "tileEntityBoundJar");
 		GameRegistry.registerTileEntity(TileEntityThinkTank.class, "tileEntityThinkTank");
 		GameRegistry.registerTileEntity(TileEntityEverfullUrn.class, "tileEntityEverfullUrn");
+		GameRegistry.registerTileEntity(TileEntityCrucibleSouls.class, "tileEntityCrucibleSouls");
 		
 		//Blocks
 		thinkTankJar = new BlockThinkTank(205, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
 		everfullUrn = new BlockEverfullUrn(1535).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
+		crucibleSouls = new BlockCrucibleSouls(1536).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucibleSouls");
 	
 		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(new StepSound("wood", 1.0F, 1.0F)).setUnlocalizedName("boundChest");
 		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
@@ -173,6 +178,7 @@ public class ThaumicExploration {
 		GameRegistry.registerBlock(boundJar, "boundJar");
 		GameRegistry.registerBlock(thinkTankJar, "thinkTankJar");
 		GameRegistry.registerBlock(everfullUrn, "everfullUrn");
+		GameRegistry.registerBlock(crucibleSouls, "crucibleSouls");
 		
 		//Items
 		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");
@@ -189,7 +195,7 @@ public class ThaumicExploration {
 		focusNecromancy = (new ItemFocusNecromancy(focusNecromancyID)).setUnlocalizedName("thaumicexploration:necromancy").setCreativeTab(tab).setTextureName("thaumicexploration:focusNecromancy");
 		
 		//Wands
-		WAND_ROD_AMBER = new WandRod("amber",75,new ItemStack(ThaumicExploration.amberCore),1,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
+		WAND_ROD_AMBER = new WandRod("amber",10,new ItemStack(ThaumicExploration.amberCore),1,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
 		WAND_ROD_CRYSTAL = new WandRod("transmutation",25,new ItemStack(ThaumicExploration.transmutationCore),1,new WandRodTransmutationOnUpdate());
 		//WandRod.rods.put("transmutation1", WAND_ROD_CRYSTAL1);
 		

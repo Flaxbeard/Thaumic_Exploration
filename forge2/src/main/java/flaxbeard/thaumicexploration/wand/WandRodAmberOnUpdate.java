@@ -18,7 +18,7 @@ public class WandRodAmberOnUpdate implements IWandRodOnUpdate {
 
 	@Override
 	public void onUpdate(ItemStack itemstack, EntityPlayer player) {
-		if (player.ticksExisted % 100 == 0) {
+		if (player.ticksExisted % 66 == 0) {
 			List lowAspects = new ArrayList();
 			for (int i=0; i<6; i++) {
 				double visCount = ((ItemWandCasting) itemstack.getItem()).getVis(itemstack, this.aspects[i]);
@@ -28,8 +28,9 @@ public class WandRodAmberOnUpdate implements IWandRodOnUpdate {
 				}
 			}
 			if (lowAspects.size() > 0) {
-				int rand1 = (int) (Math.random()*lowAspects.size());
-				((ItemWandCasting) itemstack.getItem()).addVis(itemstack, (Aspect) lowAspects.get(rand1), 1, true);
+				for (int i=0; i<lowAspects.size(); i++) {
+					((ItemWandCasting) itemstack.getItem()).addVis(itemstack, (Aspect) lowAspects.get(i), 1, true);
+				}
 			}	
 		
 		}

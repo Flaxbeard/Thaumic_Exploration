@@ -51,8 +51,13 @@ public class ItemChestSeal extends Item {
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	int j = 15 - par1ItemStack.getItemDamage();
-    	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
+    	if (j > -1 && j < 16) {
+	    	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
+	        return ( c.getRGB() & 0x00ffffff);
+    	}
+    	Color c = new Color(EntitySheep.fleeceColorTable[1][0],EntitySheep.fleeceColorTable[1][1],EntitySheep.fleeceColorTable[1][2]);
         return ( c.getRGB() & 0x00ffffff);
+
     	
     }
     
@@ -68,7 +73,10 @@ public class ItemChestSeal extends Item {
     
     @Override
     public String getUnlocalizedName(ItemStack item) {
+    	if (item.getItemDamage() > -1 && item.getItemDamage() < 16) {
             return this.getUnlocalizedName() + ":" + itemNames[15-item.getItemDamage()];
+    	}
+    	return "nubs";
     }
 
 }

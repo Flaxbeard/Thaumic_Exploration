@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
@@ -60,39 +61,33 @@ public class TXEventHandler {
 				//System.out.println(event.entityPlayer.worldObj.isRemote + ItemBlankSeal.itemNames[((TileEntityBoundChest) world.getBlockTileEntity(event.x, event.y, event.z)).getSealColor()]);
 				if (event.entityPlayer.inventory.getCurrentItem() != null){ 
 					if (event.entityPlayer.inventory.getCurrentItem().itemID == ThaumicExploration.chestSeal.itemID ) {
-						int color = ((TileEntityBoundChest) world.getBlockTileEntity(event.x, event.y, event.z)).getSealColor();		
+						int color = ((TileEntityBoundChest) world.getBlockTileEntity(event.x, event.y, event.z)).clientColor;		
 						type = 3;
+						if (15-(event.entityPlayer.inventory.getCurrentItem().getItemDamage()) == color) {
+							int nextID = ((TileEntityBoundChest) world.getBlockTileEntity(event.x, event.y, event.z)).id;
+							ItemStack linkedSeal = new ItemStack(ThaumicExploration.chestSealLinked.itemID, 1, event.entityPlayer.inventory.getCurrentItem().getItemDamage());
+							NBTTagCompound tag = new NBTTagCompound();
+							tag.setInteger("ID", nextID);
+							tag.setInteger("x", event.x);
+							tag.setInteger("y", event.y);
+							tag.setInteger("z", event.z);
+							tag.setInteger("dim", world.provider.dimensionId);
+							linkedSeal.setTagCompound(tag);
+
+							event.entityPlayer.inventory.addItemStackToInventory(linkedSeal);
+							if (!event.entityPlayer.capabilities.isCreativeMode)
+								event.entityPlayer.inventory.decrStackSize(event.entityPlayer.inventory.currentItem, 1);
+						}
 						event.setCanceled(true);
 					}
 				}
 			}
 		
-//			else if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ThaumicExploration.everfullUrn.blockID) {
-//				System.out.println("swegin");
-//				if (event.entityPlayer.inventory.getCurrentItem() != null){ 
-//					if (event.entityPlayer.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
-//						System.out.println("its happening");
-//						((IFluidContainerItem)event.entityPlayer.inventory.getCurrentItem().getItem()).fill(event.entityPlayer.inventory.getCurrentItem(), new FluidStack(FluidRegistry.WATER, 1000), true);
-//						type = 7;
-//						event.setCanceled(true);
-//					}
-//					else if (event.entityPlayer.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
-//						System.out.println("its happenin");
-//						//event.entityPlayer.inventory.decrStackSize(event.entityPlayer.inventory.currentItem, 1);
-//						//event.entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));
-//						event.setCanceled(true);
-//						type = 7;
-//						
-//					}
-//				}
-//			}
 		}
 
 
 		if (event.entityPlayer.worldObj.blockExists(event.x, event.y, event.z)) {
-			//System.out.println(event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) + " " + ThaumicExploration.boundJar.blockID);
 			if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ConfigBlocks.blockJar.blockID && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) == 0) {
-				//System.out.println("itsa jar mario");
 				if (event.entityPlayer.inventory.getCurrentItem() != null && ((TileJarFillable)event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z)).aspectFilter == null && ((TileJarFillable)event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z)).amount == 0){ 
 					if (event.entityPlayer.inventory.getCurrentItem().itemID == ThaumicExploration.jarSeal.itemID) {
 						type = 4;
@@ -103,13 +98,26 @@ public class TXEventHandler {
 				}
 			}
 			else if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ThaumicExploration.boundJar.blockID) {
-				//System.out.println("bound jar");
 				World world = event.entityPlayer.worldObj;
-				//System.out.println(event.entityPlayer.worldObj.isRemote + ItemBlankSeal.itemNames[((TileEntityBoundJar) world.getBlockTileEntity(event.x, event.y, event.z)).getSealColor()]);
 				if (event.entityPlayer.inventory.getCurrentItem() != null){ 
 					if (event.entityPlayer.inventory.getCurrentItem().itemID == ThaumicExploration.jarSeal.itemID ) {
 						int color = ((TileEntityBoundJar) world.getBlockTileEntity(event.x, event.y, event.z)).getSealColor();		
 						type = 6;
+						if (15-(event.entityPlayer.inventory.getCurrentItem().getItemDamage()) == color) {
+							int nextID = ((TileEntityBoundJar) world.getBlockTileEntity(event.x, event.y, event.z)).id;
+							ItemStack linkedSeal = new ItemStack(ThaumicExploration.jarSealLinked.itemID, 1, event.entityPlayer.inventory.getCurrentItem().getItemDamage());
+							NBTTagCompound tag = new NBTTagCompound();
+							tag.setInteger("ID", nextID);
+							tag.setInteger("x", event.x);
+							tag.setInteger("y", event.y);
+							tag.setInteger("z", event.z);
+							tag.setInteger("dim", world.provider.dimensionId);
+							linkedSeal.setTagCompound(tag);
+
+							event.entityPlayer.inventory.addItemStackToInventory(linkedSeal);
+							if (!event.entityPlayer.capabilities.isCreativeMode)
+								event.entityPlayer.inventory.decrStackSize(event.entityPlayer.inventory.currentItem, 1);
+						}
 						event.setCanceled(true);
 					}
 				}
@@ -143,37 +151,11 @@ public class TXEventHandler {
 	        packet.data = bos.toByteArray();
 	        packet.length = bos.size();
 	        //PacketDispatcher.sendPacketToServer(packet);
-	        PacketDispatcher.sendPacketToAllPlayers(packet);
+	        PacketDispatcher.sendPacketToServer(packet);
 	        //System.out.println("sent");
 		}
 
 		
 	}
 	
-//	@ForgeSubscribe
-//	public void handler(EntityJoinWorldEvent event) {
-//		if( event.entity instanceof EntityZombie )
-//        {
-//                EntityZombie zombie = (EntityZombie)event.entity;
-//                //if (hasTask(new EntityAINearestAttackableTarget(zombie, EntityItemBrain.class, 0, false), zombie)) {
-//                	//zombie.targetTasks.addTask(1, new EntityAINearestAttackableTarget(zombie, EntityItem.class, 0, false));
-//                	//zombie.tasks.addTask(3, new EntityAIAttackOnCollide(zombie, EntityItem.class, 1.0D, true));
-//                	zombie.tasks.addTask(0, new EntityAINearestEntity(zombie, EntityItem.class, 0, true));
-//                	//}
-//                	
-//        }
-//	}
-	
-	boolean hasTask(EntityAIBase task, EntityZombie zombie)
-	{
-		 for(Object taskEntryObj : zombie.targetTasks.taskEntries) { 
-			 EntityAITaskEntry taskEntry = (EntityAITaskEntry)taskEntryObj; 
-			 /* Blame the deobfuscation not supporting generics for this one */ 
-//			 if( taskEntry.action instanceof task) { 
-//				 return true; 
-//			 } 
-		} return false;
-		
-	}
-
 }

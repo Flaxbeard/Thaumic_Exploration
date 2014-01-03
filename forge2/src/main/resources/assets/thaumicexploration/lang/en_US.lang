@@ -77,8 +77,8 @@ te.text.FLESHCURE.1=By imbuing rotten flesh with certain aspects, you have found
 
 --Brain Curing
 te.name.BRAINCURE=Brain Sanitization
-te.tag.BRAINCURE=Rejuvenation Ritual
-te.text.BRAINCURE.1=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations.
+te.tag.BRAINCURE=Brain washing
+te.text.BRAINCURE.1=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations.<BR><BR>Note that any type and any duration of weakening potion will work.
 TO BE IMPLEMENTED: The brains also serve as a bait for zombified creatures, when dropped or placed on an arcane pedestal.
 
 --Think Tank
@@ -100,13 +100,13 @@ te.text.JARSEAL.1=By adjusting the infusion of the tallow seal to account for es
 --Everfull Urn
 te.name.URN=Everfull Urn
 te.tag.URN=It seems familiar...
-te.text.URN.1=You have read much about a mystical 'Everfull Urn' in your research, a mystical device created by the great Thaumaturgist Azanor that could fill an infinite amount of buckets. You have finally been able to devise a device that can do that and more. Your everfull urn can not only supply water to an infinite amount of buckets, it can also be pumped out of the top to an external tank. By including an arcane ear in the infusion, you have also allowed the urn to fill any nearby crucible, and extinguish nearby players that are on fire.
+te.text.URN.1=You have read much about an 'Everfull Urn' in your research, a mystical device created by the great Thaumaturge Azanor that could fill an infinite amount of buckets. You have finally been able to devise a device that can do that and more. Your everfull urn can not only supply water to an infinite amount of buckets, it can also be pumped out of the top to an external tank. Your urn also has the ability to fill any nearby crucible, and extinguish nearby players that are on fire.
 
 
 --Amber Wand Core
 te.name.WANDAMBER=Amber Wand Core
 te.tag.WANDAMBER=Regenerative vis storage
-te.text.WANDAMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber wand cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a slow rate when below 10% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates at twice the rate. In addition, the amber wand core boasts a larger storage capacity than that of greatwood cores.
+te.text.WANDAMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type. Amber wand cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when below 50% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at three times the rate.
 
 --Transmutative Wand Core
 te.name.TRANSMUTATION=Transmutative Wand Core

@@ -18,6 +18,9 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
+    	float f = (14.0F/16.0F);
+    	float f1 = (2.0F/16.0F);
+    	block.setBlockBounds(f1, 0.0F, f1, f, 1.0F, f);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		float x = 0;
 		float y = 0;

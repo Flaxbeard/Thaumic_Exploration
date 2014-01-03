@@ -52,21 +52,71 @@ public final class ModRecipes {
 
 
 	private static void initInfusionRecipes() {
-		registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, 32767), 3, 
-				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
-				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
-				new ItemStack(Item.potion,1, 16392), new ItemStack(Item.appleGold), 
-				new ItemStack(Item.speckledMelon));
-		registerResearchItemI("THINKTANK", new ItemStack(ThaumicExploration.thinkTankJar), 3, 
-				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
-				new ItemStack(ThaumicExploration.thinkTankJar),new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemInkwell,1,0), 
+		registerResearchItemI("BRAINCURE", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
+				new AspectList().add(Aspect.MAN, 4).add(Aspect.MIND, 6).add(Aspect.HEAL, 2), 
+				new ItemStack(ConfigItems.itemResource, 1,5), 
+				new ItemStack(Item.potion,1, 8232), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.bucketWater));
+		registerResearchItemI("BRAINCURE","BRAINCUREALT1", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
+				new AspectList().add(Aspect.MAN, 4).add(Aspect.MIND, 6).add(Aspect.HEAL, 2), 
+				new ItemStack(ConfigItems.itemResource, 1,5), 
+				new ItemStack(Item.potion,1, 8264), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.bucketWater));
+		registerResearchItemI("BRAINCURE","BRAINCUREALT3", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
+				new AspectList().add(Aspect.MAN, 4).add(Aspect.MIND, 6).add(Aspect.HEAL, 2), 
+				new ItemStack(ConfigItems.itemResource, 1,5), 
+				new ItemStack(Item.potion,1, 16424), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.bucketWater));
+		registerResearchItemI("BRAINCURE","BRAINCUREALT4", new ItemStack(ThaumicExploration.pureZombieBrain), 3, 
+				new AspectList().add(Aspect.MAN, 4).add(Aspect.MIND, 6).add(Aspect.HEAL, 2), 
+				new ItemStack(ConfigItems.itemResource, 1,5), 
+				new ItemStack(Item.potion,1, 16456), new ItemStack(Item.appleGold), 
+				new ItemStack(Item.bucketWater));
+		
+		registerResearchItemI("WANDAMBER", new ItemStack(ThaumicExploration.amberCore), 5, 
+				new AspectList().add(Aspect.MAGIC, 14).add(Aspect.AURA, 4).add(Aspect.TRAP, 6), 
+				new ItemStack(ConfigBlocks.blockCosmeticOpaque), 
+				new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14));
+		
+		for (int i = 0; i<16; i++) {
+			registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, i), 7, 
+					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12), 
+					new ItemStack(ThaumicExploration.blankSeal, 1, i), new ItemStack(Item.enderPearl), 
+					new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14),
+					new ItemStack(Item.blazePowder), new ItemStack(Block.chest),  new ItemStack(ConfigItems.itemResource,1,3));
+		}
+		
+		registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, 32767), 7, 
+				new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12), 
+				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.enderPearl), 
+				new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14),
+				new ItemStack(Item.blazePowder), new ItemStack(Block.chest),  new ItemStack(ConfigItems.itemResource,1,3));
+
+		registerResearchItemI("THINKTANK", new ItemStack(ThaumicExploration.thinkTankJar), 6, 
+				new AspectList().add(Aspect.MIND, 40).add(Aspect.SENSES, 20).add(Aspect.UNDEAD, 30), 
+				new ItemStack(ConfigBlocks.blockJar),new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemInkwell,1,0), 
 				new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemThaumonomicon), 
 				new ItemStack(ThaumicExploration.pureZombieBrain), new ItemStack(ConfigItems.itemThaumometer));
-		registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, 32767), 3, 
-				new AspectList().add(Aspect.AIR, 15).add(Aspect.MOTION, 20).add(Aspect.TRAVEL, 10), 
-				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.appleGold), 
-				new ItemStack(Item.speckledMelon), new ItemStack(Item.appleGold), 
-				new ItemStack(Item.speckledMelon));
+		
+		registerResearchItemI("URN", new ItemStack(ThaumicExploration.everfullUrn), 2, 
+				new AspectList().add(Aspect.WATER, 20).add(Aspect.VOID, 8).add(Aspect.MAGIC, 4), 
+				new ItemStack(Item.flowerPot),new ItemStack(Item.bucketWater), 
+				new ItemStack(Item.brick),new ItemStack(Item.bucketWater), 
+				new ItemStack(Item.brick),new ItemStack(Item.bucketWater), 
+				new ItemStack(Item.brick) );
+		
+		for (int i = 0; i<16; i++) {
+			registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, i), 7, 
+					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12).add(Aspect.MAGIC, 2), 
+					new ItemStack(ThaumicExploration.blankSeal, 1, i), new ItemStack(Item.enderPearl), 
+					new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14),
+					new ItemStack(Item.blazePowder), new ItemStack(ConfigBlocks.blockJar),  new ItemStack(ConfigItems.itemResource,1,3));
+		}
+		registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, 32767), 7, 
+				new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12).add(Aspect.MAGIC, 2), 
+				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.enderPearl), 
+				new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14),
+				new ItemStack(Item.blazePowder), new ItemStack(ConfigBlocks.blockJar),  new ItemStack(ConfigItems.itemResource,1,3));
 		
 		//Change Advanced golem recipe to require a pure brain
         InfusionRecipe recipe = (InfusionRecipe) ConfigResearch.recipes.get("AdvancedGolem");
@@ -83,7 +133,7 @@ public final class ModRecipes {
 	}
 
 	private static void initCraftingRecipes() {
-		for (int i=0;i<15;i++) {
+		for (int i=0;i<16;i++) {
 			GameRegistry.addRecipe(new ItemStack(ThaumicExploration.blankSeal, 1, i), " X ", "XZX", " X ", 'X', new ItemStack(ConfigItems.itemResource,1,4), 'Z', new ItemStack(Item.dyePowder,1,i));
 		}
 		
@@ -92,12 +142,9 @@ public final class ModRecipes {
 	}
 
 	private static void initCrucibleRecipes() {
-		registerCrucibleRecipe("FLESHCURE","FLESHCURE", new ItemStack(Item.leather), new ItemStack(Item.rottenFlesh), new AspectList().add(Aspect.MAGIC, 2).add(Aspect.FLESH, 2));
-//        registerResearchItem(LibResearch.KEY_GASEOUS_LIGHT, new ItemStack(ModItems.gaseousLight), new ItemStack(ConfigItems.itemEssence, 1, 0), new AspectList().add(Aspect.LIGHT, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
-//        registerResearchItem(LibResearch.KEY_GASEOUS_SHADOW, new ItemStack(ModItems.gaseousShadow), new ItemStack(ConfigItems.itemEssence, 1, 0), new AspectList().add(Aspect.DARKNESS, 16).add(Aspect.AIR, 10).add(Aspect.MOTION, 8));
-//        registerResearchItem(LibResearch.KEY_SPELL_CLOTH, new ItemStack(ModItems.spellCloth), new ItemStack(ConfigItems.itemResource, 0, 7), new AspectList().add(Aspect.MAGIC, 10).add(Aspect.ENTROPY, 6).add(Aspect.EXCHANGE, 4));
-//        registerResearchItem(LibResearch.KEY_BRIGHT_NITOR, new ItemStack(ModItems.brightNitor), new ItemStack(ConfigItems.itemResource, 1, 1), new AspectList().add(Aspect.ENERGY, 25).add(Aspect.LIGHT, 25).add(Aspect.AIR, 10).add(Aspect.FIRE, 10));
-//        registerResearchItem(LibResearch.KEY_MAGNETS, new ItemStack(ModItems.soulMould), new ItemStack(Item.enderPearl), new AspectList().add(Aspect.BEAST, 4).add(Aspect.MIND, 8).add(Aspect.SENSES, 8));
+		registerCrucibleRecipe("FLESHCURE","FLESHCURE", new ItemStack(Item.leather,2), new ItemStack(Item.rottenFlesh), new AspectList().add(Aspect.FLESH, 2).add(Aspect.CLOTH, 1));
+		
+
 	}
 	
 	private static void registerResearchItem(String name, String research, ItemStack output, AspectList aspects, Object... stuff) {
