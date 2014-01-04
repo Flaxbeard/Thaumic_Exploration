@@ -89,18 +89,17 @@ public class ThaumicExploration {
 	public static int helmetCrystalID;
 	public static Item focusNecromancy;
 	public static int focusNecromancyID;
-	public static Item legsCrystal;
-	public static int legsCrystalID;
-	public static Item shoesCrystal;
-	public static int shoesCrystalID;
 	
 	public static Block boundChest;
 	public static int boundChestID;
 	public static Block boundJar;
 	public static int boundJarID;
 	public static Block thinkTankJar;
+	public static int thinkTankJarID;
 	public static Block everfullUrn;
+	public static int everfullUrnID;
 	public static Block crucibleSouls;
+	public static int crucibleSoulsID;
 	public static WandRod WAND_ROD_CRYSTAL;
 	public static WandRod WAND_ROD_AMBER;
 	
@@ -122,24 +121,25 @@ public class ThaumicExploration {
 		
 		
 		//Item IDs
-		pureZombieBrainID = config.getItem("Cured Zombie Brain", 7000).getInt();
-		blankSealID = config.getItem("Blank Tallow Seal", 7001).getInt();
-		chestSealID = config.getItem("Chest Binding Seal", 7002).getInt();
-		chestSealLinkedID = config.getItem("Linked Chest Binding Seal", 7003).getInt();
-		jarSealID = config.getItem("Jar Binding Seal", 7006).getInt();
-		jarSealLinkedID = config.getItem("Linked Jar Binding Seal", 7007).getInt();
-		transmutationCoreID = config.getItem("Transmutation Filter Wand Core", 7004).getInt();
-		amberCoreID = config.getItem("Amber Wand Core", 7005).getInt();
+		pureZombieBrainID = config.getItem("Cured Zombie Brain", 11000).getInt();
+		blankSealID = config.getItem("Blank Tallow Seal", 11001).getInt();
+		chestSealID = config.getItem("Chest Binding Seal", 11002).getInt();
+		chestSealLinkedID = config.getItem("Linked Chest Binding Seal", 1100).getInt();
+		jarSealID = config.getItem("Jar Binding Seal", 11006).getInt();
+		jarSealLinkedID = config.getItem("Linked Jar Binding Seal", 11007).getInt();
+		transmutationCoreID = config.getItem("Transmutation Filter Wand Core", 11004).getInt();
+		amberCoreID = config.getItem("Amber Wand Core", 11005).getInt();
 		
 		//Armor Item IDs
 		helmetCrystalID = config.getItem("Crystal Helmet", 7008).getInt();
 		focusNecromancyID = config.getItem("Focus of Necromancy", 7009).getInt();
-		legsCrystalID = config.getItem("Crystal Leggings", 7010).getInt();
-		shoesCrystalID = config.getItem("Crystal Boots", 7011).getInt();
 		
 		//Block IDs
 		boundChestID = config.getBlock("Bound Chest", 700).getInt();
 		boundJarID = config.getBlock("Bound Jar", 701).getInt();
+		everfullUrnID = config.getBlock("Everfull Urn", 702).getInt();
+		thinkTankJarID = config.getBlock("Think Tank", 703).getInt();
+		crucibleSoulsID = config.getBlock("Crucible of Souls", 704).getInt();
 		
 		allowBoundInventories = config.get("Miscellaneous", "Allow bound inventories", true).getBoolean(true);
 		config.save();
@@ -167,9 +167,9 @@ public class ThaumicExploration {
 		GameRegistry.registerTileEntity(TileEntityCrucibleSouls.class, "tileEntityCrucibleSouls");
 		
 		//Blocks
-		thinkTankJar = new BlockThinkTank(205, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
-		everfullUrn = new BlockEverfullUrn(1535).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
-		crucibleSouls = new BlockCrucibleSouls(1536).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucibleSouls");
+		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
+		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
+		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucibleSouls");
 	
 		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(new StepSound("wood", 1.0F, 1.0F)).setUnlocalizedName("boundChest");
 		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
@@ -190,7 +190,7 @@ public class ThaumicExploration {
 		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
 		jarSealLinked = (new ItemChestSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
 		
-		armorMaterialCrystal = EnumHelper.addArmorMaterial("CRYSTAL", 25, new int[] { 2, 6, 5, 2 }, 25);
+		//armorMaterialCrystal = EnumHelper.addArmorMaterial("CRYSTAL", 25, new int[] { 2, 6, 5, 2 }, 25);
 		//helmetCrystal = (new ItemCrystalArmor(helmetCrystalID, armorMaterialCrystal, 2, 0)).setUnlocalizedName("thaumicexploration:helmetCrystal").setCreativeTab(CreativeTabs.tabBlock).setTextureName("thaumicexploration:focusNecromancy");
 		focusNecromancy = (new ItemFocusNecromancy(focusNecromancyID)).setUnlocalizedName("thaumicexploration:necromancy").setCreativeTab(tab).setTextureName("thaumicexploration:focusNecromancy");
 		
