@@ -44,8 +44,15 @@ public final class ModResearch {
         }
         
         //Misc
-        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.VOID, 1).add(Aspect.WATER, 2), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
-        research.setPages(new ResearchPage("1"), infusionPage("URN") );
+        if (Loader.isModLoaded("ThaumicTinkerer")) {
+	        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.VOID, 1).add(Aspect.WATER, 2), -4,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
+	        research.setPages(new ResearchPage("1"), infusionPage("URN") );
+        }
+        else
+        {
+	        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.VOID, 1).add(Aspect.WATER, 2), -2,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
+	        research.setPages(new ResearchPage("1"), infusionPage("URN") );
+        }
         research = new TXResearchItem("CRUCSOULS", "ALCHEMY", new AspectList().add(Aspect.DEATH, 2).add(Aspect.HUNGER, 1).add(Aspect.SOUL, 2), 5,1 , 7, new ItemStack(ThaumicExploration.crucibleSouls)).setParents("DISTILESSENTIA").setParentsHidden("BRAINCURE","INFUSION").setConcealed().registerResearchItem();
         research.setPages(new ResearchPage("1"), new ResearchPage("2"), infusionPage("CRUCSOULS") );
         
