@@ -1,6 +1,6 @@
 Thaumic Exploration
 ===================
-The newest release is Alpha 0.2.0, released at 8:45 PM GMT on January 2
+The newest release is Alpha 0.3.0, released at 5:50 PM GMT on January 6
 
 Releases can be found here: https://github.com/Flaxbeard/Thaumic_Exploration/releases
 
