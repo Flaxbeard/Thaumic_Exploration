@@ -45,7 +45,7 @@ public final class ModResearch {
         
         //Misc
         if (Loader.isModLoaded("ThaumicTinkerer")) {
-	        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.VOID, 1).add(Aspect.WATER, 2), -4,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
+	        research = new TXResearchItem("URN", "ARTIFICE", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.VOID, 1).add(Aspect.WATER, 2), -5,3 , 7, new ItemStack(ThaumicExploration.everfullUrn)).setParents("INFUSION").setParentsHidden("ARCANEEAR").setConcealed().registerResearchItem();
 	        research.setPages(new ResearchPage("1"), infusionPage("URN") );
         }
         else
