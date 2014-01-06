@@ -4,17 +4,36 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraftforge.common.ForgeDirection;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.tiles.TileJarFillable;
-import flaxbeard.thaumicexploration.data.BoundChestWorldData;
 import flaxbeard.thaumicexploration.data.BoundJarWorldData;
 
 public class TileEntityBoundJar extends TileJarFillable {
 	public BoundJarWorldData myJarData;
     public int accessTicks = 0;
     public int id = 0;
+    
     public int clientColor = 0;
+    
+    public int getMinimumSuction()
+    {
+      return 80;
+    }
+    
+    public AspectList getSuction(ForgeDirection loc)
+    {
+      if (this.amount < this.maxAmount)
+      {
+        if ((this.amount == 0)) {
+          return ThaumcraftApiHelper.getAllAspects(80);
+        }
+        return new AspectList().merge(this.aspect, 80);
+      }
+      return new AspectList();
+    }
     
     @Override
     public Packet getDescriptionPacket()

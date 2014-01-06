@@ -2,23 +2,18 @@ package flaxbeard.thaumicexploration.event;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAITaskEntry;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.item.Item;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -37,8 +32,15 @@ public class TXEventHandler {
 		TXWorldData.get(event.world);
 	}
 	
+
 	@ForgeSubscribe
+	public void handleMobDrop(LivingDropsEvent event) {
+		if (event.source == DamageSourceTX.soulCrucible) {
+			event.setCanceled(true);
+		}
+	}
 	
+	@ForgeSubscribe
 	public void handleItemUse(PlayerInteractEvent event) {
 		byte type = 0;
 		

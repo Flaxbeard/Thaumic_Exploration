@@ -66,6 +66,7 @@ item.thaumicexploration:jarSeal:Dark.name=Dark Jar Binding Seal
 ----Block Names----
 tile.thaumicexploration:thinkTankJar.name=Think Tank
 tile.thaumicexploration:everfullUrn.name=Everfull Urn
+tile.thaumicexploration:crucibleSouls.name=Crucible of Souls
 
 ----Thaumonomicon Entries----
 te.researchPrefix=[TX]
@@ -89,24 +90,29 @@ te.text.THINKTANK.2=This 'think tank' has very particular placement requirements
 
 --Chest Sealing
 te.name.CHESTSEAL=Seal of Chest Binding
-te.tag.CHESTSEAL=What you need, when you need it
+te.tag.CHESTSEAL=Magical inventory linking
 te.text.CHESTSEAL.1=By enchanting a mundane seal made of tallow, you have discovered a way to bind chests, so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network. Note that only empty chests are able to be bound.
 
 --Jar Sealing
 te.name.JARSEAL=Seal of Jar Binding
 te.tag.JARSEAL=Essentia, essentia everywhere
-te.text.JARSEAL.1=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.
+te.text.JARSEAL.1=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.<BR><BR>Sealed jars have a higher suction than unlabeled jars but lower than labeled jars.
 
 --Everfull Urn
 te.name.URN=Everfull Urn
-te.tag.URN=It seems familiar...
+te.tag.URN=It seems familiar... 
 te.text.URN.1=You have read much about an 'Everfull Urn' in your research, a mystical device created by the great Thaumaturge Azanor that could fill an infinite amount of buckets. You have finally been able to devise a device that can do that and more. Your everfull urn can not only supply water to an infinite amount of buckets, it can also be pumped out of the top to an external tank. Your urn also has the ability to fill any nearby crucible, and extinguish nearby players that are on fire.
 
+--Crucible of Souls
+te.name.CRUCSOULS=Crucible of Souls
+te.tag.CRUCSOULS=Caution: Keep out of reach of children.
+te.text.CRUCSOULS.1=You have discovered a way to take advantage of a previously untapped source of essentia - that of living creatures. Infusing an alchemical furnace with various occult reagents and precise quantities of essentia, will create a crucible of souls, a device that will seek out the nearest living creature and slowly drain their life force, retrieving essentia at the final blow. This comes at the cost of the normal loot the creature would drop. This essentia can then be piped out of any face except the top via essentia tubes.
+te.text.CRUCSOULS.2=The crucible of souls is very unstable, and has a high probability of converting some of the essentia to flux or breaking it down into its component parts. You should make preparations to dispose of this flux before it causes a problem.<BR><BR>You have managed to install a basic safeguard so the device will not attack humans, but keep your pets at a safe distance.
 
 --Amber Wand Core
 te.name.WANDAMBER=Amber Wand Core
 te.tag.WANDAMBER=Regenerative vis storage
-te.text.WANDAMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type. Amber wand cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when below 50% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at three times the rate.
+te.text.WANDAMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type, but it has other benefits. Amber cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when below 50% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at three times the rate.
 
 --Transmutative Wand Core
 te.name.TRANSMUTATION=Transmutative Wand Core

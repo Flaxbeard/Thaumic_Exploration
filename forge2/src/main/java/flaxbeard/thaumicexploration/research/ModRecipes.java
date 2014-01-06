@@ -78,6 +78,13 @@ public final class ModRecipes {
 				new ItemStack(ConfigBlocks.blockCosmeticOpaque), 
 				new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14));
 		
+		registerResearchItemI("CRUCSOULS", new ItemStack(ThaumicExploration.crucibleSouls), 5, 
+				new AspectList().add(Aspect.DEATH, 40).add(Aspect.UNDEAD, 10).add(Aspect.HUNGER, 20).add(Aspect.TRAP, 20).add(Aspect.WEAPON, 5).add(Aspect.SOUL, 30), 
+				new ItemStack(ConfigBlocks.blockStoneDevice,1,0), 
+				new ItemStack(ConfigBlocks.blockMetalDevice,1,0), new ItemStack(Item.rottenFlesh), 
+				new ItemStack(Item.bone), new ItemStack(Item.ghastTear), 
+				new ItemStack(Block.slowSand), new ItemStack(ConfigBlocks.blockMetalDevice,1,1));
+		
 		for (int i = 0; i<16; i++) {
 			registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, i), 7, 
 					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12), 

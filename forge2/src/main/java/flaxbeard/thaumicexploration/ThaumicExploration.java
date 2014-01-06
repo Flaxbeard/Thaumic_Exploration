@@ -104,6 +104,7 @@ public class ThaumicExploration {
 	public static WandRod WAND_ROD_AMBER;
 	
 	public static int everfullUrnRenderID;
+	public static int crucibleSoulsRenderID;
 	
 	public static CreativeTabs tab;
 	
@@ -152,6 +153,7 @@ public class ThaumicExploration {
 		NetworkRegistry.instance().registerGuiHandler(instance, new TXGuiHandler());
 		
 		everfullUrnRenderID = RenderingRegistry.getNextAvailableRenderId();
+		crucibleSoulsRenderID = RenderingRegistry.getNextAvailableRenderId();
 		
 		//Creative Tab
 		tab = new TXTab(CreativeTabs.getNextID(), "thaumicExploration");
@@ -169,7 +171,7 @@ public class ThaumicExploration {
 		//Blocks
 		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
 		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
-		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucibleSouls");
+		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucible3");
 	
 		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(new StepSound("wood", 1.0F, 1.0F)).setUnlocalizedName("boundChest");
 		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");

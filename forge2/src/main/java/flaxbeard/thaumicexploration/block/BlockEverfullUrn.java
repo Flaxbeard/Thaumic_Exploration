@@ -123,12 +123,7 @@ public class BlockEverfullUrn extends BlockContainer {
     
     public boolean onBlockActivated(World world, int par2, int par3, int par4, EntityPlayer entityPlayer, int par6, float par7, float par8, float par9)
     {
-        if (world.isRemote)
-        {
-            return true;
-        }
-        else
-        {
+
 		
 			if (entityPlayer.inventory.getCurrentItem() != null){ 
 				if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
@@ -145,7 +140,7 @@ public class BlockEverfullUrn extends BlockContainer {
 			}
 		
         	return true;
-        }
+        
     }
 
 }

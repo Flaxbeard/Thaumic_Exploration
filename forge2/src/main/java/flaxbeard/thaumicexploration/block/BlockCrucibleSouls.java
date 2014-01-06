@@ -3,6 +3,7 @@ package flaxbeard.thaumicexploration.block;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -34,28 +35,78 @@ public class BlockCrucibleSouls extends BlockContainer {
 	public static Icon topBottom;
 	public Icon texture;
 	
+	  public Icon[] icon = new Icon[16];
+	  
+	  
+	  @SideOnly(Side.CLIENT)
+	  public void registerIcons(IconRegister ir)
+	  {
+	    this.icon[0] = ir.registerIcon("thaumicexploration:metalbase");
+	    for (int a = 1; a <= 7; a++) {
+	      this.icon[a] = ir.registerIcon("thaumicExploration:crucible" + a);
+	    }
+	    this.icon[9] = ir.registerIcon("thaumicExploration:blankTexture");
+
+	  }
+	  
+	  public Icon getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int side)
+	  {
+		TileEntityCrucibleSouls te = (TileEntityCrucibleSouls) iblockaccess.getBlockTileEntity(i, j, k);
+		
+	    if (side == 1) {
+	      return this.icon[1];
+	    }
+	    if (side == 0) {
+	      return this.icon[2];
+	    }
+	    return this.icon[9];
+	  }
 
 	public BlockCrucibleSouls(int par1) {
 		super(par1, Material.iron);
+	    setHardness(3.0F);
+	    setResistance(17.0F);
+	    setStepSound(Block.soundMetalFootstep);
 		// TODO Auto-generated constructor stub
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public Icon getIcon(int par1, int par2)
+    {
+        return this.icon[3];
+    }
 	
     public TileEntity createNewTileEntity(World par1World)
     {
         return new TileEntityCrucibleSouls();
     }
     
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
+    public boolean isOpaqueCube()
     {
-       	super.registerIcons(par1IconRegister);
-        this.middleSide = par1IconRegister.registerIcon("thaumicExploration:everfullUrnMS");
-        this.topSide = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTS");
-        this.topTop = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTT");
-        this.bottomTop = par1IconRegister.registerIcon("thaumicExploration:everfullUrnBT");
-        this.bottomBottom = par1IconRegister.registerIcon("thaumicExploration:everfullUrnBB");
-        this.topBottom = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTB");
+        return false;
     }
+
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+    
+    public int getRenderType()
+    {
+        return ThaumicExploration.crucibleSoulsRenderID;
+    }
+    
+//    @SideOnly(Side.CLIENT)
+//    public void registerIcons(IconRegister par1IconRegister)
+//    {
+//       	super.registerIcons(par1IconRegister);
+//        this.middleSide = par1IconRegister.registerIcon("thaumicExploration:everfullUrnMS");
+//        this.topSide = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTS");
+//        this.topTop = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTT");
+//        this.bottomTop = par1IconRegister.registerIcon("thaumicExploration:everfullUrnBT");
+//        this.bottomBottom = par1IconRegister.registerIcon("thaumicExploration:everfullUrnBB");
+//        this.topBottom = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTB");
+//    }
     
     
     @SideOnly(Side.CLIENT)
@@ -84,31 +135,6 @@ public class BlockCrucibleSouls extends BlockContainer {
     }
     
     
-    public boolean onBlockActivated(World world, int par2, int par3, int par4, EntityPlayer entityPlayer, int par6, float par7, float par8, float par9)
-    {
-        if (world.isRemote)
-        {
-            return true;
-        }
-        else
-        {
-		
-			if (entityPlayer.inventory.getCurrentItem() != null){ 
-				if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
-					System.out.println("its happening");
-					((IFluidContainerItem)entityPlayer.inventory.getCurrentItem().getItem()).fill(entityPlayer.inventory.getCurrentItem(), new FluidStack(FluidRegistry.WATER, 1000), true);
-		            world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
-				}
-				else if (entityPlayer.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
-					System.out.println("its happenin");
-					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
-					entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));
-		            world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
-				}
-			}
-		
-        	return true;
-        }
-    }
+   
 
 }
