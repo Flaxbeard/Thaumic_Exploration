@@ -2,25 +2,22 @@ package flaxbeard.thaumicexploration.tile;
 
 import java.util.List;
 
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.client.fx.FXEssentiaTrail;
-import thaumcraft.common.config.Config;
-import thaumcraft.common.config.ConfigBlocks;
-import thaumcraft.common.tiles.TileCrucible;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.Fluid;
+import thaumcraft.common.config.Config;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.tiles.TileCrucible;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class TileEntityEverfullUrn extends TileEntity implements IFluidTank,IFluidHandler {
 
@@ -146,8 +143,8 @@ public class TileEntityEverfullUrn extends TileEntity implements IFluidTank,IFlu
 								tile.fill(ForgeDirection.SOUTH, new FluidStack(FluidRegistry.WATER, 10), true);
 							}
 							if (this.drainTicks % 5 == 0 && this.worldObj.isRemote && this.excessTicks < (40 * this.distance)) {
-								FXEssentiaTrail fx = new FXEssentiaTrail(this.worldObj, this.xCoord+0.5F, this.yCoord+1.1F, this.zCoord+0.5F, this.dX+0.5F, this.dY+1.1F, this.dZ+0.5F, 5, Aspect.TOOL.getColor(), 1.0F);
-				        		Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+								ThaumicExploration.proxy.spawnWaterAtLocation(this.worldObj, this.xCoord+0.5F, this.yCoord+1.1F, this.zCoord+0.5F, this.dX+0.5F, this.dY+1.1F, this.dZ+0.5F);
+				        		
 							}
 							this.excessTicks++;
 				        	this.drainTicks--;
@@ -174,8 +171,7 @@ public class TileEntityEverfullUrn extends TileEntity implements IFluidTank,IFlu
 				if (players.contains(player) && player.isBurning()) {
 					
 					if (this.drainTicks % 3 == 0 && this.worldObj.isRemote && this.excessTicks < (40 * this.distance)) {
-						FXEssentiaTrail fx = new FXEssentiaTrail(this.worldObj, this.xCoord+0.5F, this.yCoord+1.1F, this.zCoord+0.5F, player.posX, player.posY, player.posZ, 5, Aspect.TOOL.getColor(), 1.0F);
-		        		Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+						ThaumicExploration.proxy.spawnWaterOnPlayer(this.worldObj, this.xCoord,this.yCoord,this.zCoord, player);
 					}
 					this.excessTicks++;
 		        	this.drainTicks--;
@@ -202,8 +198,7 @@ public class TileEntityEverfullUrn extends TileEntity implements IFluidTank,IFlu
 			
 			
 			if (ticks%2 == 0 && this.worldObj.isRemote && (this.drainTicks <= 0 || this.excessTicks > (40 * this.distance))) {
-				FXEssentiaTrail fx = new FXEssentiaTrail(this.worldObj, this.xCoord+0.5F, this.yCoord+1.1F, this.zCoord+0.5F, this.xCoord+0.5F+((Math.random())-0.5), this.yCoord+2.1F, this.zCoord+0.5F+((Math.random())-0.5), 5, Aspect.TOOL.getColor(), 1.0F);
-	    		Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				ThaumicExploration.proxy.spawnRandomWaterFountain(this.worldObj, this.xCoord,this.yCoord,this.zCoord);
 			}
 			
 			if (ticks%5 == 0) {

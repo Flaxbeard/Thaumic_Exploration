@@ -2,8 +2,14 @@
 item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
 item.thaumicexploration:transmutationCore.name=Transmutative Rod
 item.thaumicexploration:amberCore.name=Amber Rod
+item.thaumicexploration:maskEvil.name=Mask of Cruelty
+item.thaumicexploration:bootsMeteor.name=Boots of the Meteor
+item.thaumicexploration:bootsComet.name=Boots of the Comet
+item.thaumicexploration:dreamcatcher.name=Wispy Dreamcatcher
 
 itemGroup.thaumicExploration=Thaumic Exploration
+
+death.attack.witherMask=%1$s was withered away by %2$s
 
 ----Wand Names----
 item.Wand.amber.rod=Amber
@@ -67,9 +73,11 @@ item.thaumicexploration:jarSeal:Dark.name=Dark Jar Binding Seal
 tile.thaumicexploration:thinkTankJar.name=Think Tank
 tile.thaumicexploration:everfullUrn.name=Everfull Urn
 tile.thaumicexploration:crucibleSouls.name=Crucible of Souls
+tile.thaumicexploration:replicator.name=Thaumic Replicator
 
 ----Thaumonomicon Entries----
 te.researchPrefix=[TX]
+tc.research_category.TAINT=Tainturgy
 
 --Flesh Curing
 te.name.FLESHCURE=Flesh Purification
@@ -114,7 +122,28 @@ te.name.WANDAMBER=Amber Wand Core
 te.tag.WANDAMBER=Regenerative vis storage
 te.text.WANDAMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type, but it has other benefits. Amber cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when below 50% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at three times the rate.
 
+--Wispy Dreamcatcher
+te.name.DREAMCATCHER=Wispy Dreamcatcher
+te.tag.DREAMCATCHER=Filtered thoughts
+te.text.DREAMCATCHER.1=They say that dreamcatchers are meant to stop nightmares from reaching the mind. Though taint may not be a construct of your psyche, you think that perhaps the ill effects that taint has on the body could be combated using a modified dreamcatcher. If you hold this dreamcatcher in your hotbar, it will have a high probability of nullifying damage from taint or tainted creatures. Although this dreamcatcher does not nullify all damage, it will certainly make excursions into tainted land much less dangerous.
+
+--Boots of the Meteor
+te.name.METEORBOOTS=Boots of the Meteor
+te.tag.METEORBOOTS=Come on and slam
+te.text.METEORBOOTS.1=Your Boots of the Traveller have been very useful, but sometimes you have desired even more mobility. By imbuing the Boots of the Traveller with the raw power of Ignis and Potentia, you have created a pair of boots with unrivaled mobility. These boots propel the wearer with the force of a meteor in the direction they are looking, if they jump while crouching. Pressing the crouch button when in midair will launch the player towards the ground at incredible speeds, damaging anything near the point of impact.
+
+--Boots of the Comet
+te.name.COMETBOOTS=Boots of the Comet
+te.tag.COMETBOOTS=Ice ice baby
+te.text.COMETBOOTS.1=The Boots of the Traveller are fast, but you think that there is room for improvement. By infusing the Boots of the Traveller with Aqua and Gelum, you have created a pair of boots with unrivaled speed. These boots allow the user to run with the speed of a comet, covering large tracts of land in a matter of seconds. Water can do nothing to slow you. When wearing the Boots of the Comet, water will be temporarily frozen under your feet.
+
 --Transmutative Wand Core
 te.name.TRANSMUTATION=Transmutative Wand Core
 te.tag.TRANSMUTATION=One thing into another
 te.text.TRANSMUTATION.1=While experimenting with different materials to filter vis, you have found that diamonds can sporadically convert one form of vis into another. You have found this property to be too unreliable to use for most purposes, but you have found that if infused with certain materials, it can be used as a wand core with unique properties. When draining a node of vis at over 90% capacity, the vis will be converted into other forms of vis.
+
+--Taint Basics
+te.name.TAINTBASICS=Taint
+te.tag.TAINTBASICS=Henturgy
+te.text.TAINTBASICS.1=Sometimes, Thaumaturgy goes horribly wrong. Miracles become twisted calamities and the very landscape twists into hideous forms. Tainted Lands are places infected by the sick runoff of magical workings, flux. Local flora and fauna become warped and mutated into forms hostile to normal life and the very ground of a tainted land infects those who tread upon its pulsing fibres.
+te.text.TAINTBASICS.2=Tainted Lands can be found naturally in the world, but can also form when a careless Thaumaturge allows flux goo to stagnate for too long. They are recognizable by their telltale purple fibres and bright violet stalks. Left alone, the tainted land will gradually extend its tendrils outwards, infecting more and more of the surrounding land. Dirt becomes thick, pulpy Tainted Soil while trees and other natural materials are slowly covered in fibres and converted into structurally unsound crust which can collapse or melt into flux goo at any moment.

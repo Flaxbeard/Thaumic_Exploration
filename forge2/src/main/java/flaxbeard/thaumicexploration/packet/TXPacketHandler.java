@@ -1,10 +1,14 @@
 package flaxbeard.thaumicexploration.packet;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,11 +23,18 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchCategoryList;
+import thaumcraft.api.research.ResearchItem;
+import thaumcraft.client.fx.FXLightningBolt;
 import thaumcraft.common.config.ConfigBlocks;
 import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.data.TXWorldData;
+import flaxbeard.thaumicexploration.event.DamageSourceTX;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 // cpw.mods.fml.common.Side;
@@ -55,6 +66,137 @@ public class TXPacketHandler implements IPacketHandler
             dimension = inputStream.readInt();
             World world = DimensionManager.getWorld(dimension);
             
+            if (packetID == 2 && world!= null) {
+            	int readInt = inputStream.readInt();
+            	if (world.getEntityByID(readInt) != null) {
+            		EntityLivingBase target = (EntityLivingBase) world.getEntityByID(readInt);
+	                readInt = inputStream.readInt();
+	            	if (world.getEntityByID(readInt) != null) {
+	            		EntityPlayer player = (EntityPlayer) world.getEntityByID(readInt);
+	            		if (player.getCurrentItemOrArmor(4) != null) {
+	            		player.getCurrentItemOrArmor(4).damageItem(1, player);
+	            		if (player.getCurrentItemOrArmor(4).getItemDamage() == player.getCurrentItemOrArmor(4).getMaxDamage()) {
+	            			player.inventory.armorInventory[3] = null;
+	            		}
+	            		//player.worldObj.spawnParticle("explode", (double)(target.posX + Math.random()-0.5F), (double)(target.boundingBox.maxY + Math.random()/2), (double)(target.posZ + Math.random()-0.5F), 0.0D, 0.0D, 0.0D);
+
+
+	            		target.attackEntityFrom(DamageSourceTX.witherPlayerDamage(player), 1);
+	            		
+						ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+				        DataOutputStream outputStream = new DataOutputStream(bos);
+				        try
+				        {
+				            outputStream.writeByte(3);
+				            outputStream.writeInt(world.provider.dimensionId);
+				            outputStream.writeInt(target.entityId);
+				            outputStream.writeInt(player.entityId);
+				           
+				        }
+				        catch (Exception ex)
+				        {
+				            ex.printStackTrace();
+				        }
+				
+				        packet = new Packet250CustomPayload();
+				        packet.channel = "tExploration";
+				        packet.data = bos.toByteArray();
+				        packet.length = bos.size();
+				        PacketDispatcher.sendPacketToAllPlayers(packet);
+	            		}
+	            	}
+            	}
+            	
+            }
+            
+            if (packetID == 3 ) {
+
+            	if (world!= null) {
+            	int readInt = inputStream.readInt();
+            	if (world.getEntityByID(readInt) != null) {
+            		EntityLivingBase target = (EntityLivingBase) world.getEntityByID(readInt);
+	                readInt = inputStream.readInt();
+	            	if (world.getEntityByID(readInt) != null) {
+	            		EntityPlayer player = (EntityPlayer) world.getEntityByID(readInt);
+
+	            		if (player.username != Minecraft.getMinecraft().thePlayer.username) {
+	            			
+		        			FXLightningBolt bolt = new FXLightningBolt(player.worldObj, player.posX, player.boundingBox.minY + player.height / 2.0F + 0.75D, player.posZ, target.posX, target.boundingBox.maxY - 0.5F, target.posZ, player.worldObj.rand.nextLong(), 6, 0.5F, 5);
+		        			bolt.defaultFractal();
+		        		    bolt.setType(5);
+		        	        if (player.username.equalsIgnoreCase("killajoke")) {
+		        	        	bolt.setType(3);
+		        	        }
+		        		    bolt.setWidth(0.0625F);
+		        		    bolt.finalizeBolt();
+		                	//System.out.println(Minecraft.getMinecraft().thePlayer.username);
+	            		}
+	            	}
+            	}
+            }
+            }
+            
+            if (packetID == 4 ) {
+
+            	if (world!= null) {
+            	int readInt = inputStream.readInt();
+	            	if (world.getEntityByID(readInt) != null) {
+	            		EntityPlayer player = (EntityPlayer) world.getEntityByID(readInt);
+	            		ItemStack item = player.inventory.armorItemInSlot(0);
+	            		if (!player.onGround && item != null) {
+		            		if (!item.hasTagCompound()) {
+		            			NBTTagCompound par1NBTTagCompound = new NBTTagCompound();
+			        			item.setTagCompound(par1NBTTagCompound );
+			        			item.stackTagCompound.setBoolean("IsSmashing", true);
+			        			item.stackTagCompound.setInteger("smashTicks",0);
+			        			item.stackTagCompound.setInteger("airTicks",0);
+		            		}
+		            		if (item.stackTagCompound.getInteger("airTicks") > 5) {
+		            			item.stackTagCompound.setBoolean("IsSmashing", true);
+		            			
+		            		}
+		            		
+	            		}
+	            	}
+            	}
+            }
+            
+            if (packetID == 5 ) {
+
+            	if (world!= null) {
+            	int readInt = inputStream.readInt();
+	            	if (world.getEntityByID(readInt) != null) {
+	            		EntityPlayer player = (EntityPlayer) world.getEntityByID(readInt);
+	            		if (player.inventory.armorItemInSlot(0) != null) {
+	            		ItemStack item = player.inventory.armorItemInSlot(0);
+	            		if (!player.onGround  && item != null) {
+		            		if (!item.hasTagCompound()) {
+		            			NBTTagCompound par1NBTTagCompound = new NBTTagCompound();
+			        			item.setTagCompound(par1NBTTagCompound );
+			        			item.stackTagCompound.setBoolean("IsSmashing", true);
+			        			item.stackTagCompound.setInteger("smashTicks",0);
+			        			item.stackTagCompound.setInteger("airTicks",0);
+		            		}
+		            			item.stackTagCompound.setInteger("airTicks", 10);
+		            		
+	            		}
+	            	}
+	            	}
+            	}
+            }
+            
+            if (packetID == 6) {
+            	int x2 = inputStream.readInt();
+            	int y2 = inputStream.readInt();
+            	int z2 = inputStream.readInt();
+            	int x = inputStream.readInt();
+            	int y = inputStream.readInt();
+            	int z = inputStream.readInt();
+            	int color = inputStream.readInt();
+            	
+            	//ThaumicExploration.proxy.spawnEssentiaAtLocation(world, x+0.5F, y+1.1F, z+0.5F, x2+0.5F, y2+0.5F, z2+0.5F, 5,color);
+            }
+        
 
 
             if (packetID == 1 && world != null)
@@ -88,7 +230,6 @@ public class TXPacketHandler implements IPacketHandler
 					world.markBlockForUpdate(x, y, z);
 				}
 				else if (type == 2) {
-					////System.out.println("dafuk");
 					world.setBlock(x, y, z, ThaumicExploration.boundChest.blockID, world.getBlockMetadata(x, y, z),1);
 					int nextID = player.inventory.getCurrentItem().stackTagCompound.getInteger("ID");
 					((TileEntityBoundChest) world.getBlockTileEntity(x, y, z)).id = nextID;
@@ -158,7 +299,7 @@ public class TXPacketHandler implements IPacketHandler
 			
 					}
 					
-					System.out.println("Name is: " + player.inventory.getCurrentItem().getUnlocalizedName());
+					//System.out.println("Name is: " + player.inventory.getCurrentItem().getUnlocalizedName());
 					int nextID = player.inventory.getCurrentItem().stackTagCompound.getInteger("ID");
 					((TileEntityBoundJar) world.getBlockTileEntity(x, y, z)).id = nextID;
 					((TileEntityBoundJar) world.getBlockTileEntity(x, y, z)).setColor(15-player.inventory.getCurrentItem().getItemDamage());
@@ -189,11 +330,9 @@ public class TXPacketHandler implements IPacketHandler
 				}
 				else if (type == 7) {
 					if (player.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
-						System.out.println("its happening");
 						((IFluidContainerItem)player.inventory.getCurrentItem().getItem()).fill(player.inventory.getCurrentItem(), new FluidStack(FluidRegistry.WATER, 1000), true);
 					}
 					else if (player.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
-						System.out.println("its happenin");
 						
 						player.inventory.decrStackSize(player.inventory.currentItem, 1);
 						player.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));

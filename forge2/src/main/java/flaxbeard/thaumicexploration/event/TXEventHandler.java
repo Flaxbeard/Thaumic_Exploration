@@ -3,20 +3,27 @@ package flaxbeard.thaumicexploration.event;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.entities.ITaintedMob;
+import thaumcraft.common.lib.world.DamageSourceThaumcraft;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.data.TXWorldData;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
@@ -38,6 +45,76 @@ public class TXEventHandler {
 		if (event.source == DamageSourceTX.soulCrucible) {
 			event.setCanceled(true);
 		}
+	}
+	
+	@ForgeSubscribe
+	public void handleTaint(LivingHurtEvent event) {
+		if (event.entityLiving.worldObj.rand.nextInt(4) < 3) {
+		if (event.source.damageType == "mob") {
+			if (event.source.getSourceOfDamage() instanceof ITaintedMob) {
+				if (event.entityLiving instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) event.entityLiving;
+					
+//					List<String> completed = Thaumcraft.proxy.getResearchManager().getResearchForPlayerSafe(player.username);
+//				    if ((completed != null) && (completed.contains("CRUCIBLE")) && (completed.contains("NITOR")))
+//				    {
+//				    	
+//				      completed.remove("CRUCIBLE");
+//				      completed.remove("NITOR");
+//				      completed = new ArrayList();
+//				      completed.add("TAINTURGE");
+//				      completed.add("TAINTURGE2");
+//				      Thaumcraft.proxy.getCompletedResearch().put(player.username, completed);
+//				    }
+//				    //Thaumcraft.proxy.getResearchManager().updateResearchNBT(player);
+//				    
+//				    ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+//			        DataOutputStream outputStream = new DataOutputStream(bos);
+//			        try
+//			        {
+//			            outputStream.writeByte(6);
+//			            outputStream.writeInt(player.worldObj.provider.dimensionId);
+//			            outputStream.writeInt(player.entityId);
+//			           
+//			        }
+//			        catch (Exception ex)
+//			        {
+//			            ex.printStackTrace();
+//			        }
+//			
+//			        Packet250CustomPayload packet = new Packet250CustomPayload();
+//			        packet.channel = "tExploration";
+//			        packet.data = bos.toByteArray();
+//			        packet.length = bos.size();
+//			        PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
+					
+					for (int i = 0; i<10; i++) {
+						if (player.inventory.getStackInSlot(i) != null)
+							System.out.println((player.inventory.getStackInSlot(i).getItem().getUnlocalizedName()) + i);
+						if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmNoTaint.itemID) {
+							event.setCanceled(true);
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (event.source == DamageSourceThaumcraft.taint  || event.source == DamageSourceThaumcraft.tentacle  || event.source == DamageSourceThaumcraft.swarm ) {
+			if (event.entityLiving instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) event.entityLiving;
+				for (int i = 0; i<10; i++) {
+					if (player.inventory.getStackInSlot(i) != null)
+						System.out.println((player.inventory.getStackInSlot(i).getItem().getUnlocalizedName()) + i);
+					if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmNoTaint.itemID) {
+						System.out.println("cansul");
+						event.setCanceled(true);
+						break;
+					}
+				}
+					
+			}
+		}
+	}
 	}
 	
 	@ForgeSubscribe

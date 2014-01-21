@@ -22,7 +22,7 @@ public class WandRodAmberOnUpdate implements IWandRodOnUpdate {
 			List lowAspects = new ArrayList();
 			for (int i=0; i<6; i++) {
 				double visCount = ((ItemWandCasting) itemstack.getItem()).getVis(itemstack, this.aspects[i]);
-				double cutoffPercent = (((((ItemWandCasting) itemstack.getItem()).getMaxVis(itemstack)) / 10));
+				double cutoffPercent = (((((ItemWandCasting) itemstack.getItem()).getMaxVis(itemstack)) / 2));
 				if (visCount < cutoffPercent) {
 					lowAspects.add(aspects[i]);
 				}

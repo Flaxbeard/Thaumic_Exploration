@@ -109,32 +109,7 @@ public class BlockCrucibleSouls extends BlockContainer {
 //    }
     
     
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
-    {
-        int l = par1World.getBlockMetadata(par2, par3, par4);
-        float f = (float)par2 + 0.5F;
-        float f1 = (float)par3 + 1.0F;
-        float f2 = (float)par4 + 0.5F;
-        float f3 = 0.52F;
-        float f4 = par5Random.nextFloat() * 0.6F - 0.3F;
-//        par1World.spawnParticle("splash", f, f1, f2, 0.0D, 1.0D, 0.0D);
-//        par1World.spawnParticle("splash", f, f1, f2, 0.0D, 1.0D, 0.0D);
-//        par1World.spawnParticle("splash", f, f1, f2, 0.0D, 1.0D, 0.0D);
-//        par1World.spawnParticle("splash", f, f1, f2, 0.0D, 1.0D, 0.0D);
-//        par1World.spawnParticle("splash", f, f1, f2, 0.0D, 1.0D, 0.0D);
-//        par1World.spawnPamorticle("splash", f, f1, f2, 0.0D, 1.0D, 0.0D);
-        if (Math.random() < 0.1) {    
 
-        }
-
-        //par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-        //par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-        
-        
-    }
-    
-    
    
 
 }

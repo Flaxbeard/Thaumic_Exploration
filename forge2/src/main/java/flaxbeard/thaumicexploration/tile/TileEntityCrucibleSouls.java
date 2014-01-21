@@ -24,6 +24,7 @@ import thaumcraft.client.fx.FXBoreParticles;
 import thaumcraft.client.fx.FXBoreSparkle;
 import thaumcraft.common.config.ConfigBlocks;
 import cpw.mods.fml.client.FMLClientHandler;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.event.DamageSourceTX;
 
 public class TileEntityCrucibleSouls extends TileEntity implements IAspectContainer, IEssentiaTransport {
@@ -40,10 +41,10 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
     public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setInteger("drainTicks",this.drainTicks);
+        //par1NBTTagCompound.setInteger("drainTicks",this.drainTicks);
         par1NBTTagCompound.setFloat("myFlux",this.myFlux);
         if (this.drainTicks > 0) {
-        	par1NBTTagCompound.setInteger("targetID",this.targetMob.entityId);
+        	//par1NBTTagCompound.setInteger("targetID",this.targetMob.entityId);
         }
         NBTTagCompound aspects = new NBTTagCompound();
     	
@@ -60,12 +61,12 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        this.drainTicks = par1NBTTagCompound.getInteger("drainTicks");
+        //this.drainTicks = par1NBTTagCompound.getInteger("drainTicks");
         this.myFlux = par1NBTTagCompound.getFloat("myFlux");
-    	if (this.drainTicks >0) {
-    		this.targetMob = (EntityLivingBase) this.worldObj.getEntityByID(par1NBTTagCompound.getInteger("targetID"));
-
-    	}
+//    	if (this.drainTicks >0) {
+//    		//this.targetMob = (EntityLivingBase) this.worldObj.getEntityByID(par1NBTTagCompound.getInteger("targetID"));
+//
+//    	}
 		AspectList readAspects = new AspectList();
 		NBTTagCompound aspects = par1NBTTagCompound.getCompoundTag("Aspects");
 		Iterator iterator =  Aspect.aspects.keySet().iterator();
@@ -117,6 +118,10 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
     	if (this.drainTicks >0) {
     		this.targetMob = (EntityLivingBase) this.worldObj.getEntityByID(access.getInteger("targetID"));
 
+    	}
+    	else
+    	{
+    		this.targetMob = null;
     	}
 		AspectList readAspects = new AspectList();
 		NBTTagCompound aspects = access.getCompoundTag("Aspects");
@@ -229,27 +234,16 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 					
 					if (myDistance < this.range) {
 						if (myDistance > 1.5F) {
-							this.targetMob.moveEntity(xChange, 0, zChange);
+							//this.targetMob.moveEntity(xChange, 0, zChange);
 						}
 						
 						if (this.worldObj.isRemote) {
 							if (this.worldObj.rand.nextInt(2) == 0) {
-							    FXBoreParticles fb = new FXBoreParticles(worldObj, this.targetMob.posX, this.targetMob.boundingBox.maxY - 0.5F, this.targetMob.posZ, this.xCoord+0.5F, this.yCoord+0.5F, this.zCoord+0.5F, Item.coal, worldObj.rand.nextInt(6), 3);
-							    
-		
-							    fb.setAlphaF(0.3F);
-								fb.motionX = ((float)worldObj.rand.nextGaussian() * 0.03F);
-								fb.motionY = ((float)worldObj.rand.nextGaussian() * 0.03F);
-								fb.motionZ = ((float)worldObj.rand.nextGaussian() * 0.03F);
-							    FMLClientHandler.instance().getClient().effectRenderer.addEffect(fb);
+								ThaumicExploration.instance.proxy.spawnHarvestParticle(this.worldObj, this.targetMob.posX, this.targetMob.boundingBox.maxY-0.5F, this.targetMob.posZ, this.xCoord+0.5F, this.yCoord+0.5F, this.zCoord+0.5F);
 							}
 							else
 							{
-								
-							    FXBoreSparkle fb = new FXBoreSparkle(worldObj, this.targetMob.posX, this.targetMob.boundingBox.maxY - 0.5F, this.targetMob.posZ, this.xCoord+0.5F, this.yCoord+0.5F, this.zCoord+0.5F);
-							    
-							    fb.setRBGColorF(0.4F + worldObj.rand.nextFloat() * 0.2F, 0.2F, 0.6F + worldObj.rand.nextFloat() * 0.3F);
-							    FMLClientHandler.instance().getClient().effectRenderer.addEffect(fb);
+								ThaumicExploration.instance.proxy.spawnBoreSparkle(this.worldObj, this.targetMob.posX, this.targetMob.boundingBox.maxY-0.5F, this.targetMob.posZ, this.xCoord+0.5F, this.yCoord+0.5F, this.zCoord+0.5F);   
 							}
 						}
 		

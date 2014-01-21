@@ -15,6 +15,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
@@ -126,16 +127,31 @@ public class BlockEverfullUrn extends BlockContainer {
 
 		
 			if (entityPlayer.inventory.getCurrentItem() != null){ 
-				if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
-					System.out.println("its happening");
-					((IFluidContainerItem)entityPlayer.inventory.getCurrentItem().getItem()).fill(entityPlayer.inventory.getCurrentItem(), new FluidStack(FluidRegistry.WATER, 1000), true);
-		            world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
-				}
-				else if (entityPlayer.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
+				if (entityPlayer.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
 					System.out.println("its happenin");
 					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
-					entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1));
+					if (!entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1))) {
+						entityPlayer.dropPlayerItem(new ItemStack(Item.bucketWater, 1));
+					}
 		            world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
+				}
+				else if (FluidContainerRegistry.isEmptyContainer(entityPlayer.inventory.getCurrentItem())) {
+					ItemStack newStack = entityPlayer.inventory.getCurrentItem();
+					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
+					if (!entityPlayer.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.WATER, 1000), newStack))) {
+						entityPlayer.dropPlayerItem(FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.WATER, 1000), newStack));
+					}
+					world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
+				}
+				else if (entityPlayer.inventory.getCurrentItem().getItem() instanceof IFluidContainerItem) {
+					System.out.println("its happening");
+					ItemStack newStack = new ItemStack(entityPlayer.inventory.getCurrentItem().getItem(),1);
+					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
+					((IFluidContainerItem)newStack.getItem()).fill(newStack, new FluidStack(FluidRegistry.WATER, 1000), true);
+					if (!entityPlayer.inventory.addItemStackToInventory(newStack)) {
+						entityPlayer.dropPlayerItem(newStack);
+					}
+					world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
 				}
 			}
 		

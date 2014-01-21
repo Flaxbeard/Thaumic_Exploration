@@ -93,6 +93,18 @@ public final class ModRecipes {
 					new ItemStack(Item.blazePowder), new ItemStack(Block.chest),  new ItemStack(ConfigItems.itemResource,1,3));
 		}
 		
+		registerResearchItemI("METEORBOOTS", new ItemStack(ThaumicExploration.bootsMeteor), 4, 
+				new AspectList().add(Aspect.FIRE, 25).add(Aspect.ENERGY, 25), 
+				new ItemStack(ConfigItems.itemBootsTraveller), new ItemStack(ConfigBlocks.blockCrystal, 1, 1), 
+				new ItemStack(Block.netherrack), new ItemStack(Block.netherrack),
+				new ItemStack(Block.netherrack), new ItemStack(ConfigItems.itemFocusFire));
+		
+		registerResearchItemI("COMETBOOTS", new ItemStack(ThaumicExploration.bootsComet), 4, 
+				new AspectList().add(Aspect.WATER, 25).add(Aspect.ICE, 25), 
+				new ItemStack(ConfigItems.itemBootsTraveller), new ItemStack(ConfigBlocks.blockCrystal, 1, 2), 
+				new ItemStack(Block.blockSnow), new ItemStack(Block.blockSnow),
+				new ItemStack(Block.blockSnow), new ItemStack(ConfigItems.itemFocusFrost));
+		
 		registerResearchItemI("CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal, 1, 32767), 7, 
 				new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12), 
 				new ItemStack(ThaumicExploration.blankSeal, 1, 32767), new ItemStack(Item.enderPearl), 
@@ -135,8 +147,13 @@ public final class ModRecipes {
 	}
 
 	private static void initArcaneRecipes() {
-		// TODO Auto-generated method stub
 		
+        registerResearchItem("DREAMCATCHER", "DREAMCATCHER", new ItemStack(ThaumicExploration.charmNoTaint), new AspectList().add(Aspect.ORDER, 15).add(Aspect.ENTROPY, 15),
+                "GPG", "PSP", "FPF",
+                'G', new ItemStack(ConfigItems.itemResource,1, 11),
+                'P', new ItemStack(ConfigBlocks.blockWoodenDevice,1,6),
+                'S', new ItemStack(ConfigItems.itemResource,1, 12),
+                'F', new ItemStack(Item.feather));
 	}
 
 	private static void initCraftingRecipes() {
@@ -158,6 +175,7 @@ public final class ModRecipes {
 	        ShapedArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(research, output, aspects, stuff);
 	        ConfigResearch.recipes.put(name, recipe);
 	}
+	
 	
 	private static void registerCraftingRecipe(String name, ItemStack output, Object... stuff) {
 	        GameRegistry.addRecipe(output, stuff);

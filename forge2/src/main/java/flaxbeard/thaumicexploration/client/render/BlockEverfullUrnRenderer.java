@@ -20,32 +20,33 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
 			RenderBlocks renderer) {
     	float f = (14.0F/16.0F);
     	float f1 = (2.0F/16.0F);
-    	block.setBlockBounds(f1, 0.0F, f1, f, 1.0F, f);
+
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		float x = 0;
 		float y = 0;
 		float z = 0;
 		Icon icon = block.getBlockTextureFromSide(2);
-        float f4 = (0.0F/16.0F);
+        float f4 = 0;
         Tessellator tessellator = Tessellator.instance;
+    	block.setBlockBounds(f1, 0.0F, f1, f, 1.0F, f);
         tessellator.startDrawingQuads();
         tessellator.setNormal(1.0F, 0.0F, 0.0F);
-        renderer.renderFaceXPos(block, (double)((float)x  - f4), (double)y, (double)z, icon);
+        renderer.renderFaceXPos(block, (double)((float)x), (double)y, (double)z, icon);
         tessellator.draw();
         
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-        renderer.renderFaceXNeg(block, (double)((float)x  + f4), (double)y, (double)z, icon);
+        renderer.renderFaceXNeg(block, (double)((float)x), (double)y, (double)z, icon);
         tessellator.draw();
         
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, -1.0F);
-        renderer.renderFaceZNeg(block, (double)x, (double)y, (double)((float)z  + f4), icon);
+        renderer.renderFaceZNeg(block, (double)x, (double)y, (double)((float)z), icon);
         tessellator.draw();
         
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, 1.0F);
-        renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z - f4), icon);
+        renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z), icon);
         tessellator.draw();
         
         f4 = (3.0F/16.0F);
