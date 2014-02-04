@@ -2,23 +2,27 @@ package flaxbeard.thaumicexploration.event;
 
 import java.util.HashMap;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import thaumcraft.client.fx.FXLightningBolt;
+import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.Config;
+import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.items.PotionFluxTaint;
 import thaumcraft.common.lib.Utils;
+import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
+import cpw.mods.fml.common.Loader;
 import flaxbeard.thaumicexploration.ThaumicExploration;
+import flaxbeard.thaumicexploration.integration.TTIntegration;
 
 public class TXBootsEventHandler
 {
@@ -31,14 +35,104 @@ public class TXBootsEventHandler
     if ((event.entity instanceof EntityPlayer))
     {
     	EntityPlayer player = (EntityPlayer)event.entity;
-        Utils.setWalkSpeed(player.capabilities, Utils.getWalkSpeed(genericPlayerCapabilities));
+        //Utils.setWalkSpeed(player.capabilities, Utils.getWalkSpeed(genericPlayerCapabilities));
         updateSpeed(player);
         checkAir(player);
         if (player.getCurrentItemOrArmor(4) != null) {
 	        if (player.getCurrentItemOrArmor(4).itemID == ThaumicExploration.maskEvil.itemID && player.username.equalsIgnoreCase("Succubism")) {
 	        	player.worldObj.spawnParticle("heart", (double)(player.posX + Math.random()-0.5F), (double)(player.boundingBox.maxY + Math.random()/2), (double)(player.posZ + Math.random()-0.5F), 0.0D, 0.0D, 0.0D);        	
 	        }
+        }
+        
+        boolean isTainted = false;
+        for (int i = 0; i<10; i++) {
+			if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmTaint.itemID) {
+				isTainted = true;
+				break;
+			}
+		}
+        
+        if (!player.getEntityData().hasKey("tainted")) {
+        	System.out.println("Setting up player NBT");
+        	player.getEntityData().setBoolean("tainted", isTainted);
+        }
+        boolean wasTainted = player.getEntityData().getBoolean("tainted");
+        if (wasTainted && !isTainted && !player.capabilities.disableDamage) {
+        	player.attackEntityFrom(DamageSourceTX.noTaint, 999);
+        }
+        if (!wasTainted && isTainted) {
+        	player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "thaumcraft:zap", 1.0F, 1.0F);
+//        	player.addPotionEffect(new PotionEffect(Potion.blindness.id,60));
+//        	player.addPotionEffect(new PotionEffect(Potion.confusion.id,160));
+        }
+    	player.getEntityData().setBoolean("tainted", isTainted);
+        
+        if (!(player.worldObj.getBiomeGenForCoords((int)player.posX, (int)player.posZ) == ThaumcraftWorldGenerator.biomeTaint)) {
+        	if (isTainted) {
+        		if (!player.getEntityData().hasKey("taintGracePeriod")) {
+		        	System.out.println("Setting up player grace period");
+		        	player.getEntityData().setInteger("taintGracePeriod", 0);
+		        }
+		        int taintGP = player.getEntityData().getInteger("taintGracePeriod");
+		        taintGP++;
+		        player.getEntityData().setInteger("taintGracePeriod", taintGP);
+    			if (player.getActivePotionEffect(ThaumicExploration.potionTaintWithdrawl) == null && taintGP > 100) {
+    				for (int i = 0; i<10; i++) {
+    					if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ConfigItems.itemResource.itemID && (player.inventory.getStackInSlot(i).getItemDamage() == 11 || player.inventory.getStackInSlot(i).getItemDamage() == 12)) {
+    						player.inventory.decrStackSize(i, 1);
+    	    				taintGP = 0;
+    	    				player.getEntityData().setInteger("taintGracePeriod",0);
+    						break;
+    					}
+    				}
 
+    				if (taintGP > 100)
+    					player.addPotionEffect(new PotionEffect(ThaumicExploration.potionTaintWithdrawl.id,100,1));
+    				
+    			}
+    		}
+	        
+        }
+        else
+        {
+        	if (!player.worldObj.isRemote){
+	        	if (isTainted) {
+	        		player.getEntityData().setInteger("taintGracePeriod", 0);
+    				if (player.getFoodStats().getFoodLevel() < 4) {
+	    		        if (!player.getEntityData().hasKey("taintFoodBuff")) {
+	    		        	System.out.println("Setting up player food NBT");
+	    		        	player.getEntityData().setInteger("taintFoodBuff", 0);
+	    		        }
+	    		        int taint = player.getEntityData().getInteger("taintFoodBuff");
+	    		        taint++;
+	    		        if (taint > 80) {
+	    		        	player.getFoodStats().addStats(1, 0.0F);
+	    		        	taint = 0;
+	    		        	if (player.worldObj.isRemote) {
+	    		        		Thaumcraft.proxy.swarmParticleFX(player.worldObj, player, 0.1F, 10.0F, 0.0F);
+	    		        	}
+	    		        }
+
+	    		        player.getEntityData().setInteger("taintFoodBuff", taint);
+    				}
+    				else
+    				{
+    					if (!player.getEntityData().hasKey("taintFoodBuff")) {
+ 	    		        	System.out.println("Setting up player food NBT");
+ 	    		        	player.getEntityData().setInteger("taintFoodBuff", 0);
+ 	    		        }
+ 	    		        player.getEntityData().setInteger("taintFoodBuff", 0);
+    				}
+	        	}
+        	}
+        }
+        if (player.getActivePotionEffect(PotionFluxTaint.fluxTaint) != null) {
+        	for (int i = 0; i<10; i++) {
+    			if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmTaint.itemID) {
+        		player.removePotionEffect(PotionFluxTaint.fluxTaint.id);	
+				break;
+			}
+        	}
         }
     }
     
@@ -141,15 +235,24 @@ public class TXBootsEventHandler
     if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)) {
       if (((EntityPlayer)event.entity).isSneaking()) {
     	  Vec3 vector = event.entityLiving.getLook(0.5F);
-	      double total = vector.zCoord + vector.xCoord;
+	      double total = Math.abs(vector.zCoord + vector.xCoord);
 	      EntityPlayer player = (EntityPlayer)event.entity;
-	
+	      double jump = 0;
+		  if (Loader.isModLoaded("ThaumicTinkerer")) {
+	    	  jump = TTIntegration.getAscentLevel((EntityPlayer)event.entity);
+	      }
+		  if(jump >= 1) {
+			  jump = (jump + 2D)/4D;
+		  }
+		  
 	      if (vector.yCoord < total)
 	    	  vector.yCoord = total;
-	      if (vector.yCoord > 0)
-	      event.entityLiving.motionY += vector.yCoord/1.5F;
-	      event.entityLiving.motionZ += vector.zCoord*4;
-	      event.entityLiving.motionX += vector.xCoord*4;
+	      
+	      event.entityLiving.motionY += ((jump+1)*vector.yCoord)/1.5F;
+	      event.entityLiving.motionZ += (jump+1)*vector.zCoord*4;
+	      event.entityLiving.motionX += (jump+1)*vector.xCoord*4;
+
+	      
       }
       else
       {

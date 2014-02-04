@@ -6,10 +6,23 @@ item.thaumicexploration:maskEvil.name=Mask of Cruelty
 item.thaumicexploration:bootsMeteor.name=Boots of the Meteor
 item.thaumicexploration:bootsComet.name=Boots of the Comet
 item.thaumicexploration:dreamcatcher.name=Wispy Dreamcatcher
+item.thaumicexploration:ringTaint.name=Tainted Band
+item.thaumicexploration:talismanFood.name=Talisman of Nourishment
+item.thaumicexploration:taintBerry.name=Taintberry
 
+----Creative Tab----
 itemGroup.thaumicExploration=Thaumic Exploration
 
+----Death Messages----
 death.attack.witherMask=%1$s was withered away by %2$s
+death.attack.noTaint=%1$s suffered from Taint withdrawl
+potion.binding=Binding
+potion.taintWithdrawl=Taint Withdrawl
+
+----Enchantment Names----
+enchantment.binding=Binding
+enchantment.nightVision=Night Vision
+enchantment.disarm=Disarming
 
 ----Wand Names----
 item.Wand.amber.rod=Amber
@@ -99,12 +112,12 @@ te.text.THINKTANK.2=This 'think tank' has very particular placement requirements
 --Chest Sealing
 te.name.CHESTSEAL=Seal of Chest Binding
 te.tag.CHESTSEAL=Magical inventory linking
-te.text.CHESTSEAL.1=By enchanting a mundane seal made of tallow, you have discovered a way to bind chests, so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network. Note that only empty chests are able to be bound.
+te.text.CHESTSEAL.1=By soaking a mundane seal made of tallow in a concoction of essentia, you have discovered a way to bind chests so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network. Note that only empty chests are able to be bound.
 
 --Jar Sealing
 te.name.JARSEAL=Seal of Jar Binding
 te.tag.JARSEAL=Essentia, essentia everywhere
-te.text.JARSEAL.1=By adjusting the infusion of the tallow seal to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.<BR><BR>Sealed jars have a higher suction than unlabeled jars but lower than labeled jars.
+te.text.JARSEAL.1=By adjusting the mixture of aspects that you soak the tallow seal in to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.<BR><BR>Sealed jars have a higher suction than unlabeled jars but lower than labeled jars.
 
 --Everfull Urn
 te.name.URN=Everfull Urn
@@ -117,6 +130,12 @@ te.tag.CRUCSOULS=Caution: Keep out of reach of children.
 te.text.CRUCSOULS.1=You have discovered a way to take advantage of a previously untapped source of essentia - that of living creatures. Infusing an alchemical furnace with various occult reagents and precise quantities of essentia, will create a crucible of souls, a device that will seek out the nearest living creature and slowly drain their life force, retrieving essentia at the final blow. This comes at the cost of the normal loot the creature would drop. This essentia can then be piped out of any face except the top via essentia tubes.
 te.text.CRUCSOULS.2=The crucible of souls is very unstable, and has a high probability of converting some of the essentia to flux or breaking it down into its component parts. You should make preparations to dispose of this flux before it causes a problem.<BR><BR>You have managed to install a basic safeguard so the device will not attack humans, but keep your pets at a safe distance.
 
+--Replicator
+te.name.REPLICATOR=Thaumic Replicator
+te.tag.REPLICATOR=Equivalent exchange
+te.text.REPLICATOR.1=You have been able to break down blocks and items into essentia with an alchemical furnace, now finally you have found a way to do the opposite. You have created a device that can replicate simple building blocks using essentia.<BR><BR>By right clicking the Thaumic Replicator with a block, you can set the template. Right clicking with a wand starts the replication process. Simply look at the Replicator with Goggles of Revealing to see what essentia is neccesary, and place this essentia in nearby jars like you would for an infusion.
+te.text.REPLICATOR.2=This essentia will then form into the block that you set as a template. This block must be removed before starting the process again. Right clicking will remove any blocks in the replicator and right clicking again will reset the template.<BR><BR>This process can also be automated by starting replication with a redstone signal and removing blocks with a hopper.
+
 --Amber Wand Core
 te.name.WANDAMBER=Amber Wand Core
 te.tag.WANDAMBER=Regenerative vis storage
@@ -126,6 +145,26 @@ te.text.WANDAMBER.1=You have finally found a practical use for amber, in the for
 te.name.DREAMCATCHER=Wispy Dreamcatcher
 te.tag.DREAMCATCHER=Filtered thoughts
 te.text.DREAMCATCHER.1=They say that dreamcatchers are meant to stop nightmares from reaching the mind. Though taint may not be a construct of your psyche, you think that perhaps the ill effects that taint has on the body could be combated using a modified dreamcatcher. If you hold this dreamcatcher in your hotbar, it will have a high probability of nullifying damage from taint or tainted creatures. Although this dreamcatcher does not nullify all damage, it will certainly make excursions into tainted land much less dangerous.
+
+--Talisman of Nourishment
+te.name.TALISMANFOOD=Talisman of Nourishment
+te.tag.TALISMANFOOD=Everfull belly
+te.text.TALISMANFOOD.1=You often find yourself needing to take breaks during marathon researching sessions to satisfy your hunger. Finally you have found a way to get past your need for food.<BR><BR>By infusing a diamond with the essence of hunger, you have created an item that is able to suck the nourishing energy from various food items in your hotbar and store this energy within. It will then automatically replenish your food meter if it is depleted.<BR><BR>This device will only work on simple food items, so foods that invoke effects such as Rotten Flesh and Golden Apples must be consumed normally.
+
+--Disarming Enchantment
+te.name.ENCHDISARM=Enchantment: Disarming
+te.tag.ENCHDISARM=Fighting dirty
+te.text.ENCHDISARM.1=You have formulated an enchantment that has a slight chance of knocking a weapon from a creature's hands.<BR><BR>This enchantment can be applied to swords. When done so, struck creatures have a chance of dropping the weapon they are holding. This disarming effect does not work on other players. This enchantment has a better chance of success if it is a higher level.
+
+--Binding Enchantment
+te.name.ENCHBINDING=Enchantment: Binding
+te.tag.ENCHBINDING=Going somewhere?
+te.text.ENCHBINDING.1=You have formulated an enchantment that binds a struck creature to a certain location.<BR><BR>This enchantment can be applied to swords. When a creature is struck with a sword enchanted with the first level of this enchantment, they will be slowed temporarily. Attacking an enderman with a sword that carries the second level of this enchantment will stop the enderman from teleporting away. Creepers struck with a blade that holds the second level of this enchantment will not be able to explode for a short time afterward.
+
+--Night Vision Enchantment
+te.name.ENCHNIGHTVISION=Enchantment: Night Vision
+te.tag.ENCHNIGHTVISION=Low-light vision
+te.text.ENCHNIGHTVISION.1=You have formulated an enchantment that allows you to see in the dark.<BR><BR>This enchantment can be applied to headgear. When done so, the wearer is able to see in low light conditions, similarly to using a night vision potion.
 
 --Boots of the Meteor
 te.name.METEORBOOTS=Boots of the Meteor

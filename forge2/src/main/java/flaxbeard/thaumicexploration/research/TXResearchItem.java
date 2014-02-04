@@ -9,6 +9,7 @@ import thaumcraft.api.research.ResearchPage;
 import thaumcraft.api.research.ResearchPage.PageType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class TXResearchItem extends ResearchItem {
 
@@ -35,8 +36,14 @@ public class TXResearchItem extends ResearchItem {
         @Override
         @SideOnly(Side.CLIENT)
         public String getText() {
+        	if (ThaumicExploration.prefix) {
                 return StatCollector.translateToLocal("te.researchPrefix")
                                 + " " + StatCollector.translateToLocal("te.tag." + key);
+        	}
+        	else
+        	{
+        		return StatCollector.translateToLocal("te.tag." + key);
+        	}
         }
 
         @Override

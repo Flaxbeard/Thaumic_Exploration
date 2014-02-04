@@ -6,25 +6,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAICreeperSwell;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAITaskEntry;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.entities.ITaintedMob;
 import thaumcraft.common.lib.world.DamageSourceThaumcraft;
+import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import flaxbeard.thaumicexploration.ThaumicExploration;
+import flaxbeard.thaumicexploration.ai.EntityAIAttackOnCollideReplacement;
+import flaxbeard.thaumicexploration.ai.EntityAICreeperDummy;
+import flaxbeard.thaumicexploration.ai.EntityAINearestAttackablePureTarget;
+import flaxbeard.thaumicexploration.ai.EntityAINearestAttackableTargetNecromancy;
 import flaxbeard.thaumicexploration.data.TXWorldData;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
@@ -41,9 +63,150 @@ public class TXEventHandler {
 	
 
 	@ForgeSubscribe
+	public void handleTaintSpawns(EntityJoinWorldEvent event) {
+		System.out.println("brainwashed0");
+		if (event.entity instanceof ITaintedMob) {
+			EntityLiving mob = (EntityLiving) event.entity;
+			List<EntityAITaskEntry> tasksToRemove = new ArrayList<EntityAITaskEntry>();
+			for ( Object entry : mob.targetTasks.taskEntries)
+			{
+				EntityAITaskEntry entry2 = (EntityAITaskEntry)entry;
+				if (entry2.action instanceof EntityAINearestAttackableTarget)
+				{
+					tasksToRemove.add((EntityAITaskEntry) entry);
+				}
+			}
+			for (EntityAITaskEntry entry : tasksToRemove)
+			{
+				mob.targetTasks.removeTask(entry.action);
+			}
+			System.out.println("brainwashed1");
+			mob.targetTasks.addTask(1, new EntityAINearestAttackablePureTarget((EntityCreature) mob, EntityPlayer.class, 0, true)); 
+		}
+	}
+
+	@ForgeSubscribe
 	public void handleMobDrop(LivingDropsEvent event) {
 		if (event.source == DamageSourceTX.soulCrucible) {
 			event.setCanceled(true);
+		}
+	}
+	
+	@ForgeSubscribe
+	public void handleTeleport(EnderTeleportEvent event) {
+		if (event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityPlayer) {
+			if (event.entityLiving.isPotionActive(ThaumicExploration.potionBinding)) {
+				event.setCanceled(true);
+				System.out.println("no teleporting, bad enderman.");
+			}
+		}
+	}
+	
+	
+	@ForgeSubscribe
+	public void stopCreeperExplosions(LivingUpdateEvent event) {
+		if (event.entityLiving.getCurrentItemOrArmor(4) != null) {
+			ItemStack heldItem = event.entityLiving.getCurrentItemOrArmor(4);
+			int nightVision = EnchantmentHelper.getEnchantmentLevel(ThaumicExploration.enchantmentNightVision.effectId, heldItem);
+			if(nightVision > 0 && (!event.entityLiving.isPotionActive(Potion.nightVision.id) || event.entityLiving.getActivePotionEffect(Potion.nightVision).duration < 202)) {
+				event.entityLiving.addPotionEffect(new PotionEffect(Potion.nightVision.id, 202, 1));
+			}
+		}
+		if (event.entityLiving instanceof EntityCreeper && event.entityLiving.isPotionActive(ThaumicExploration.potionBinding)) {
+            EntityCreeper creeper = (EntityCreeper) event.entityLiving;
+            int size = creeper.tasks.taskEntries.size();
+			for(int i = 0; i<size; i++) {
+				EntityAITaskEntry entry = (EntityAITaskEntry) creeper.tasks.taskEntries.get(i);
+            	if(entry.action instanceof EntityAICreeperSwell) {
+            		entry.action = new EntityAICreeperDummy(creeper);
+            		creeper.tasks.taskEntries.set(i, entry);
+            	}
+            }
+			//ReflectionHelper.setPrivateValue(EntityCreeper.class, (EntityCreeper) event.entityLiving, 2, LibObfuscation.TIME_SINCE_IGNITED);
+		}
+		else if (event.entityLiving instanceof EntityCreeper) {
+			EntityCreeper creeper = (EntityCreeper) event.entityLiving;
+            int size = creeper.tasks.taskEntries.size();
+			for(int i = 0; i<size; i++) {
+				EntityAITaskEntry entry = (EntityAITaskEntry) creeper.tasks.taskEntries.get(i);
+            	if(entry.action instanceof EntityAICreeperDummy) {
+            		entry.action = new EntityAICreeperSwell(creeper);
+            		creeper.tasks.taskEntries.set(i, entry);
+            		creeper.setCreeperState(1);
+            	}
+            	
+            }
+		}
+	}
+	
+//	@ForgeSubscribe
+//	public void handleTaintSeeds(BlockEvent.HarvestDropsEvent event) {
+//		if (event.drops.size() > 0 && !event.drops.contains(Item.itemsList[Block.tallGrass.blockID]) && event.block.blockID == Block.tallGrass.blockID && event.world.getBiomeGenForCoords(event.x, event.z) == ThaumcraftWorldGenerator.biomeTaint) {
+//			event.drops.clear();
+//			event.drops.add(new ItemStack(Item.arrow));
+//		}
+//	}
+	
+	@ForgeSubscribe
+	public void handleEnchantmentAttack(LivingAttackEvent event) {
+		if ((event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityCreeper || event.entityLiving instanceof EntityPlayer)&& event.source.getSourceOfDamage() instanceof EntityLivingBase) {
+			EntityLivingBase attacker = (EntityLivingBase) event.source.getSourceOfDamage();
+			ItemStack heldItem = attacker.getHeldItem();
+			if(heldItem == null)
+				return;
+
+			int binding = EnchantmentHelper.getEnchantmentLevel(ThaumicExploration.enchantmentBinding.effectId, heldItem);
+			if(binding > 1) {
+				event.entityLiving.addPotionEffect(new PotionEffect(ThaumicExploration.potionBinding.id, 50, 1));
+			}
+		}
+		if (event.source.getSourceOfDamage() instanceof EntityLivingBase) {
+			EntityLivingBase attacker = (EntityLivingBase) event.source.getSourceOfDamage();
+			ItemStack heldItem = attacker.getHeldItem();
+			if(heldItem == null)
+				return;
+
+			int binding = EnchantmentHelper.getEnchantmentLevel(ThaumicExploration.enchantmentBinding.effectId, heldItem);
+			if (binding > 0) {
+				event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 50, 1));
+			}
+		}
+		if (event.source.getSourceOfDamage() instanceof EntityLivingBase) {
+			EntityLivingBase attacker = (EntityLivingBase) event.source.getSourceOfDamage();
+			ItemStack heldItem = attacker.getHeldItem();
+			if(heldItem == null)
+				return;
+
+			int disarm = EnchantmentHelper.getEnchantmentLevel(ThaumicExploration.enchantmentDisarm.effectId, heldItem);
+			if (disarm > 0 && !(event.entityLiving instanceof EntityPlayer)) {
+				if (event.entityLiving.getHeldItem() != null && !event.entityLiving.worldObj.isRemote && event.entityLiving.worldObj.rand.nextInt(10-(2*disarm)) == 0) {
+					ItemStack itemstack = event.entityLiving.getHeldItem();
+					event.entityLiving.setCurrentItemOrArmor(0, null);
+					World world = event.entityLiving.worldObj;
+					double x = event.entityLiving.posX;
+					double y = event.entityLiving.posY;
+					double z = event.entityLiving.posZ;
+					float f = world.rand.nextFloat() * 0.8F + 0.1F;
+	                float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+	                float f2 = world.rand.nextFloat();
+	                EntityItem entityitem;
+			    	int k1 = world.rand.nextInt(21) + 10;
+		
+		            k1 = itemstack.stackSize;
+		
+		            entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+		            float f3 = 0.05F;
+		            entityitem.motionX = (double)((float)world.rand.nextGaussian() * f3);
+		            entityitem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
+		            entityitem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
+		
+		            if (itemstack.hasTagCompound())
+		            {
+		                entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+		            }
+		            world.spawnEntityInWorld(entityitem);
+				}
+			}
 		}
 	}
 	

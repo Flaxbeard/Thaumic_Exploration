@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -20,10 +19,8 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
-import thaumcraft.client.fx.FXBoreParticles;
-import thaumcraft.client.fx.FXBoreSparkle;
 import thaumcraft.common.config.ConfigBlocks;
-import cpw.mods.fml.client.FMLClientHandler;
+import thaumcraft.common.entities.monster.EntityThaumicSlime;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.event.DamageSourceTX;
 
@@ -255,15 +252,15 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 										if (tag.entityName == name) {
 											
 											tag.aspects.aspects.keySet().iterator();
-											int randomAspect = this.worldObj.rand.nextInt(tag.aspects.aspects.keySet().size());
+											
 											Iterator iterator = tag.aspects.aspects.keySet().iterator();
-		
+
 											int i = 0;
 											while (iterator.hasNext()) {
 												Object next = iterator.next();
 												if (next != null) {
 													for (int z = 0;z<tag.aspects.getAmount((Aspect) next);z++) {
-														if (this.worldObj.rand.nextBoolean()) {
+														if (this.worldObj.rand.nextInt(3) == 0) {
 															this.myAspects.add((Aspect) next, 1);
 														}
 														else
@@ -323,7 +320,7 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 					this.distance = this.range + 1.0F;
 					List<EntityLivingBase> mobs = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(this.xCoord-this.range, this.yCoord-this.yRange, this.zCoord-this.range, this.xCoord+this.range, this.yCoord+this.yRange, this.zCoord+this.range));
 					for (EntityLivingBase mob : mobs) {
-						if (!(mob instanceof EntityPlayer)) {
+						if (!(mob instanceof EntityPlayer) && !(mob instanceof EntityThaumicSlime)) {
 							float myDistance=(float) Math.sqrt(Math.pow(this.xCoord-mob.posX,2) + Math.pow(this.yCoord-mob.posY,2) + Math.pow(this.zCoord-mob.posZ,2));
 							if (myDistance < distance) {
 								this.drainTicks = (int) (mob.getMaxHealth()*10);

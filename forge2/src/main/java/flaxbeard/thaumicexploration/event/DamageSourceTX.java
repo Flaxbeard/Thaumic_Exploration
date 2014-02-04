@@ -7,7 +7,8 @@ import net.minecraft.util.EntityDamageSource;
 public class DamageSourceTX extends DamageSource {
 	
 	public static DamageSource soulCrucible = (new DamageSourceTX("soulCrucible")).setDamageBypassesArmor();
-
+	public static DamageSource noTaint = new DamageSourceTX("noTaint").setDamageBypassesArmor().setMagicDamage();
+	
 	public DamageSourceTX(String par1Str) {
 		super(par1Str);
 	}

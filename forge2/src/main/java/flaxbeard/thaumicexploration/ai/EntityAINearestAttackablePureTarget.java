@@ -1,23 +1,16 @@
 package flaxbeard.thaumicexploration.ai;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
-import flaxbeard.thaumicexploration.data.NecromancyMobProperties;
-
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityOwnable;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTargetSorter;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.entity.ai.EntityAITarget;
 
-public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAttackableTarget
+public class EntityAINearestAttackablePureTarget extends EntityAITarget
 {
     private final Class targetClass;
     private final int targetChance;
@@ -32,30 +25,39 @@ public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAt
     private final IEntitySelector targetEntitySelector;
     private EntityLivingBase targetEntity;
 
-    public EntityAINearestAttackableTargetNecromancy(EntityCreature par1EntityCreature, Class par2Class, int par3, boolean par4)
+    public EntityAINearestAttackablePureTarget(EntityCreature par1EntityCreature, Class par2Class, int par3, boolean par4)
     {
         this(par1EntityCreature, par2Class, par3, par4, false);
     }
 
-    public EntityAINearestAttackableTargetNecromancy(EntityCreature par1EntityCreature, Class par2Class, int par3, boolean par4, boolean par5)
+    public EntityAINearestAttackablePureTarget(EntityCreature par1EntityCreature, Class par2Class, int par3, boolean par4, boolean par5)
     {
         this(par1EntityCreature, par2Class, par3, par4, par5, (IEntitySelector)null);
     }
 
-    public EntityAINearestAttackableTargetNecromancy(EntityCreature par1EntityCreature, Class par2Class, int par3, boolean par4, boolean par5, IEntitySelector par6IEntitySelector)
+    public EntityAINearestAttackablePureTarget(EntityCreature par1EntityCreature, Class par2Class, int par3, boolean par4, boolean par5, IEntitySelector par6IEntitySelector)
     {
-        super(par1EntityCreature, par2Class, par3, par4, par5, par6IEntitySelector);
+        super(par1EntityCreature, par4, par5);
         this.targetClass = par2Class;
         this.targetChance = par3;
         this.theNearestAttackableTargetSorter = new EntityAINearestAttackableTargetSorter(par1EntityCreature);
         this.setMutexBits(1);
-        this.targetEntitySelector = null;
-        //this.targetEntitySelector = new EntityAINearestAttackableTargetSelectorReplacement(this, par6IEntitySelector);
+        this.targetEntitySelector = new EntityAINearestAttackableTargetSelectorReplacement(this, par6IEntitySelector);
     }
     
     public boolean isSuitableTarget(EntityLivingBase par1EntityLivingBase, boolean par2)
     {
+    	System.out.println("is suitable?");
+        if (par1EntityLivingBase.getEntityData().hasKey("tainted"))
+        {
+        	if (par1EntityLivingBase.getEntityData().getBoolean("tainted") == true) 
+        	{
+        		return false;
+        	}
+        }
+        System.out.println("is suitable.");
         return super.isSuitableTarget(par1EntityLivingBase, par2);
+       
     }
 
     /**
@@ -72,6 +74,15 @@ public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAt
             double d0 = this.getTargetDistance();
             List list = this.taskOwner.worldObj.selectEntitiesWithinAABB(this.targetClass, this.taskOwner.boundingBox.expand(d0, 4.0D, d0), this.targetEntitySelector);
             Collections.sort(list, this.theNearestAttackableTargetSorter);
+            List mobsToRemove = new ArrayList<Object>();
+            for (Object mob : list) {
+            	if (!this.isSuitableTarget((EntityLivingBase) mob, false)) {
+            		mobsToRemove.add(mob);
+            	}
+            }
+            for (Object mob : mobsToRemove) {
+            	list.remove(mob);
+            }
 
             if (list.isEmpty())
             {
@@ -79,21 +90,8 @@ public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAt
             }
             else
             {
-            	System.out.println("checkbox");
-            	for (Object item : list) {
-            		if(NecromancyMobProperties.get((EntityLiving) item) == null)
-            		{
-            			System.out.println("there is at least one zombie in this hizzle with no prop");
-            			this.targetEntity = (EntityLivingBase) item;
-            			this.taskOwner.setAttackTarget(this.targetEntity);
-            			NecromancyMobProperties prop = NecromancyMobProperties.get(this.taskOwner);
-            			prop.setTarget(this.targetEntity);
-            			break;
-            		}
-            	}
-            	return this.targetEntity != null;
-            	
-            	//return true;
+                this.targetEntity = (EntityLivingBase)list.get(0);
+                return true;
             }
         }
     }
@@ -103,10 +101,7 @@ public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAt
      */
     public void startExecuting()
     {
-    	System.out.println("motha fukin bass");
         this.taskOwner.setAttackTarget(this.targetEntity);
         super.startExecuting();
     }
-    
-
 }

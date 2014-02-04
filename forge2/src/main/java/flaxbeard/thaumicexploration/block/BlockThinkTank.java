@@ -76,36 +76,36 @@ public class BlockThinkTank extends BlockContainer
      */
     private void setDefaultDirection(World par1World, int par2, int par3, int par4)
     {
-        if (!par1World.isRemote)
-        {
-            int l = par1World.getBlockId(par2, par3, par4 - 1);
-            int i1 = par1World.getBlockId(par2, par3, par4 + 1);
-            int j1 = par1World.getBlockId(par2 - 1, par3, par4);
-            int k1 = par1World.getBlockId(par2 + 1, par3, par4);
-            byte b0 = 3;
-
-            if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
-            {
-                b0 = 3;
-            }
-
-            if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
-            {
-                b0 = 2;
-            }
-
-            if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
-            {
-                b0 = 5;
-            }
-
-            if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
-            {
-                b0 = 4;
-            }
-
-            par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
-        }
+//        if (!par1World.isRemote)
+//        {
+//            int l = par1World.getBlockId(par2, par3, par4 - 1);
+//            int i1 = par1World.getBlockId(par2, par3, par4 + 1);
+//            int j1 = par1World.getBlockId(par2 - 1, par3, par4);
+//            int k1 = par1World.getBlockId(par2 + 1, par3, par4);
+//            byte b0 = 3;
+//
+//            if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
+//            {
+//                b0 = 3;
+//            }
+//
+//            if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
+//            {
+//                b0 = 2;
+//            }
+//
+//            if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
+//            {
+//                b0 = 5;
+//            }
+//
+//            if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
+//            {
+//                b0 = 4;
+//            }
+//
+//            par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
+//        }
     }
 
 

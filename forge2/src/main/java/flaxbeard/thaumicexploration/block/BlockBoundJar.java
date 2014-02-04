@@ -85,10 +85,6 @@ public class BlockBoundJar extends BlockJar {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
 	{
     	if (!world.isRemote) {
-    		int id = ((TileEntityBoundJar)world.getBlockTileEntity(x,  y,  z)).id;
-    		int amt1 = ((TileEntityBoundJar)world.getBlockTileEntity(x,  y,  z)).myJarData.getJarAmount();
-    		int amt2 = ((TileEntityBoundJar)world.getBlockTileEntity(x,  y,  z)).amount;
-    		System.out.println("ID: " + id + " Bound amount: " + amt1 + " Contained amount: " + amt2);
     		world.markBlockForUpdate(x,  y,  z);
     	}
     	TileEntity te = world.getBlockTileEntity(x,  y,  z);

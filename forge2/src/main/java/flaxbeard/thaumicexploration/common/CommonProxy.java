@@ -50,5 +50,11 @@ public class CommonProxy
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void crucibleBubble(World world, float x, float y, float z,
+			float cr, float cg, float cb) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
