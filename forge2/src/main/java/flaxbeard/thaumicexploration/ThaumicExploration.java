@@ -50,12 +50,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import flaxbeard.thaumicexploration.block.BlockBootsIce;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
 import flaxbeard.thaumicexploration.block.BlockBoundJar;
 import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
 import flaxbeard.thaumicexploration.block.BlockEverfullUrn;
 import flaxbeard.thaumicexploration.block.BlockReplicator;
-import flaxbeard.thaumicexploration.block.BlockSkullCandle;
 import flaxbeard.thaumicexploration.block.BlockTaintBerries;
 import flaxbeard.thaumicexploration.block.BlockThinkTank;
 import flaxbeard.thaumicexploration.common.CommonProxy;
@@ -72,7 +72,6 @@ import flaxbeard.thaumicexploration.item.ItemBrain;
 import flaxbeard.thaumicexploration.item.ItemChestSeal;
 import flaxbeard.thaumicexploration.item.ItemChestSealLinked;
 import flaxbeard.thaumicexploration.item.ItemFoodTalisman;
-import flaxbeard.thaumicexploration.item.ItemSkullCandle;
 import flaxbeard.thaumicexploration.item.ItemTXArmorSpecial;
 import flaxbeard.thaumicexploration.item.ItemTXArmorSpecialDiscount;
 import flaxbeard.thaumicexploration.item.ItemTaintSeedFood;
@@ -331,7 +330,7 @@ public class ThaumicExploration {
 		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucible3");
 		replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setUnlocalizedName("thaumicexploration:replicator").setCreativeTab(tab).setTextureName("thaumicexploration:replicatorBottom");
 		
-		meltyIce = new BlockSkullCandle(meltyIceID).setUnlocalizedName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("ice").setTextureName("ice");
+		meltyIce = new BlockBootsIce(meltyIceID).setUnlocalizedName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("ice").setTextureName("ice");
 		//skullCandle = new BlockSkullCandle(skullCandleID).setUnlocalizedName("thaumicexploration:skullCandle");
 		
 		taintBerryCrop = new BlockTaintBerries(taintBerryCropID).setUnlocalizedName("thaumicexploration:taintBerryCrop").setTextureName("thaumicExploration:berries");
