@@ -189,7 +189,7 @@ public final class ModRecipes {
                 'S', new ItemStack(ConfigItems.itemResource,1, 12),
                 'F', new ItemStack(Item.feather));
         
-        registerResearchItem("DREAMCATCHER", "DREAMCATCHER", new ItemStack(ThaumicExploration.charmNoTaint), new AspectList().add(Aspect.ORDER, 15).add(Aspect.ENTROPY, 15),
+        registerResearchItem("DREAMCATCHER2", "DREAMCATCHER", new ItemStack(ThaumicExploration.charmNoTaint), new AspectList().add(Aspect.ORDER, 15).add(Aspect.ENTROPY, 15),
                 "GPG", "PSP", "FPF",
                 'G', "gooTaint",
                 'P', new ItemStack(ConfigBlocks.blockWoodenDevice,1,6),

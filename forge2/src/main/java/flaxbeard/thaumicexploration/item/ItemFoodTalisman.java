@@ -20,15 +20,9 @@ public class ItemFoodTalisman extends Item {
 	public ItemFoodTalisman(int par1) {
 		super(par1);
 		this.maxStackSize = 1;
-		this.setMaxDamage(100);
+		//this.setMaxDamage(100);
 	}
 	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(int itemID, CreativeTabs tab,
-                    List itemList) {
-                    itemList.add(new ItemStack(itemID,1,100));
-    }
 	
 	@Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
