@@ -56,18 +56,21 @@ public class ItemChestSealLinked extends Item {
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
-    	if (par2 == 0) {
-    		int j = 15 - par1ItemStack.getItemDamage();
-	    	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
-	        return ( c.getRGB() & 0x00ffffff);
+    	if (par1ItemStack.getItemDamage() <= 15) {
+	    	if (par2 == 0) {
+	    		int j = 15 - par1ItemStack.getItemDamage();
+		    	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
+		        return ( c.getRGB() & 0x00ffffff);
+	    	}
+	    	else
+	    	{
+	    		int j = 15 - par1ItemStack.getItemDamage();
+		    	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
+		    	Color c2 = new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());;
+		    	return ( c2.getRGB() & 0x00ffffff);
+	    	}
     	}
-    	else
-    	{
-    		int j = 15 - par1ItemStack.getItemDamage();
-	    	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
-	    	Color c2 = new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());;
-	    	return ( c2.getRGB() & 0x00ffffff);
-    	}
+    	return 0;
     }
     
 	@Override

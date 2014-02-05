@@ -24,7 +24,6 @@ public class BoundChestWorldData extends WorldSavedData {
 
         @Override
         public void readFromNBT(NBTTagCompound nbt) {
-        	System.out.println("looking for dem KEEZ");
         	if (nbt.hasKey("myColor")) {
         		myColor = nbt.getInteger("myColor");
         	}
@@ -86,7 +85,7 @@ public class BoundChestWorldData extends WorldSavedData {
         		BoundChestWorldData data = (BoundChestWorldData) world.mapStorage.loadData(BoundChestWorldData.class, ident);
                 
                 if (data == null) {
-                		System.out.println("making new itemdata for " + ident);
+                		System.out.println("Making new Bound Chest world data for " + ident);
                         data = new BoundChestWorldData(ident);
                         data.setSealColor(color);
                         data.markDirty();

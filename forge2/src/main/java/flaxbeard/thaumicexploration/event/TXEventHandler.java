@@ -4,20 +4,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAICreeperSwell;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,21 +33,19 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.entities.ITaintedMob;
 import thaumcraft.common.lib.world.DamageSourceThaumcraft;
-import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import flaxbeard.thaumicexploration.ThaumicExploration;
-import flaxbeard.thaumicexploration.ai.EntityAIAttackOnCollideReplacement;
 import flaxbeard.thaumicexploration.ai.EntityAICreeperDummy;
 import flaxbeard.thaumicexploration.ai.EntityAINearestAttackablePureTarget;
-import flaxbeard.thaumicexploration.ai.EntityAINearestAttackableTargetNecromancy;
 import flaxbeard.thaumicexploration.data.TXWorldData;
+import flaxbeard.thaumicexploration.entity.EntityLoveArrow;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 
@@ -64,7 +62,6 @@ public class TXEventHandler {
 
 	@ForgeSubscribe
 	public void handleTaintSpawns(EntityJoinWorldEvent event) {
-		System.out.println("brainwashed0");
 		if (event.entity instanceof ITaintedMob) {
 			EntityLiving mob = (EntityLiving) event.entity;
 			List<EntityAITaskEntry> tasksToRemove = new ArrayList<EntityAITaskEntry>();
@@ -80,7 +77,7 @@ public class TXEventHandler {
 			{
 				mob.targetTasks.removeTask(entry.action);
 			}
-			System.out.println("brainwashed1");
+			//System.out.println("brainwashed1");
 			mob.targetTasks.addTask(1, new EntityAINearestAttackablePureTarget((EntityCreature) mob, EntityPlayer.class, 0, true)); 
 		}
 	}
@@ -97,7 +94,6 @@ public class TXEventHandler {
 		if (event.entityLiving instanceof EntityEnderman || event.entityLiving instanceof EntityPlayer) {
 			if (event.entityLiving.isPotionActive(ThaumicExploration.potionBinding)) {
 				event.setCanceled(true);
-				System.out.println("no teleporting, bad enderman.");
 			}
 		}
 	}
@@ -137,6 +133,77 @@ public class TXEventHandler {
             	
             }
 		}
+	}
+	
+	@ForgeSubscribe
+	public void handleArrow(ArrowLooseEvent event) {
+		event.setCanceled(true);
+		ItemStack par1ItemStack = event.bow;
+		World par2World = event.entityPlayer.worldObj;
+		EntityPlayer par3EntityPlayer = event.entityPlayer;
+		Random itemRand = new Random();
+		int j = event.charge;
+
+        boolean flag = par3EntityPlayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, par1ItemStack) > 0;
+
+        if (flag || par3EntityPlayer.inventory.hasItem(Item.arrow.itemID))
+        {
+            float f = (float)j / 20.0F;
+            f = (f * f + f * 2.0F) / 3.0F;
+
+            if ((double)f < 0.1D)
+            {
+                return;
+            }
+
+            if (f > 1.0F)
+            {
+                f = 1.0F;
+            }
+
+            EntityLoveArrow entityarrow = new EntityLoveArrow(par2World, par3EntityPlayer, f * 2.0F);
+
+            if (f == 1.0F)
+            {
+                entityarrow.setIsCritical(true);
+            }
+
+            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, par1ItemStack);
+
+            if (k > 0)
+            {
+                entityarrow.setDamage(entityarrow.getDamage() + (double)k * 0.5D + 0.5D);
+            }
+
+            int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, par1ItemStack);
+
+            if (l > 0)
+            {
+                entityarrow.setKnockbackStrength(l);
+            }
+
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, par1ItemStack) > 0)
+            {
+                entityarrow.setFire(100);
+            }
+
+            par1ItemStack.damageItem(1, par3EntityPlayer);
+            par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+
+            if (flag)
+            {
+                entityarrow.canBePickedUp = 2;
+            }
+            else
+            {
+                par3EntityPlayer.inventory.consumeInventoryItem(Item.arrow.itemID);
+            }
+
+            if (!par2World.isRemote)
+            {
+                par2World.spawnEntityInWorld(entityarrow);
+            }
+        }
 	}
 	
 //	@ForgeSubscribe
@@ -252,8 +319,8 @@ public class TXEventHandler {
 //			        PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
 					
 					for (int i = 0; i<10; i++) {
-						if (player.inventory.getStackInSlot(i) != null)
-							System.out.println((player.inventory.getStackInSlot(i).getItem().getUnlocalizedName()) + i);
+						//if (player.inventory.getStackInSlot(i) != null)
+							
 						if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmNoTaint.itemID) {
 							event.setCanceled(true);
 							break;
@@ -266,10 +333,7 @@ public class TXEventHandler {
 			if (event.entityLiving instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.entityLiving;
 				for (int i = 0; i<10; i++) {
-					if (player.inventory.getStackInSlot(i) != null)
-						System.out.println((player.inventory.getStackInSlot(i).getItem().getUnlocalizedName()) + i);
 					if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmNoTaint.itemID) {
-						System.out.println("cansul");
 						event.setCanceled(true);
 						break;
 					}
@@ -298,7 +362,6 @@ public class TXEventHandler {
 				}
 			}
 			else if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ThaumicExploration.boundChest.blockID) {
-				//System.out.println("bound chest");
 				World world = event.entityPlayer.worldObj;
 				//System.out.println(event.entityPlayer.worldObj.isRemote + ItemBlankSeal.itemNames[((TileEntityBoundChest) world.getBlockTileEntity(event.x, event.y, event.z)).getSealColor()]);
 				if (event.entityPlayer.inventory.getCurrentItem() != null){ 

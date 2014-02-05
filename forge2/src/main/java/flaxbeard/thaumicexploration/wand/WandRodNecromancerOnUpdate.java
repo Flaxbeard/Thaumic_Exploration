@@ -37,7 +37,6 @@ public class WandRodNecromancerOnUpdate implements IWandRodOnUpdate {
 			  }
 		  }
 		  eatTicks++;
-		  System.out.println(eatTicks);
 		  AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(par1EntityPlayer.posX - 3, par1EntityPlayer.posY - 3, par1EntityPlayer.posZ - 3, par1EntityPlayer.posX + 3, par1EntityPlayer.posY + 3, par1EntityPlayer.posZ + 3);
           List<EntityAspectOrb> orbs = par1EntityPlayer.worldObj.getEntitiesWithinAABB(EntityAspectOrb.class, boundingBox);
 

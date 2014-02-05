@@ -82,8 +82,6 @@ public class TileEntityThinkTankRender
 	    	direction[i] = 4 - new Random().nextInt(4);
 	    }
         float f4 = (((int)(tile.rotationTicks+i))%7)/7.0F;
-        //System.out.println(f4);
-        
 	    float f1 = tile.rotationTicks + f;
 	    this.bindTexture(enchantingTableBookTextures);
 	    float rotationDegrees = -2*((tile.rotationTicks) % 360);
@@ -99,7 +97,6 @@ public class TileEntityThinkTankRender
 		    break;
 	    }
 	    GL11.glEnable(GL11.GL_CULL_FACE);
-	    //System.out.println(direction[i]);
 	    GL11.glColor4f(1.0F, 1.0F, 1.0F, tile.warmedUpNumber/40F);
 	    GL11.glEnable(3042);
 	    GL11.glBlendFunc(770, 771);

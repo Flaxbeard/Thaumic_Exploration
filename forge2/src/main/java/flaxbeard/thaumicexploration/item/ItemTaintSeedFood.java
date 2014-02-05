@@ -34,7 +34,6 @@ public class ItemTaintSeedFood extends ItemSeedFood implements IPlantable
     {
         if (par7 != 1)
         {
-        	System.out.println("IDK");
             return false;
         }
         else if (par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4, par5 + 1, par6, par7, par1ItemStack))

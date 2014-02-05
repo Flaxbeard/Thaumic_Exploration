@@ -116,7 +116,6 @@ public class TileEntityEverfullUrn extends TileEntity implements IFluidTank,IFlu
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		// TODO Auto-generated method stub
-		System.out.println(from == ForgeDirection.UP);
 		return (from == ForgeDirection.UP);
 	}
 

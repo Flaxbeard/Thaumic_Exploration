@@ -106,7 +106,6 @@ public class ItemFocusNecromancy extends Item implements IWandFocus {
 				particleCheck = 1;
 			}
 			if (progress % particleCheck == 0) {
-				System.out.println("generate particle");
 				targetItem.worldObj.spawnParticle("spell", targetItem.posX, targetItem.posY, targetItem.posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
@@ -222,7 +221,7 @@ public class ItemFocusNecromancy extends Item implements IWandFocus {
 		super.registerIcons(ir);
 		this.orn = ir.registerIcon("thaumicexploration:necromancyOrn");
 		this.depth = ir.registerIcon("thaumicexploration:necromancyDepth");
-		System.out.println(ThaumicExploration.focusNecromancy.getUnlocalizedName().replaceAll("item.", "") + "Orn");
+		//System.out.println(ThaumicExploration.focusNecromancy.getUnlocalizedName().replaceAll("item.", "") + "Orn");
 	}
 
 

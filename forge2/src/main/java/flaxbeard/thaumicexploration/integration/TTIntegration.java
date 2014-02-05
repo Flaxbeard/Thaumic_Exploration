@@ -47,7 +47,7 @@ public class TTIntegration {
 	public static boolean okVersion() {
 		String ver = LibMisc.VERSION.substring(LibMisc.VERSION.lastIndexOf("-") + 1);
 		int version = Integer.parseInt(ver);
-		System.out.println("!!!!!!!THAUMIC TINKERER VERSION: " + version + "!!!!!!!");
+		System.out.println("!THAUMIC TINKERER VERSION: " + version + "!");
 		return (version > 71);
 	}
 	

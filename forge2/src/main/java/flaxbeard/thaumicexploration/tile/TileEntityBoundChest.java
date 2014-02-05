@@ -216,7 +216,6 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
                 this.chestContents[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
             }
         }
-        //System.out.println("SAVING FOR ID" + par1NBTTagCompound.getInteger("chestID"));
     }
 
     /**
@@ -246,7 +245,6 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
         }
         par1NBTTagCompound.setInteger("myAccessTick", this.accessTicks);
         par1NBTTagCompound.setInteger("chestID", this.id);
-        System.out.println("SAVING FOR ID" + this.id);
     }
 
     /**
@@ -298,9 +296,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
         super.updateEntity();
         ++this.ticksSinceSync;
         if (this.accessTicks > 0 && !this.worldObj.isRemote) {
-        	//System.out.println(accessTicks);
         	--this.accessTicks;
-        	//System.out.println(this.accessTicks + " is what the server thinks it is");
         	this.updateAccessTicks();
         }
         float f;
@@ -415,7 +411,6 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     	this.accessTicks = access.getInteger("accessTicks");
     	this.setColor(access.getInteger("color"));
     	this.clientColor = access.getInteger("color");
-    	//System.out.println("suxes u got " + this.accessTicks);
         worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
     }
 
@@ -540,7 +535,6 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
 	public int getAccessTicks() {
 		// TODO Auto-generated method stub
 		if (this.worldObj.isRemote) {
-			//System.out.println("TileEntity thinks that it is" + this.accessTicks);
 		}
 		return this.accessTicks;
 		

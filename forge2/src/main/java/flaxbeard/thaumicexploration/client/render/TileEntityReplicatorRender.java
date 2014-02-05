@@ -28,7 +28,6 @@ public class TileEntityReplicatorRender extends TileEntitySpecialRenderer {
 			double d2, float f) {
 
          TileEntityReplicator replicator = ((TileEntityReplicator) tileentity);
-         //System.out.println(replicator.getStackInSlot(0).toString());
          if (replicator.getStackInSlot(0) != null && replicator.validLocation() && !replicator.crafting) {
 	         EntityItem entityitem = null;
 	         float ticks = Minecraft.getMinecraft().renderViewEntity.ticksExisted + f;
@@ -67,7 +66,6 @@ public class TileEntityReplicatorRender extends TileEntitySpecialRenderer {
 	         GL11.glTranslatef((float)d0 + 0.5F, (float)d1 + 1.15F + h, (float)d2 + 0.5F);
 	         GL11.glRotatef(ticks % 360.0F, 0.0F, 1.0F, 0.0F);
 	         float size = (100F-replicator.ticksLeft)/100F;
-	         System.out.println(size);
 
 	         if (((replicator.getStackInSlot(0).getItem() instanceof ItemBlock)) && (replicator.getStackInSlot(0).itemID < Block.blocksList.length)) {
 	           GL11.glScalef(2.0F * size, 2.0F * size, 2.0F * size);
@@ -157,8 +155,6 @@ public class TileEntityReplicatorRender extends TileEntitySpecialRenderer {
 	         tessellator.setColorOpaque_I(aspect.getColor());
 	         float offset = (ot.getAmount(aspect) - replicator.recipeEssentia.getAmount(aspect));
 	         offset = offset /ot.getAmount(aspect);
-	         //offset = 1.0F - offset;
-	         System.out.println(offset);
 	         tessellator.addVertexWithUV(d0 + 1 - 0.5F, d1 + offset, d2 - 0.001 - 0.5F, 0, 1.0 - offset);
 	         tessellator.addVertexWithUV(d0 + 1 - 0.5F, d1 +0, d2 - 0.001 - 0.5F, 0,1);
 	         tessellator.addVertexWithUV(d0 + 0 - 0.5F, d1 + 0, d2 - 0.001 - 0.5F, 1, 1);

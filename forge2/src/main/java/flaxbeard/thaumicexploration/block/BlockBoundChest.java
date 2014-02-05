@@ -269,7 +269,7 @@ public class BlockBoundChest extends BlockContainer
         if (par1World.isRemote)
         {
            
-            //System.out.println("Clientside block says" + ((TileEntityBoundChest)par1World.getBlockTileEntity(par2,par3,par4)).accessTicks);
+           
             return true;
         }
         else

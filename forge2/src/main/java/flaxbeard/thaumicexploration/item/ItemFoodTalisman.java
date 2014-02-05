@@ -2,6 +2,8 @@ package flaxbeard.thaumicexploration.item;
 
 import java.util.List;
 
+import thaumcraft.common.config.ConfigItems;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,7 +46,7 @@ public class ItemFoodTalisman extends Item {
 		
 		if (par3Entity instanceof EntityPlayer && !par2World.isRemote && par3Entity.ticksExisted % 20 == 0) {
 			EntityPlayer player = (EntityPlayer)par3Entity;
-			//System.out.println("Saturation is " + player.getFoodStats().getSaturationLevel());
+		
 			if (!par1ItemStack.hasTagCompound()) {
 				par1ItemStack.setTagCompound(new NBTTagCompound());
 			}
@@ -57,7 +59,6 @@ public class ItemFoodTalisman extends Item {
 			for (int i = 0; i<10; i++) {
 				if (player.inventory.getStackInSlot(i) != null) {
 					ItemStack food = player.inventory.getStackInSlot(i);
-					//System.out.println("y");
 					if (isEdible(food, player)) {
 						float sat = ((ItemFood)food.getItem()).getSaturationModifier() * 2;
 
@@ -70,7 +71,6 @@ public class ItemFoodTalisman extends Item {
 							{
 								par1ItemStack.stackTagCompound.setFloat("saturation", 100);
 							}
-							//System.out.println(foodBonus + "is the bonus");
 							if (food.stackSize <= 1) {
 								player.inventory.setInventorySlotContents(i, null);
 							}
@@ -108,7 +108,7 @@ public class ItemFoodTalisman extends Item {
 	}
 	
 	private boolean isEdible(ItemStack food, EntityPlayer player) {
-		if (food.getItem() instanceof ItemFood) {
+		if (food.getItem() instanceof ItemFood && food.itemID != ConfigItems.itemManaBean.itemID) {
 			
 			for (int i = 1; i < 25; i++) {
 				EntityPlayer fakePlayer = new FakePlayerPotion(player.worldObj, "foodTabletPlayer");

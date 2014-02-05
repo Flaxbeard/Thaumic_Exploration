@@ -32,7 +32,6 @@ public class WandRodTransmutationOnUpdate implements IWandRodOnUpdate {
 
 			if (numberUnder90 > 0) {
 				for(int i=0;i<6;i++) {
-					//System.out.println(aspects[i].getName());
 					double visCount = ((ItemWandCasting) itemstack.getItem()).getVis(itemstack, this.aspects[i]);
 					double cutoffPercent = (((((ItemWandCasting) itemstack.getItem()).getMaxVis(itemstack)) / 10) * 9) + 0.1;
 					double excessVis = (visCount - cutoffPercent);
@@ -60,8 +59,6 @@ public class WandRodTransmutationOnUpdate implements IWandRodOnUpdate {
 					double visCount = ((ItemWandCasting) itemstack.getItem()).getVis(itemstack, this.aspects[z]);
 					((ItemWandCasting)itemstack.getItem()).storeVis(itemstack, this.aspects[z], (int) (visCount + wastedVis));
 				}
-				System.out.println("There is " + totalExcessVis/100 + " excess vis.");
-				System.out.println("There is " + eachToAdd/100 + " vis added to each thingy.");
 			}
 		//}
 		

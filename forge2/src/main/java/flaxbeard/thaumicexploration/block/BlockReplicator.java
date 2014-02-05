@@ -79,7 +79,6 @@ public class BlockReplicator extends BlockContainer {
 	      TileEntityReplicator ped = (TileEntityReplicator)tileEntity;
 	      if (ped.crafting && (player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemWandCasting))) {
 	    	  ped.cancelCrafting();
-	    	  System.out.println("STAHp it");
 	      }
 
 		      if (ped.getStackInSlot(0) != null  && (player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemWandCasting)))
@@ -127,7 +126,6 @@ public class BlockReplicator extends BlockContainer {
 		      }
 		      if (player.getCurrentEquippedItem() != null && (ThaumicExploration.allowedItems.contains(MutablePair.of(player.getCurrentEquippedItem().itemID,player.getCurrentEquippedItem().getItemDamage())) || ThaumicExploration.allowedItems.contains(MutablePair.of(player.getCurrentEquippedItem().itemID,OreDictionary.WILDCARD_VALUE))))
 		      {
-		    	  System.out.println("test2be");
 		    	//IN
 		        ItemStack i = player.getCurrentEquippedItem().copy();
 		        i.stackSize = 0;

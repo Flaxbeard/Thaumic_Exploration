@@ -79,11 +79,11 @@ public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAt
             }
             else
             {
-            	System.out.println("checkbox");
+   
             	for (Object item : list) {
             		if(NecromancyMobProperties.get((EntityLiving) item) == null)
             		{
-            			System.out.println("there is at least one zombie in this hizzle with no prop");
+            			
             			this.targetEntity = (EntityLivingBase) item;
             			this.taskOwner.setAttackTarget(this.targetEntity);
             			NecromancyMobProperties prop = NecromancyMobProperties.get(this.taskOwner);
@@ -103,7 +103,6 @@ public class EntityAINearestAttackableTargetNecromancy extends EntityAINearestAt
      */
     public void startExecuting()
     {
-    	System.out.println("motha fukin bass");
         this.taskOwner.setAttackTarget(this.targetEntity);
         super.startExecuting();
     }

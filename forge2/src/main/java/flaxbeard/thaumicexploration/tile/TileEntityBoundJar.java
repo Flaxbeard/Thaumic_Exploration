@@ -166,7 +166,6 @@ public class TileEntityBoundJar extends TileJarFillable {
 				myJarData = BoundJarWorldData.get(this.worldObj, "jar" + id, 0);
 			}
 	    	
-	    	//System.out.println(this.amount);
 			if (this.amount != myJarData.getJarAmount()) {
 				this.amount = myJarData.getJarAmount();
             	this.accessTicks = 80;

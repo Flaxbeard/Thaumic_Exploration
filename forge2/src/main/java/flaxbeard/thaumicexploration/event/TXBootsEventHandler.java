@@ -53,7 +53,6 @@ public class TXBootsEventHandler
 		}
         
         if (!player.getEntityData().hasKey("tainted")) {
-        	System.out.println("Setting up player NBT");
         	player.getEntityData().setBoolean("tainted", isTainted);
         }
         boolean wasTainted = player.getEntityData().getBoolean("tainted");
@@ -70,7 +69,6 @@ public class TXBootsEventHandler
         if (!(player.worldObj.getBiomeGenForCoords((int)player.posX, (int)player.posZ) == ThaumcraftWorldGenerator.biomeTaint)) {
         	if (isTainted) {
         		if (!player.getEntityData().hasKey("taintGracePeriod")) {
-		        	System.out.println("Setting up player grace period");
 		        	player.getEntityData().setInteger("taintGracePeriod", 0);
 		        }
 		        int taintGP = player.getEntityData().getInteger("taintGracePeriod");
@@ -100,7 +98,6 @@ public class TXBootsEventHandler
 	        		player.getEntityData().setInteger("taintGracePeriod", 0);
     				if (player.getFoodStats().getFoodLevel() < 4) {
 	    		        if (!player.getEntityData().hasKey("taintFoodBuff")) {
-	    		        	System.out.println("Setting up player food NBT");
 	    		        	player.getEntityData().setInteger("taintFoodBuff", 0);
 	    		        }
 	    		        int taint = player.getEntityData().getInteger("taintFoodBuff");
@@ -118,7 +115,6 @@ public class TXBootsEventHandler
     				else
     				{
     					if (!player.getEntityData().hasKey("taintFoodBuff")) {
- 	    		        	System.out.println("Setting up player food NBT");
  	    		        	player.getEntityData().setInteger("taintFoodBuff", 0);
  	    		        }
  	    		        player.getEntityData().setInteger("taintFoodBuff", 0);

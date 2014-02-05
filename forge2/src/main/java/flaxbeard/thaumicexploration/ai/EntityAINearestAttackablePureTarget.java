@@ -47,7 +47,6 @@ public class EntityAINearestAttackablePureTarget extends EntityAITarget
     
     public boolean isSuitableTarget(EntityLivingBase par1EntityLivingBase, boolean par2)
     {
-    	System.out.println("is suitable?");
         if (par1EntityLivingBase.getEntityData().hasKey("tainted"))
         {
         	if (par1EntityLivingBase.getEntityData().getBoolean("tainted") == true) 
@@ -55,7 +54,6 @@ public class EntityAINearestAttackablePureTarget extends EntityAITarget
         		return false;
         	}
         }
-        System.out.println("is suitable.");
         return super.isSuitableTarget(par1EntityLivingBase, par2);
        
     }

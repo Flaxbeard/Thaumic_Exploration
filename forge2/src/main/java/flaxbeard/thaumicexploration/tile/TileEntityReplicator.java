@@ -47,7 +47,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	
 	    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	    {
-			System.out.println("daffy duck the fuck");
 	    	super.writeToNBT(par1NBTTagCompound);
 			
 	    	this.writeInventoryNBT(par1NBTTagCompound);
@@ -92,7 +91,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
     	this.crafting = false;
     	this.recipeEssentia = new AspectList();
     	this.displayEssentia = new AspectList();
-    	System.out.println("craftingfail - 2");
 	}
 	
 	public void updateEntity() {
@@ -117,7 +115,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 		}
 
 		if (this.crafting && !this.worldObj.isRemote) {
-			System.out.println("crafting - 1");
 			
 			
 	        if (true)
@@ -129,7 +126,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	            if (this.recipeEssentia.visSize() > 0)
 	            {
 	            	
-		        	System.out.println("vs > 0");
 		        if (essentiaTicks > 49) {
 		        	essentiaTicks = 0;
 	              for (Aspect aspect : this.recipeEssentia.getAspects()) {
@@ -190,7 +186,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 		            		if (260-this.ticksLeft % 40 == 0) {
 		            			this.worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "thaumcraft:rumble", 0.5F, 1.0F);
 		            		}
-			            	System.out.println(ticksLeft);
 			            	this.ticksLeft--;
 
 		            	}
@@ -220,7 +215,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		System.out.println("removal by decrStackSize");
 		if (this.inventory[i] != null)
 		{
 			ItemStack template = this.inventory[i].copy();
@@ -258,7 +252,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	}
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		System.out.println("set contesnts");
 		//if (itemstack != null) {
 			this.inventory[i] = itemstack;
 			if ((itemstack != null) && (itemstack.stackSize > getInventoryStackLimit())) {
@@ -355,7 +348,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 				this.inventory[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
-		System.out.println("Getting" + nbttagcompound.getInteger("Ticks"));
 		this.ticksLeft = nbttagcompound.getInteger("Ticks");
 		this.crafting = nbttagcompound.getBoolean("Crafting");
 		AspectList readAspects = new AspectList();
@@ -374,7 +366,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	  
 	public void writeInventoryNBT(NBTTagCompound nbttagcompound)
 	{
-		System.out.println("save that shit");
 		nbttagcompound.setBoolean("Crafting", this.crafting);
 		nbttagcompound.setInteger("Ticks", this.ticksLeft);
 		NBTTagList nbttaglist = new NBTTagList();
@@ -454,7 +445,6 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	public int onWandRightClick(World world, ItemStack wandstack,
 			EntityPlayer player, int x, int y, int z, int side, int md) {
 		if (!this.crafting) {
-			System.out.println("start crafting - 1");
 			this.startCrafting();
 			return 0;
 		}

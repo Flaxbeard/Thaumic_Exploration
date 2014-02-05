@@ -147,7 +147,7 @@ public final class ModResearch {
     }
     
 	private static void registerResearchPages() {
-		ResourceLocation background = new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png");
+		ResourceLocation background = new ResourceLocation("thaumicexploration:textures/gui/taintBackground.png");
 		ResearchCategories.registerCategory("TAINT", new ResourceLocation("thaumicexploration:textures/tabs/taintResearch.png"), background);
         
 		

@@ -55,40 +55,34 @@ public class EntityAIAttackOnCollideReplacement extends EntityAIAttackOnCollide
      */
     public boolean shouldExecute()
     {
-    	System.out.println("violins");
-    	System.out.println(this.attacker.getAttackTarget());
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         NecromancyMobProperties prop = NecromancyMobProperties.get(this.attacker);
         entitylivingbase = prop.getTarget();
 
         if (entitylivingbase == null)
         {
-            System.out.println("violins1");
             return false;
             
         }
         else if (!entitylivingbase.isEntityAlive())
         {
-            System.out.println("violins2");
+
             return false;
         }
         else if (this.classTarget != null && !this.classTarget.isAssignableFrom(entitylivingbase.getClass()))
         {
-            System.out.println("violins4");
             return false;
         }
         else
         {
             if (-- this.field_75445_i <= 0)
             {
-                System.out.println("violins77");
                 this.entityPathEntity = this.attacker.getNavigator().getPathToEntityLiving(entitylivingbase);
                 this.field_75445_i = 4 + this.attacker.getRNG().nextInt(7);
                 return this.entityPathEntity != null;
             }
             else
             {
-                System.out.println("violins43");
                 return true;
             }
         }
@@ -108,7 +102,6 @@ public class EntityAIAttackOnCollideReplacement extends EntityAIAttackOnCollide
      */
     public void startExecuting()
     {
-    	System.out.println("execution");
         this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.field_75445_i = 0;
     }

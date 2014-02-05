@@ -26,7 +26,6 @@ public class BoundJarWorldData extends WorldSavedData {
 
         @Override
         public void readFromNBT(NBTTagCompound nbt) {
-        	System.out.println("looking for dem KEEZ");
         	if (nbt.hasKey("myColor")) {
         		myColor = nbt.getInteger("myColor");
         	}
@@ -77,7 +76,7 @@ public class BoundJarWorldData extends WorldSavedData {
         		BoundJarWorldData data = (BoundJarWorldData) world.mapStorage.loadData(BoundJarWorldData.class, ident);
                 
                 if (data == null) {
-                		System.out.println("making new itemdata for " + ident);
+                		System.out.println("Making new Bound Jar data for " + ident);
                         data = new BoundJarWorldData(ident);
                         data.setSealColor(color);
                         data.markDirty();
