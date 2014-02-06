@@ -4,10 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -19,7 +17,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -33,7 +30,6 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import thaumcraft.common.config.ConfigBlocks;
@@ -45,7 +41,6 @@ import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.ai.EntityAICreeperDummy;
 import flaxbeard.thaumicexploration.ai.EntityAINearestAttackablePureTarget;
 import flaxbeard.thaumicexploration.data.TXWorldData;
-import flaxbeard.thaumicexploration.entity.EntityLoveArrow;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 
@@ -135,77 +130,7 @@ public class TXEventHandler {
 		}
 	}
 	
-	@ForgeSubscribe
-	public void handleArrow(ArrowLooseEvent event) {
-		event.setCanceled(true);
-		ItemStack par1ItemStack = event.bow;
-		World par2World = event.entityPlayer.worldObj;
-		EntityPlayer par3EntityPlayer = event.entityPlayer;
-		Random itemRand = new Random();
-		int j = event.charge;
 
-        boolean flag = par3EntityPlayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, par1ItemStack) > 0;
-
-        if (flag || par3EntityPlayer.inventory.hasItem(Item.arrow.itemID))
-        {
-            float f = (float)j / 20.0F;
-            f = (f * f + f * 2.0F) / 3.0F;
-
-            if ((double)f < 0.1D)
-            {
-                return;
-            }
-
-            if (f > 1.0F)
-            {
-                f = 1.0F;
-            }
-
-            EntityLoveArrow entityarrow = new EntityLoveArrow(par2World, par3EntityPlayer, f * 2.0F);
-
-            if (f == 1.0F)
-            {
-                entityarrow.setIsCritical(true);
-            }
-
-            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, par1ItemStack);
-
-            if (k > 0)
-            {
-                entityarrow.setDamage(entityarrow.getDamage() + (double)k * 0.5D + 0.5D);
-            }
-
-            int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, par1ItemStack);
-
-            if (l > 0)
-            {
-                entityarrow.setKnockbackStrength(l);
-            }
-
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, par1ItemStack) > 0)
-            {
-                entityarrow.setFire(100);
-            }
-
-            par1ItemStack.damageItem(1, par3EntityPlayer);
-            par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-
-            if (flag)
-            {
-                entityarrow.canBePickedUp = 2;
-            }
-            else
-            {
-                par3EntityPlayer.inventory.consumeInventoryItem(Item.arrow.itemID);
-            }
-
-            if (!par2World.isRemote)
-            {
-                par2World.spawnEntityInWorld(entityarrow);
-            }
-        }
-	}
-	
 //	@ForgeSubscribe
 //	public void handleTaintSeeds(BlockEvent.HarvestDropsEvent event) {
 //		if (event.drops.size() > 0 && !event.drops.contains(Item.itemsList[Block.tallGrass.blockID]) && event.block.blockID == Block.tallGrass.blockID && event.world.getBiomeGenForCoords(event.x, event.z) == ThaumcraftWorldGenerator.biomeTaint) {

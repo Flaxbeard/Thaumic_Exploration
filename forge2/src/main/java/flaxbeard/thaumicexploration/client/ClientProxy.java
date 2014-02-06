@@ -26,7 +26,6 @@ import flaxbeard.thaumicexploration.client.render.TileEntityRenderCrucibleSouls;
 import flaxbeard.thaumicexploration.client.render.TileEntityReplicatorRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityThinkTankRender;
 import flaxbeard.thaumicexploration.common.CommonProxy;
-import flaxbeard.thaumicexploration.entity.EntitySoulFX;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
@@ -58,14 +57,6 @@ public class ClientProxy extends CommonProxy
     	Minecraft.getMinecraft().fontRenderer.setUnicodeFlag(false);
     }
     
-
-    @Override
-    public void crucibleBubble(World world, float x, float y, float z, float cr, float cg, float cb)
-    {
-      EntitySoulFX fb = new EntitySoulFX(world, x, y, z, 0.0D, 0.0D, 0.0D);
-      fb.setRBGColorF(cr, cg, cb);
-      FMLClientHandler.instance().getClient().effectRenderer.addEffect(fb);
-    }
 
     
     @Override
