@@ -2,13 +2,13 @@ package flaxbeard.thaumicexploration.event;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -19,6 +19,7 @@ import thaumcraft.common.config.Config;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.PotionFluxTaint;
 import thaumcraft.common.lib.Utils;
+import thaumcraft.common.lib.research.PlayerKnowledge;
 import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 import cpw.mods.fml.common.Loader;
 import flaxbeard.thaumicexploration.ThaumicExploration;
@@ -32,6 +33,18 @@ public class TXBootsEventHandler
   @ForgeSubscribe
   public void livingTick(LivingEvent.LivingUpdateEvent event)
   {
+	if (event.entity instanceof EntityPlayer) {
+		PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
+		if (!rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
+			System.out.println(event.entity.worldObj.isRemote+" Discovering fake aspect");
+			//PacketHandler.sendAspectDiscoveryPacket(ThaumicExploration.fakeAspectNecro.getTag(), (EntityPlayerMP)event.entity);
+			
+			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);
+			if (rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
+				System.out.println(event.entity.worldObj.isRemote+" has discovered fake aspect");
+			}
+		}
+	}
     if ((event.entity instanceof EntityPlayer))
     {
     	EntityPlayer player = (EntityPlayer)event.entity;
@@ -204,8 +217,8 @@ public class TXBootsEventHandler
             player.motionX *= 1.133000016212463D;
             player.motionZ *= 1.133000016212463D;
           }
-          if (player.fallDistance > 0.0F) {
-            player.fallDistance = 0.0F;
+          if (player.fallDistance > 0.25F) {
+              player.fallDistance -= 0.25F;
           }
         }
       
@@ -331,7 +344,7 @@ public class TXBootsEventHandler
         }
         for (int x = -5; x < 6; x++) {
       	  for (int z = -5; z < 6; z++) {
-  		      if (player.worldObj.getBlockMaterial((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == Material.water && player.worldObj.getBlockMetadata((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == 0 && !player.isInWater() && (Math.abs(x)+Math.abs(z) < 8)) {
+  		      if ((player.worldObj.getBlockId((int) (player.posX + x), (int) (player.posY-1), (int) (player.posZ + z)) == Block.waterMoving.blockID || player.worldObj.getBlockId((int) (player.posX + x), (int) (player.posY-1), (int) (player.posZ + z)) == Block.waterStill.blockID) && player.worldObj.getBlockMaterial((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == Material.water && player.worldObj.getBlockMetadata((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == 0 && !player.isInWater() && (Math.abs(x)+Math.abs(z) < 8)) {
   		    	  player.worldObj.setBlock((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z), ThaumicExploration.meltyIce.blockID);
   		    	player.worldObj.spawnParticle("snowballpoof", (int) (player.posX + x), (int) player.posY, (int) (player.posZ + z), 0.0D, 0.025D, 0.0D);
   		      }

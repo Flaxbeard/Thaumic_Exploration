@@ -10,6 +10,8 @@ item.thaumicexploration:ringTaint.name=Tainted Band
 item.thaumicexploration:talismanFood.name=Talisman of Nourishment
 item.thaumicexploration:taintBerry.name=Taintberry
 
+tc.aspect.Necromantic Energy=Energy of the Undead
+
 ----Creative Tab----
 itemGroup.thaumicExploration=Thaumic Exploration
 

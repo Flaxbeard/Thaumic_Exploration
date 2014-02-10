@@ -7,7 +7,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.StepSound;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -30,6 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.config.ConfigBlocks;
@@ -55,6 +58,8 @@ import flaxbeard.thaumicexploration.block.BlockBoundChest;
 import flaxbeard.thaumicexploration.block.BlockBoundJar;
 import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
 import flaxbeard.thaumicexploration.block.BlockEverfullUrn;
+import flaxbeard.thaumicexploration.block.BlockNecroFire;
+import flaxbeard.thaumicexploration.block.BlockNecroPedestal;
 import flaxbeard.thaumicexploration.block.BlockReplicator;
 import flaxbeard.thaumicexploration.block.BlockTaintBerries;
 import flaxbeard.thaumicexploration.block.BlockThinkTank;
@@ -76,6 +81,7 @@ import flaxbeard.thaumicexploration.item.ItemTXArmorSpecial;
 import flaxbeard.thaumicexploration.item.ItemTXArmorSpecialDiscount;
 import flaxbeard.thaumicexploration.item.ItemTaintSeedFood;
 import flaxbeard.thaumicexploration.item.focus.ItemFocusNecromancy;
+import flaxbeard.thaumicexploration.misc.FauxAspect;
 import flaxbeard.thaumicexploration.misc.TXPotion;
 import flaxbeard.thaumicexploration.misc.TXTaintPotion;
 import flaxbeard.thaumicexploration.misc.WorldGenTX;
@@ -86,6 +92,8 @@ import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
 import flaxbeard.thaumicexploration.tile.TileEntityEverfullUrn;
+import flaxbeard.thaumicexploration.tile.TileEntityNecroFire;
+import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 import flaxbeard.thaumicexploration.tile.TileEntityReplicator;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
@@ -144,8 +152,13 @@ public class ThaumicExploration {
 	public static int thinkTankJarID;
 	public static Block everfullUrn;
 	public static int everfullUrnID;
-	public static Block crucibleSouls;
 	
+	public static Block necroPedestal;
+	public static int necroPedestalID ;
+	public static Block necroFire;
+	public static int necroFireID;
+	
+	public static Block crucibleSouls;
 	public static int crucibleSoulsID;
 	public static Block taintBerryCrop;
 	public static int taintBerryCropID;
@@ -164,6 +177,7 @@ public class ThaumicExploration {
 	public static int crucibleSoulsRenderID;
 	public static int replicatorRenderID;
 	public static int candleSkullRenderID;
+	public static int necroPedestalRenderID;
 	
 	public static CreativeTabs tab;
 	
@@ -177,6 +191,8 @@ public class ThaumicExploration {
 	public static boolean allowFood;
 	public static boolean allowUrn;
 	public static boolean allowBoots;
+	
+	public static Aspect fakeAspectNecro;
 	
 	public static boolean allowOsmotic;
 	
@@ -266,6 +282,9 @@ public class ThaumicExploration {
 		skullCandleID = config.getBlock("Skull Candle", 707).getInt();
 		replicatorID = config.getBlock("Thaumic Replicator", 706).getInt();
 		taintBerryCropID = config.getBlock("Taintberry Crop Block", 708).getInt();
+		necroPedestalID = config.getBlock("Necromantic Pedestal", 709).getInt();
+		necroFireID = config.getBlock("Necromantic Fire", 710).getInt();
+
 
 		potionTaintWithdrawlID = config.get("Potion", "Taint Withdrawl", 32).getInt();
 		potionBindingID = config.get("Potion", "Binding", 31).getInt();
@@ -296,6 +315,7 @@ public class ThaumicExploration {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		fakeAspectNecro = new FauxAspect("Necromantic Energy", 0x870404, null, new ResourceLocation("thaumicexploration", "textures/tabs/necroAspect.png"), 771);
 		
 		TickRegistry.registerTickHandler(new TXTickHandler(), Side.CLIENT);
 	    this.entityEventHandler = new TXBootsEventHandler();
@@ -307,6 +327,7 @@ public class ThaumicExploration {
 		crucibleSoulsRenderID = RenderingRegistry.getNextAvailableRenderId();
 		replicatorRenderID = RenderingRegistry.getNextAvailableRenderId();
 		candleSkullRenderID = RenderingRegistry.getNextAvailableRenderId();
+		necroPedestalRenderID = RenderingRegistry.getNextAvailableRenderId();
 		
 		//Creative Tab
 		tab = new TXTab(CreativeTabs.getNextID(), "thaumicExploration");
@@ -321,12 +342,17 @@ public class ThaumicExploration {
 		GameRegistry.registerTileEntity(TileEntityEverfullUrn.class, "tileEntityEverfullUrn");
 		GameRegistry.registerTileEntity(TileEntityCrucibleSouls.class, "tileEntityCrucibleSouls");
 		GameRegistry.registerTileEntity(TileEntityReplicator.class, "tileEntityReplicator");
-		
+		GameRegistry.registerTileEntity(TileEntityNecroPedestal.class, "tileEntityNecroPedestal");
+		GameRegistry.registerTileEntity(TileEntityNecroFire.class, "tileEntityNecroFire");
 		//Blocks
 		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
 		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
 		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucible3");
 		replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setUnlocalizedName("thaumicexploration:replicator").setCreativeTab(tab).setTextureName("thaumicexploration:replicatorBottom");
+		
+		necroPedestal = new BlockNecroPedestal(necroPedestalID, Material.ground).setUnlocalizedName("thaumicexploration:necroPedestal");
+		
+		necroFire = (BlockFire)(new BlockNecroFire(necroFireID)).setUnlocalizedName("thaumicexploration:necroFire").setTextureName("thaumicexploration:fire").setHardness(0.0F).setLightValue(1.0F).setStepSound(Block.soundWoodFootstep);
 		
 		meltyIce = new BlockBootsIce(meltyIceID).setUnlocalizedName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("ice").setTextureName("ice");
 		//skullCandle = new BlockSkullCandle(skullCandleID).setUnlocalizedName("thaumicexploration:skullCandle");
@@ -345,6 +371,8 @@ public class ThaumicExploration {
 		GameRegistry.registerBlock(everfullUrn, "everfullUrn");
 		GameRegistry.registerBlock(crucibleSouls, "crucibleSouls");
 		GameRegistry.registerBlock(replicator, "replicator");
+		GameRegistry.registerBlock(necroPedestal, "necroPedestal");
+		GameRegistry.registerBlock(necroFire, "necroFire");
 		
 		//Items
 		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");

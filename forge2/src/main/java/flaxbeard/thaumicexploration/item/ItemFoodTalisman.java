@@ -2,12 +2,6 @@ package flaxbeard.thaumicexploration.item;
 
 import java.util.List;
 
-import thaumcraft.common.config.ConfigItems;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,6 +9,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thaumcraft.common.config.ConfigItems;
 import flaxbeard.thaumicexploration.misc.FakePlayerPotion;
 
 public class ItemFoodTalisman extends Item {
@@ -89,7 +84,7 @@ public class ItemFoodTalisman extends Item {
 					finalSat = sat - (20 - player.getFoodStats().getFoodLevel());
 					sat = 20 - player.getFoodStats().getFoodLevel();
 				}
-				player.getFoodStats().setFoodLevel( (int) (player.getFoodStats().getFoodLevel() + sat));
+				player.getFoodStats().addStats((int) sat, 0);
 				par1ItemStack.stackTagCompound.setFloat("food", finalSat);
 				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage());
 			}
@@ -100,7 +95,7 @@ public class ItemFoodTalisman extends Item {
 					finalSat = sat - (player.getFoodStats().getFoodLevel() - player.getFoodStats().getSaturationLevel());
 					sat = player.getFoodStats().getFoodLevel() - player.getFoodStats().getSaturationLevel();	
 				}
-				player.getFoodStats().setFoodSaturationLevel( player.getFoodStats().getSaturationLevel() + sat);
+				player.getFoodStats().addStats(0, sat);
 				par1ItemStack.stackTagCompound.setFloat("saturation", finalSat);
 				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage());
 			}

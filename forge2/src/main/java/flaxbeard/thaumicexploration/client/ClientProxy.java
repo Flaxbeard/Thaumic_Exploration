@@ -17,6 +17,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.client.render.BlockCrucibleSoulsRenderer;
 import flaxbeard.thaumicexploration.client.render.BlockEverfullUrnRenderer;
+import flaxbeard.thaumicexploration.client.render.BlockNecroPedestalRenderer;
 import flaxbeard.thaumicexploration.client.render.BlockReplicatorRenderer;
 import flaxbeard.thaumicexploration.client.render.BlockSkullCandleRenderer;
 import flaxbeard.thaumicexploration.client.render.ItemRenderThinkTank;
@@ -45,6 +46,7 @@ public class ClientProxy extends CommonProxy
     	 TileEntitySpecialRenderer renderThinkTank = new TileEntityThinkTankRender();
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityThinkTank.class, renderThinkTank);
     	
+    	 RenderingRegistry.registerBlockHandler(ThaumicExploration.necroPedestalRenderID, new BlockNecroPedestalRenderer());
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.candleSkullRenderID, new BlockSkullCandleRenderer());
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.everfullUrnRenderID, new BlockEverfullUrnRenderer());
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.replicatorRenderID, new BlockReplicatorRenderer());

@@ -173,7 +173,6 @@ public class BlockThinkTank extends BlockContainer
         }
     }
 
-    @SideOnly(Side.CLIENT)
 
     /**
      * A randomly called display update to be able to add particles or other items for display

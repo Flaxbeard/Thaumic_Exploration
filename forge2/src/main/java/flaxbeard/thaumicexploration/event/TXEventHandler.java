@@ -17,11 +17,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -32,8 +34,12 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.entities.ITaintedMob;
+import thaumcraft.common.items.wands.ItemWandCasting;
+import thaumcraft.common.lib.PacketHandler;
+import thaumcraft.common.lib.research.PlayerKnowledge;
 import thaumcraft.common.lib.world.DamageSourceThaumcraft;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -57,6 +63,15 @@ public class TXEventHandler {
 
 	@ForgeSubscribe
 	public void handleTaintSpawns(EntityJoinWorldEvent event) {
+		if (event.entity instanceof EntityPlayer) {
+			System.out.println(event.entity.worldObj.isRemote+" Discovering fake aspect");
+			//PacketHandler.sendAspectDiscoveryPacket(ThaumicExploration.fakeAspectNecro.getTag(), (EntityPlayerMP)event.entity);
+			PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
+			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);
+			if (rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
+				System.out.println(event.entity.worldObj.isRemote+" has discovered fake aspect");
+			}
+		}
 		if (event.entity instanceof ITaintedMob) {
 			EntityLiving mob = (EntityLiving) event.entity;
 			List<EntityAITaskEntry> tasksToRemove = new ArrayList<EntityAITaskEntry>();
@@ -138,6 +153,9 @@ public class TXEventHandler {
 //			event.drops.add(new ItemStack(Item.arrow));
 //		}
 //	}
+
+
+	
 	
 	@ForgeSubscribe
 	public void handleEnchantmentAttack(LivingAttackEvent event) {
