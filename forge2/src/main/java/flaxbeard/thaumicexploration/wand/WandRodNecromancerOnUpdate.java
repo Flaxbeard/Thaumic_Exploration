@@ -6,6 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.IWandRodOnUpdate;
 import thaumcraft.common.entities.EntityAspectOrb;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -20,36 +22,51 @@ public class WandRodNecromancerOnUpdate implements IWandRodOnUpdate {
 	@Override
 	public void onUpdate(ItemStack itemstack, EntityPlayer par1EntityPlayer) {
 		  if (!itemstack.hasTagCompound()) {
+			  System.out.println("starting compound tag");
 			  itemstack.setTagCompound(new NBTTagCompound());
-		  }
-		  if (!itemstack.stackTagCompound.hasKey("eatTicks")) {
-			  itemstack.stackTagCompound.setInteger("eatTicks",0);
-			  itemstack.stackTagCompound.setInteger("eatClock",intialClock);
-		  }
-		  int eatTicks = itemstack.stackTagCompound.getInteger("eatTicks");
-		  int eatClock = itemstack.stackTagCompound.getInteger("eatClock");
-		  if (eatTicks > eatClock) {
-			  par1EntityPlayer.attackEntityFrom(DamageSourceThaumcraft.taint, 1);
-			  eatTicks = 0;
-			  eatClock = eatClock / 2 ;
-			  if (eatClock <= 1) {
-				  eatClock = 1;
+			  NBTTagCompound tag = new NBTTagCompound();
+			  ItemWandCasting wand = (ItemWandCasting)itemstack.getItem();
+			  for (Aspect aspect : Aspect.getPrimalAspects()) {
+				  tag.setInteger(aspect.getName(), wand.getVis(itemstack, aspect));
 			  }
+			  itemstack.stackTagCompound.setCompoundTag("lastAspects", tag);
 		  }
-		  eatTicks++;
+		  ItemWandCasting thisWand = (ItemWandCasting)itemstack.getItem();
+		  NBTTagCompound lastAspectTag = itemstack.stackTagCompound.getCompoundTag("lastAspects");
+		  AspectList lastAspects = new AspectList();
+		  for (Aspect aspect : Aspect.getPrimalAspects()) {
+			  lastAspects.add(aspect,lastAspectTag.getInteger(aspect.getName()));
+		  }
+		  AspectList currentAspects = thisWand.getAllVis(itemstack);
+		  for (Aspect aspect : Aspect.getPrimalAspects()) {
+			  int diff = currentAspects.getAmount(aspect) - lastAspects.getAmount(aspect);
+			  if (diff > 0) {
+				  diff = (int) (diff*0.75F);
+			  }
+			  lastAspects.add(aspect, diff);
+		  }
+		  
 		  AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(par1EntityPlayer.posX - 3, par1EntityPlayer.posY - 3, par1EntityPlayer.posZ - 3, par1EntityPlayer.posX + 3, par1EntityPlayer.posY + 3, par1EntityPlayer.posZ + 3);
           List<EntityAspectOrb> orbs = par1EntityPlayer.worldObj.getEntitiesWithinAABB(EntityAspectOrb.class, boundingBox);
 
+
+		  
+          thisWand.storeAllVis(itemstack, lastAspects);
+          NBTTagCompound tag = new NBTTagCompound();
+		  
+		  for (Aspect aspect : Aspect.getPrimalAspects()) {
+			  tag.setInteger(aspect.getName(), lastAspects.getAmount(aspect));
+		  }
+		  itemstack.stackTagCompound.setCompoundTag("lastAspects", tag);
+		  
           for(EntityAspectOrb orb : orbs) {
         	  if (!orb.isDead) {
 	        	  int slot = InventoryHelper.isWandInHotbarWithRoom(orb.getAspect(), orb.getAspectValue(), par1EntityPlayer);
 	    	      if ((orb.orbCooldown == 0) && (par1EntityPlayer.xpCooldown == 0) && (orb.getAspect().isPrimal()) && (slot >= 0))
 	    	      {
 	    	        ItemWandCasting wand = (ItemWandCasting)par1EntityPlayer.inventory.mainInventory[slot].getItem();
-	    	        if (wand.getRod(par1EntityPlayer.inventory.mainInventory[slot]) == ThaumicExploration.WAND_ROD_CRYSTAL) {
-	    	        	eatTicks = 0;
-	    	        	eatClock = intialClock;
-	    	        	wand.addVis(par1EntityPlayer.inventory.mainInventory[slot], orb.getAspect(), orb.getAspectValue()*3, true);
+	    	        if (wand.getRod(par1EntityPlayer.inventory.mainInventory[slot]) == ThaumicExploration.WAND_ROD_NECRO) {
+	    	        	wand.addVis(par1EntityPlayer.inventory.mainInventory[slot], orb.getAspect(), (int) (orb.getAspectValue()*1.6666666), true);
 	    	        }
 	    	        wand.addVis(par1EntityPlayer.inventory.mainInventory[slot], orb.getAspect(), orb.getAspectValue(), true);
 	    	        
@@ -59,7 +76,5 @@ public class WandRodNecromancerOnUpdate implements IWandRodOnUpdate {
 	    	      }
         	  }
           }
-		  itemstack.stackTagCompound.setInteger("eatTicks",eatTicks);
-		  itemstack.stackTagCompound.setInteger("eatClock",eatClock);
 	}
 }

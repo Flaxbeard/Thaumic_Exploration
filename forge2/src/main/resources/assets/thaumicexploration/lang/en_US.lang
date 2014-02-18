@@ -2,13 +2,23 @@
 item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
 item.thaumicexploration:transmutationCore.name=Transmutative Rod
 item.thaumicexploration:amberCore.name=Amber Rod
+item.thaumicexploration:breadCore.name=Baguette Rod
+item.thaumicexploration:necroCore.name=Necromancer's Rod
 item.thaumicexploration:maskEvil.name=Mask of Cruelty
 item.thaumicexploration:bootsMeteor.name=Boots of the Meteor
 item.thaumicexploration:bootsComet.name=Boots of the Comet
+item.thaumicexploration:runicBootsMeteor.name=Runic Boots of the Meteor
+item.thaumicexploration:runicBootsComet.name=Runic Boots of the Comet
 item.thaumicexploration:dreamcatcher.name=Wispy Dreamcatcher
 item.thaumicexploration:ringTaint.name=Tainted Band
 item.thaumicexploration:talismanFood.name=Talisman of Nourishment
 item.thaumicexploration:taintBerry.name=Taintberry
+item.thaumicexploration:necroAltar.name=Necromantic Pedestal
+thaumicexploration.bread0=Will you be my friend?
+thaumicexploration.bread1=Please eat me.
+thaumicexploration.bread2=Are you feeling hungry?
+thaumicexploration.bread3=Bonjour, monsieur.
+thaumicexploration.bread4=Mangez-moi, s'il vous plait.
 
 tc.aspect.Necromantic Energy=Energy of the Undead
 
@@ -27,8 +37,10 @@ enchantment.nightVision=Night Vision
 enchantment.disarm=Disarming
 
 ----Wand Names----
-item.Wand.amber.rod=Amber
-item.Wand.transmutation.rod=Transmutative
+item.Wand.AMBER.rod=Amber
+item.Wand.BREAD.rod=Baguette
+item.Wand.TRANSMUTATION.rod=Transmutative
+item.Wand.NECROMANCER.rod=Necromancer's
 
 ----Blank Seals----
 item.thaumicexploration:blankSeal:Pale.name=Pale Blank Seal
@@ -93,6 +105,7 @@ tile.thaumicexploration:replicator.name=Thaumic Replicator
 ----Thaumonomicon Entries----
 te.researchPrefix=[TX]
 tc.research_category.TAINT=Tainturgy
+tc.research_category.NECROMANCY=Necromancy
 
 --Flesh Curing
 te.name.FLESHCURE=Flesh Purification
@@ -139,9 +152,14 @@ te.text.REPLICATOR.1=You have been able to break down blocks and items into esse
 te.text.REPLICATOR.2=This essentia will then form into the block that you set as a template. This block must be removed before starting the process again. Right clicking will remove any blocks in the replicator and right clicking again will reset the template.<BR><BR>This process can also be automated by starting replication with a redstone signal and removing blocks with a hopper.
 
 --Amber Wand Core
-te.name.WANDAMBER=Amber Wand Core
-te.tag.WANDAMBER=Regenerative vis storage
-te.text.WANDAMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type, but it has other benefits. Amber cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when below 50% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at three times the rate.
+te.name.ROD_AMBER=Amber Wand Core
+te.tag.ROD_AMBER=Regenerative vis storage
+te.text.ROD_AMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type, but it has other benefits. Amber cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when below 50% capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at three times the rate.
+
+--Bread Wand Core
+te.name.ROD_BREAD=Baguette Wand Core
+te.tag.ROD_BREAD=Frenchman's vis storage
+te.text.ROD_BREAD.1=Bonjour! Yesterday, you bought one too many baguettes. It is a shame to let this beautiful bread go to waste, so you have developed a way to use this bread as a wand core. Bon Appetit!
 
 --Wispy Dreamcatcher
 te.name.DREAMCATCHER=Wispy Dreamcatcher
@@ -178,10 +196,32 @@ te.name.COMETBOOTS=Boots of the Comet
 te.tag.COMETBOOTS=Ice ice baby
 te.text.COMETBOOTS.1=The Boots of the Traveller are fast, but you think that there is room for improvement. By infusing the Boots of the Traveller with Aqua and Gelum, you have created a pair of boots with unrivaled speed. These boots allow the user to run with the speed of a comet, covering large tracts of land in a matter of seconds. Water can do nothing to slow you. When wearing the Boots of the Comet, water will be temporarily frozen under your feet.
 
+--Runic Boots
+te.name.RUNICBOOTS=Runic Elemental Boots
+te.tag.RUNICBOOTS=Protection coupled with mobility
+te.text.RUNICBOOTS.1=It was easy enough to find a way to combine your Boots of the Traveller with Runic Armor, and now you have done the same with its upgraded variants. You have created the ultimate footwear, providing a fusion of mobility and protection.<BR>Simply affix runic charms to a pair of Boots of the Meteor or Boots of the Comet with a bit of mystical energy, and you will create a variant that has the armor strength of Runic Armor and the mobility of the boots of your choice.
+
 --Transmutative Wand Core
 te.name.TRANSMUTATION=Transmutative Wand Core
 te.tag.TRANSMUTATION=One thing into another
 te.text.TRANSMUTATION.1=While experimenting with different materials to filter vis, you have found that diamonds can sporadically convert one form of vis into another. You have found this property to be too unreliable to use for most purposes, but you have found that if infused with certain materials, it can be used as a wand core with unique properties. When draining a node of vis at over 90% capacity, the vis will be converted into other forms of vis.
+
+--Necro Wand
+te.name.ROD_NECROMANCER=Necromancer's Wand Core
+te.tag.ROD_NECROMANCER=Evil vis storage
+te.text.ROD_NECROMANCER.1=You have always found finding a node to charge your depleted wand to be a nuisance. To remedy this, you have developed a wand core that harnesses the energy of the dead more efficiently.<BR><BR>Vis orbs collected from the remains of dead monsters yeild twice the vis, charging your wand quickly. Unfortunately, the dark energies used to infuse this wand are not as receptive to other forms of vis. When draining nodes or obtaining vis from other means, approximately a fourth is lost. This wand core has storage that rivals that of Silverwood, making it a formidible option when choosing which core to use.
+
+--Necromantic Energy
+te.name.NECROENERGY=Necromantic Energy
+te.tag.NECROENERGY=Energy of the Undead
+te.text.NECROENERGY.1=When infusing using the Necromantic Infusion Altar, a specific quantity of Necromantic Energy is required. This energy can be provided by specific items being sacrificed at the altar, a list of these items is displayed here.
+
+--Necro Infusion
+te.name.NECROINFUSION=Necromantic Infusion
+te.tag.NECROINFUSION=Kali ma! Kali maaa!
+te.text.NECROINFUSION.1=Harnessing the mystical energies of the natural world is all fine and good, but you want to do more. The energy of a living being is something you've wanted to be able to capture for a long time. Finally, that day is here.<BR><BR>By infusing an Arcane Pedestal with evil energies, adorning it with the skulls of the undead, and building a pentagram of candles surrounding the pedestal, you have created an altar that will allow you to fuse items wih evil energies. Right click on this construct with a wand to activate the altar. Right click with items to add them to the altar, shift right click the altar to remove items.
+te.text.NECROINFUSION.2=To infuse an item, simply hit the altar with a wand. Each infusion requires a certain amount of Necromantic Energy, or NE, that can be supplied by sacrificing items that contain NE to the altar. To do this, light a fire on top of the altar and toss in items. When enough NE is supplied, the infusion will complete.
+te.text.NECROINFUSION.3=An example setup for the Necromantic Infusion Altar can be found below.<IMG>thaumicexploration:textures/tabs/altarSetup.png:0:0:255:255:0.5</IMG> The skulls placed on the altar can be from a zombie, skeleton, or wither skeleton.
 
 --Taint Basics
 te.name.TAINTBASICS=Taint

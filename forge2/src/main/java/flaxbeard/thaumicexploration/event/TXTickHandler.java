@@ -39,7 +39,7 @@ public class TXTickHandler implements ITickHandler {
 
 			EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 			ItemStack item = player.getCurrentItemOrArmor(4);
-		    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)) {
+		    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID || player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)) {
 		    	if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isPressed()) {
 		    		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 			        DataOutputStream outputStream = new DataOutputStream(bos);

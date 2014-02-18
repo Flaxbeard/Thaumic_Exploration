@@ -464,11 +464,11 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 	}
 
 
-	@Override
-	public void setSuction(AspectList suction) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void setSuction(AspectList suction) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 
 	@Override
@@ -478,16 +478,16 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 	}
 
 
-	@Override
-	public AspectList getSuction(ForgeDirection face) {
-		// TODO Auto-generated method stub
-		AspectList AL = new AspectList();
-		Iterator iterator =  Aspect.aspects.keySet().iterator();
-		while (iterator.hasNext()) {
-			AL.add(Aspect.getAspect((String) iterator.next()), 0);
-		}
-		return AL;
-	}
+//	@Override
+//	public AspectList getSuction(ForgeDirection face) {
+//		// TODO Auto-generated method stub
+//		AspectList AL = new AspectList();
+//		Iterator iterator =  Aspect.aspects.keySet().iterator();
+//		while (iterator.hasNext()) {
+//			AL.add(Aspect.getAspect((String) iterator.next()), 0);
+//		}
+//		return AL;
+//	}
 
 
 	@Override
@@ -510,11 +510,11 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 	}
 
 
-	@Override
-	public AspectList getEssentia(ForgeDirection face) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public AspectList getEssentia(ForgeDirection face) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 
 	@Override
@@ -528,6 +528,32 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 	public boolean renderExtendedTube() {
 		// TODO Auto-generated method stub
 		return false;
+		//NEW AFTER THIS LINE
+	}
+
+	@Override
+	public Aspect getSuctionType(ForgeDirection face) {
+		return null;
+	}
+
+	@Override
+	public int getSuctionAmount(ForgeDirection face) {
+		return 0;
+	}
+
+	@Override
+	public int addVis(Aspect aspect, int amount) {
+		return 0;
+	}
+
+	@Override
+	public Aspect getEssentiaType(ForgeDirection face) {
+		return this.myAspects.size() > 0 ? this.myAspects.getAspects()[this.worldObj.rand.nextInt(this.myAspects.getAspects().length)] : null;
+	}
+
+	@Override
+	public int getEssentiaAmount(ForgeDirection face) {
+		return this.myAspects.visSize();
 	}
 
 }

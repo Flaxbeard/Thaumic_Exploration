@@ -56,5 +56,10 @@ public class CommonProxy
 		// TODO Auto-generated method stub
 		
 	}
+	public void spawnLightningBolt(World worldObj, double xCoord,
+			double yCoord, double zCoord, double dX, double dY, double dZ) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,24 +24,68 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.research.ResearchCategories;
-import thaumcraft.api.research.ResearchCategoryList;
-import thaumcraft.api.research.ResearchItem;
 import thaumcraft.client.fx.FXLightningBolt;
+import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigBlocks;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.data.TXWorldData;
 import flaxbeard.thaumicexploration.event.DamageSourceTX;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
+import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 // cpw.mods.fml.common.Side;
 
 public class TXPacketHandler implements IPacketHandler
 {
+	
+	  public static void sendNecroZapPacket(float x, float y, float z, float x2, float y2, float z2, TileEntity te)
+	  {
+	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	    DataOutputStream dos = new DataOutputStream(bos);
+	    try
+	    {
+	      dos.writeByte(42);
+	      dos.writeInt(te.worldObj.provider.dimensionId);
+	      dos.writeFloat(x);
+	      dos.writeFloat(y);
+	      dos.writeFloat(z);
+	      dos.writeFloat(x2);
+	      dos.writeFloat(y2);
+	      dos.writeFloat(z2);
+	    }
+	    catch (IOException e) {}
+	    Packet250CustomPayload pkt = new Packet250CustomPayload();
+	    pkt.channel = "tExploration";
+	    pkt.data = bos.toByteArray();
+	    pkt.length = bos.size();
+	    pkt.isChunkDataPacket = false;
+	    Thaumcraft.proxy.sendCustomPacketToAllNear(pkt, 64.0D, te);
+	  }
+	  
+	  @SideOnly(Side.CLIENT)
+	  private void handleBlockZapPacket(ByteArrayDataInput dat, Player p)
+	  {
+		dat.readByte();
+		dat.readInt();
+	    float x = dat.readFloat();
+	    float y = dat.readFloat();
+	    float z = dat.readFloat();
+	    float x2 = dat.readFloat();
+	    float y2 = dat.readFloat();
+	    float z2 = dat.readFloat();
+	    //Thaumcraft.proxy.nodeBolt(((EntityPlayer)p).worldObj, x, y, z, x2, y2, z2);
+	    ThaumicExploration.proxy.spawnLightningBolt(((EntityPlayer)p).worldObj, x, y, z, x2, y2, z2);
+	  }
+	  
     @Override
     public void onPacketData(INetworkManager manager,
             Packet250CustomPayload packet, Player player)
@@ -48,13 +93,13 @@ public class TXPacketHandler implements IPacketHandler
         if (packet.channel.equals("tExploration"))
         {
         	//System.out.println("got a packet!" );
-            handlePacket(packet);
+            handlePacket(packet,player);
         }
     }
 
-    private void handlePacket(Packet250CustomPayload packet)
+    private void handlePacket(Packet250CustomPayload packet,Player players)
     {
-
+    	ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
         DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
         byte packetType;
         int dimension;
@@ -65,6 +110,13 @@ public class TXPacketHandler implements IPacketHandler
             packetID = inputStream.readByte();
             dimension = inputStream.readInt();
             World world = DimensionManager.getWorld(dimension);
+            
+            if (packetID == 42) {
+            	this.handleBlockZapPacket(dat,players);
+            }
+            if (packetID == 43) {
+            	this.handleNecroZombiePacket(dat,players);
+            }
             
             if (packetID == 2 && world!= null) {
             	int readInt = inputStream.readInt();
@@ -348,4 +400,40 @@ public class TXPacketHandler implements IPacketHandler
             return;
         }
     }
+
+	private void handleNecroZombiePacket(ByteArrayDataInput dat, Player players) {
+		EntityZombie zombie = new EntityZombie(((EntityPlayer)players).worldObj);
+		dat.readByte();
+		dat.readInt();
+
+	    ((EntityPlayer)players).worldObj.spawnEntityInWorld(zombie);
+	    float x = dat.readFloat();
+	    float y = dat.readFloat()+1.0F;
+	    float z = dat.readFloat();
+		System.out.println(x + " " + y+ " " + z);
+	    zombie.setPosition(x, y, z);
+		
+	}
+
+	public static void sendNecroZombiePacket(
+			TileEntityNecroPedestal te) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	    DataOutputStream dos = new DataOutputStream(bos);
+	    try
+	    {
+	      dos.writeByte(43);
+	      dos.writeInt(te.worldObj.provider.dimensionId);
+	      dos.writeFloat(te.xCoord);
+	      dos.writeFloat(te.yCoord+1.0F);
+	      dos.writeFloat(te.zCoord);
+	    }
+	    catch (IOException e) {}
+	    Packet250CustomPayload pkt = new Packet250CustomPayload();
+	    pkt.channel = "tExploration";
+	    pkt.data = bos.toByteArray();
+	    pkt.length = bos.size();
+	    pkt.isChunkDataPacket = false;
+	    Thaumcraft.proxy.sendCustomPacketToAllNear(pkt, 64.0D, te);
+		
+	}
 }

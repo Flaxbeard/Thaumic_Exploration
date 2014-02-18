@@ -17,14 +17,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -37,18 +36,19 @@ import net.minecraftforge.event.world.WorldEvent;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.entities.ITaintedMob;
-import thaumcraft.common.items.wands.ItemWandCasting;
-import thaumcraft.common.lib.PacketHandler;
 import thaumcraft.common.lib.research.PlayerKnowledge;
 import thaumcraft.common.lib.world.DamageSourceThaumcraft;
 import thaumcraft.common.tiles.TileJarFillable;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.ai.EntityAICreeperDummy;
 import flaxbeard.thaumicexploration.ai.EntityAINearestAttackablePureTarget;
 import flaxbeard.thaumicexploration.data.TXWorldData;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
+import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 
 public class TXEventHandler {
 	public TXEventHandler() {
@@ -61,10 +61,20 @@ public class TXEventHandler {
 	}
 	
 
+	@SideOnly(Side.CLIENT)
+	@ForgeSubscribe
+	public void onSound(SoundLoadEvent event) {
+		event.manager.addSound("thaumicexploration:necroInfusion.ogg");
+		for (int i=0;i<8;i++) {
+			event.manager.addSound("thaumicexploration:necroInfusion"+TileEntityNecroPedestal.getLetterFromNumber(i)+".ogg");
+		}
+	}
+	
+
 	@ForgeSubscribe
 	public void handleTaintSpawns(EntityJoinWorldEvent event) {
 		if (event.entity instanceof EntityPlayer) {
-			System.out.println(event.entity.worldObj.isRemote+" Discovering fake aspect");
+	
 			//PacketHandler.sendAspectDiscoveryPacket(ThaumicExploration.fakeAspectNecro.getTag(), (EntityPlayerMP)event.entity);
 			PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
 			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);

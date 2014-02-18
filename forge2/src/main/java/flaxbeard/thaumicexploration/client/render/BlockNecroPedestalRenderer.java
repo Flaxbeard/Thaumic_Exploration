@@ -15,17 +15,7 @@ public class BlockNecroPedestalRenderer
 {
   public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
   {
-      block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
-      renderer.setRenderBoundsFromBlock(block);
-      drawFaces(renderer, block, ((BlockNecroPedestal)block).iconPedestal[1], ((BlockNecroPedestal)block).iconPedestal[1], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], true);
-      
-      block.setBlockBounds(0.25F, 0.25F, 0.25F, 0.75F, 0.75F, 0.75F);
-      renderer.setRenderBoundsFromBlock(block);
-      drawFaces(renderer, block, ((BlockNecroPedestal)block).iconPedestal[1], ((BlockNecroPedestal)block).iconPedestal[1], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], true);
-      
-      block.setBlockBounds(0.125F, 0.75F, 0.125F, 0.875F, 1.0F, 0.875F);
-      renderer.setRenderBoundsFromBlock(block);
-      drawFaces(renderer, block, ((BlockNecroPedestal)block).iconPedestal[1], ((BlockNecroPedestal)block).iconPedestal[1], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], ((BlockNecroPedestal)block).iconPedestal[0], true);
+	    Tessellator tessellator = Tessellator.instance;
   }
   
   public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
@@ -87,7 +77,7 @@ public class BlockNecroPedestalRenderer
   
   public boolean shouldRender3DInInventory()
   {
-    return true;
+    return false;
   }
   
   public int getRenderId()

@@ -21,6 +21,8 @@ import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ConfigResearch;
 import cpw.mods.fml.common.registry.GameRegistry;
 import flaxbeard.thaumicexploration.ThaumicExploration;
+import flaxbeard.thaumicexploration.api.NecromanticAltarAPI;
+import flaxbeard.thaumicexploration.api.NecromanticRecipe;
 
 
 public final class ModRecipes {
@@ -33,6 +35,7 @@ public final class ModRecipes {
         initInfusionRecipes();
         initCrucibleRecipes();
         initConstructRecipes();
+        initNecromanticRecipes();
     }
     
     private static void initConstructRecipes() {
@@ -50,6 +53,18 @@ public final class ModRecipes {
     					 empty, empty, empty, 
     					 empty, new ItemStack(Block.bookShelf), empty, 
     					 empty, empty, empty}) }));
+    	 registerResearchItemC("BUILDNECROINFUSION", Arrays.asList(new Object[] { 
+    			 new AspectList(), 
+    			 Integer.valueOf(7), Integer.valueOf(1), Integer.valueOf(6), 
+    			 Arrays.asList(new ItemStack[] { 
+    					 empty,new ItemStack(ConfigBlocks.blockCandle),empty,empty,empty,new ItemStack(ConfigBlocks.blockCandle),empty,
+    					 empty,empty,empty,new ItemStack(Block.skull),empty,empty,empty,
+    					 empty,empty,new ItemStack(Block.skull),new ItemStack(ThaumicExploration.itemAltar),new ItemStack(Block.skull),empty,empty,
+    					 new ItemStack(ConfigBlocks.blockCandle),empty,empty,new ItemStack(Block.skull),empty,empty,new ItemStack(ConfigBlocks.blockCandle),
+    					 empty,empty,empty,empty,empty,empty,empty,
+    					 empty,empty,empty,new ItemStack(ConfigBlocks.blockCandle),empty,empty,empty
+    					 
+    			 }) }));
     }
 
 
@@ -80,10 +95,17 @@ public final class ModRecipes {
 				new ItemStack(Item.potion,1, 8200), new ItemStack(Item.appleGold), 
 				new ItemStack(Item.bucketWater));
 		
-		registerResearchItemI("WANDAMBER", new ItemStack(ThaumicExploration.amberCore), 5, 
+		registerResearchItemI("ROD_AMBER", new ItemStack(ThaumicExploration.amberCore), 5, 
 				new AspectList().add(Aspect.MAGIC, 14).add(Aspect.AURA, 4).add(Aspect.TRAP, 6), 
 				new ItemStack(ConfigBlocks.blockCosmeticOpaque), 
 				new ItemStack(ConfigItems.itemResource,1,14), new ItemStack(ConfigItems.itemResource,1,14));
+		
+		if (ThaumicExploration.breadWand) {
+			registerResearchItemI("ROD_BREAD", new ItemStack(ThaumicExploration.breadCore), 3, 
+					new AspectList().add(Aspect.MAGIC, 8).add(Aspect.SEED, 8).add(Aspect.HUNGER, 4), 
+					new ItemStack(Item.bread), 
+					new ItemStack(ConfigItems.itemResource,1,14));
+		}
 		
 		registerResearchItemI("CRUCSOULS", new ItemStack(ThaumicExploration.crucibleSouls), 5, 
 				new AspectList().add(Aspect.DEATH, 40).add(Aspect.UNDEAD, 10).add(Aspect.HUNGER, 20).add(Aspect.TRAP, 20).add(Aspect.WEAPON, 5).add(Aspect.SOUL, 30), 
@@ -102,7 +124,7 @@ public final class ModRecipes {
 		
 		registerResearchItemI("METEORBOOTS", new ItemStack(ThaumicExploration.bootsMeteor), 4, 
 				new AspectList().add(Aspect.FIRE, 25).add(Aspect.ENERGY, 25).add(Aspect.TRAVEL, 25).add(Aspect.FLIGHT,25), 
-				new ItemStack(ConfigItems.itemBootsTraveller), new ItemStack(ConfigBlocks.blockCrystal, 1, 1), 
+				new ItemStack(ConfigItems.itemBootsTraveller, 1, 32767), new ItemStack(ConfigBlocks.blockCrystal, 1, 1), 
 				new ItemStack(Block.netherrack), new ItemStack(Block.netherrack),
 				new ItemStack(Block.netherrack), new ItemStack(ConfigItems.itemFocusFire));
 		
@@ -120,7 +142,7 @@ public final class ModRecipes {
 		
 		registerResearchItemI("TALISMANFOOD", new ItemStack(ThaumicExploration.talismanFood), 5, 
 				new AspectList().add(Aspect.HUNGER, 30).add(Aspect.FLESH, 25).add(Aspect.CROP, 25).add(Aspect.EXCHANGE,10), 
-				new ItemStack(Item.diamond), new ItemStack(Block.obsidian), 
+				new ItemStack(ConfigItems.itemResource,1,15), new ItemStack(Block.obsidian), 
 				new ItemStack(Item.beefCooked), new ItemStack(Item.chickenCooked),
 				new ItemStack(Item.porkCooked), new ItemStack(Item.fishCooked), new ItemStack(Item.bread));
 		
@@ -133,7 +155,27 @@ public final class ModRecipes {
 		
 		registerResearchItemI("COMETBOOTS", new ItemStack(ThaumicExploration.bootsComet), 4, 
 				new AspectList().add(Aspect.WATER, 25).add(Aspect.ICE, 25).add(Aspect.TRAVEL, 25).add(Aspect.MOTION,25), 
-				new ItemStack(ConfigItems.itemBootsTraveller), new ItemStack(ConfigBlocks.blockCrystal, 1, 2), 
+				new ItemStack(ConfigItems.itemBootsTraveller, 1, 32767), new ItemStack(ConfigBlocks.blockCrystal, 1, 2), 
+				new ItemStack(Block.blockSnow), new ItemStack(Block.blockSnow),
+				new ItemStack(Block.blockSnow), new ItemStack(ConfigItems.itemFocusFrost));
+		
+		registerResearchItemI("RUNICBOOTS", "RUNICBOOTSCOMET", new ItemStack(ThaumicExploration.runicBootsComet), 5,
+				new AspectList().add(Aspect.MAGIC, 25).add(Aspect.EXCHANGE, 25).add(Aspect.WATER, 10), 
+				new ItemStack(ThaumicExploration.bootsComet, 1, 32767), new ItemStack(ConfigItems.itemBootsRunic), new ItemStack(Item.slimeBall));
+		
+		registerResearchItemI("RUNICBOOTS", "RUNICBOOTSMETEOR", new ItemStack(ThaumicExploration.runicBootsMeteor), 5,
+				new AspectList().add(Aspect.MAGIC, 25).add(Aspect.EXCHANGE, 25).add(Aspect.FIRE, 10), 
+				new ItemStack(ThaumicExploration.bootsMeteor, 1, 32767), new ItemStack(ConfigItems.itemBootsRunic), new ItemStack(Item.slimeBall));
+		
+		registerResearchItemI("RUNICBOOTS", "RUNICBOOTSMETEOR2", new ItemStack(ThaumicExploration.runicBootsMeteor), 5, 
+				new AspectList().add(Aspect.FIRE, 35).add(Aspect.ENERGY, 25).add(Aspect.TRAVEL, 25).add(Aspect.FLIGHT,25), 
+				new ItemStack(ConfigItems.itemBootsTravellerRunic, 1, 32767), new ItemStack(ConfigBlocks.blockCrystal, 1, 1), 
+				new ItemStack(Block.netherrack), new ItemStack(Block.netherrack),
+				new ItemStack(Block.netherrack), new ItemStack(ConfigItems.itemFocusFire));
+		
+		registerResearchItemI("COMETBOOTS", "RUNICBOOTSCOMET2", new ItemStack(ThaumicExploration.runicBootsComet), 5, 
+				new AspectList().add(Aspect.WATER, 35).add(Aspect.ICE, 25).add(Aspect.TRAVEL, 25).add(Aspect.MOTION,25), 
+				new ItemStack(ConfigItems.itemBootsTravellerRunic, 1, 32767), new ItemStack(ConfigBlocks.blockCrystal, 1, 2), 
 				new ItemStack(Block.blockSnow), new ItemStack(Block.blockSnow),
 				new ItemStack(Block.blockSnow), new ItemStack(ConfigItems.itemFocusFrost));
 		
@@ -155,6 +197,12 @@ public final class ModRecipes {
 				new ItemStack(Item.brick),new ItemStack(Item.bucketWater), 
 				new ItemStack(Item.brick),new ItemStack(Item.bucketWater), 
 				new ItemStack(Item.brick) );
+		
+		registerResearchItemI("NECROINFUSION", new ItemStack(ThaumicExploration.itemAltar), 7, 
+				new AspectList().add(Aspect.MAGIC, 32).add(Aspect.DEATH, 16).add(Aspect.UNDEAD, 16).add(Aspect.CRAFT, 16), 
+				new ItemStack(ConfigBlocks.blockStoneDevice,1,1),new ItemStack(Block.netherrack), 
+				new ItemStack(ConfigBlocks.blockCosmeticSolid,1,6),new ItemStack(ConfigBlocks.blockStoneDevice,1,2),
+				new ItemStack(ConfigBlocks.blockCosmeticSolid,1,6));
 		
 //		for (int i = 0; i<16; i++) {
 //			registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, i), 7, 
@@ -219,6 +267,16 @@ public final class ModRecipes {
 		}
 		//registerCrucibleRecipe("CHESTSEAL","CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal,1,1), new ItemStack(ThaumicExploration.blankSeal,1,32767), 
 				//new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12));
+	}
+	
+	public static void initNecromanticRecipes()
+	{
+		  NecromanticAltarAPI.addNecroRecipeWithThaumnomiconDisplay("ROD_NECROMANCER", new NecromanticRecipe("NECROWAND", new ItemStack(ThaumicExploration.necroCore), new ItemStack[]{new ItemStack(Item.skull,1,1),new ItemStack(Item.bone),new ItemStack(Item.bone),new ItemStack(ConfigItems.itemResource,1,14),new ItemStack(ConfigItems.itemResource,1,14)}, 25));
+		  NecromanticAltarAPI.addEnergyToItem(Item.rottenFlesh.itemID,1);
+		  NecromanticAltarAPI.addEnergyToItem(Item.bone.itemID,2);
+		  NecromanticAltarAPI.addEnergyToItem(ConfigItems.itemResource.itemID,5,4);
+		  NecromanticAltarAPI.addEnergyToItem(Item.skull.itemID,1,5);
+		  NecromanticAltarAPI.addEnergyToItem(Item.appleRed.itemID,1);
 	}
 	
 	private static void registerResearchItem(String name, String research, ItemStack output, AspectList aspects, Object... stuff) {

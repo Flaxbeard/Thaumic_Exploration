@@ -57,7 +57,7 @@ public class BlockNecroFire extends BlockFire implements ITileEntityProvider{
 	    {
 	        entity.attackEntityFrom(DamageSource.onFire, 4.0F);
 	        entity.setFire(8);
-	        System.out.println("burning item " + entity.toString());
+
 	    }
 	}
 	

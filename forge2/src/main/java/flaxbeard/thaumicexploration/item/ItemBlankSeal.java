@@ -24,9 +24,12 @@ public class ItemBlankSeal extends Item {
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
+    	if (par1ItemStack.getItemDamage() <= 15) {
     	int j = 15 - par1ItemStack.getItemDamage();
     	Color c = new Color(EntitySheep.fleeceColorTable[j][0],EntitySheep.fleeceColorTable[j][1],EntitySheep.fleeceColorTable[j][2]);
         return ( c.getRGB() & 0x00ffffff);
+    	}
+    	return 0;
     }
     
     
@@ -41,7 +44,10 @@ public class ItemBlankSeal extends Item {
     
     @Override
     public String getUnlocalizedName(ItemStack item) {
+    	if (item.getItemDamage() <= 15) {
             return "item.thaumicexploration:blankSeal:" + itemNames[15-item.getItemDamage()];
+    	}
+    	return "";
     }
 
 }

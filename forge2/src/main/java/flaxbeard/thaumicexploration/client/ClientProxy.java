@@ -11,6 +11,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.client.fx.FXBoreParticles;
 import thaumcraft.client.fx.FXBoreSparkle;
 import thaumcraft.client.fx.FXEssentiaTrail;
+import thaumcraft.client.fx.FXLightningBolt;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -23,6 +24,7 @@ import flaxbeard.thaumicexploration.client.render.BlockSkullCandleRenderer;
 import flaxbeard.thaumicexploration.client.render.ItemRenderThinkTank;
 import flaxbeard.thaumicexploration.client.render.TileEntityBoundChestRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityBoundJarRender;
+import flaxbeard.thaumicexploration.client.render.TileEntityNecroPedestalRenderer;
 import flaxbeard.thaumicexploration.client.render.TileEntityRenderCrucibleSouls;
 import flaxbeard.thaumicexploration.client.render.TileEntityReplicatorRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityThinkTankRender;
@@ -30,6 +32,7 @@ import flaxbeard.thaumicexploration.common.CommonProxy;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
+import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 import flaxbeard.thaumicexploration.tile.TileEntityReplicator;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 public class ClientProxy extends CommonProxy
@@ -42,6 +45,7 @@ public class ClientProxy extends CommonProxy
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoundChest.class, new TileEntityBoundChestRender());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrucibleSouls.class, new TileEntityRenderCrucibleSouls());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityReplicator.class, new TileEntityReplicatorRender());
+    	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNecroPedestal.class, new TileEntityNecroPedestalRenderer());
     	 
     	 TileEntitySpecialRenderer renderThinkTank = new TileEntityThinkTankRender();
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityThinkTank.class, renderThinkTank);
@@ -65,6 +69,15 @@ public class ClientProxy extends CommonProxy
     public void spawnWaterOnPlayer(World worldObj, int xCoord, int yCoord, int zCoord, EntityPlayer player) {
     	FXEssentiaTrail fx = new FXEssentiaTrail(worldObj, xCoord+0.5F, yCoord+1.1F, zCoord+0.5F, player.posX, player.posY, player.posZ, 5, Aspect.TOOL.getColor(), 1.0F);
     	Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+    }
+    
+    @Override
+    public void spawnLightningBolt(World worldObj, double xCoord, double  yCoord, double zCoord, double dX, double dY, double dZ) {
+    	FXLightningBolt bolt = new FXLightningBolt(worldObj,xCoord,yCoord,zCoord,dX,dY,dZ, worldObj.rand.nextLong(), 6, 0.5F, 5);
+		bolt.defaultFractal();
+	    bolt.setType(4);
+	    bolt.setWidth(0.05F);
+	    bolt.finalizeBolt();
     }
     
     @Override

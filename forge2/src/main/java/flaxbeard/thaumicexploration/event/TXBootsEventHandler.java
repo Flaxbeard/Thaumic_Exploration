@@ -49,7 +49,7 @@ public class TXBootsEventHandler
     {
     	EntityPlayer player = (EntityPlayer)event.entity;
         //Utils.setWalkSpeed(player.capabilities, Utils.getWalkSpeed(genericPlayerCapabilities));
-        updateSpeed(player);
+        //updateSpeed(player);
         checkAir(player);
         if (player.getCurrentItemOrArmor(4) != null) {
 	        if (player.getCurrentItemOrArmor(4).itemID == ThaumicExploration.maskEvil.itemID && player.username.equalsIgnoreCase("Succubism")) {
@@ -147,7 +147,7 @@ public class TXBootsEventHandler
     
     
 
-    if ((event.entity.worldObj.isRemote) && (this.prevStep.containsKey(Integer.valueOf(event.entity.entityId))) && ((((EntityPlayer)event.entity).inventory.armorItemInSlot(0) == null) || (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.bootsMeteor.itemID && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.bootsComet.itemID)))
+    if ((event.entity.worldObj.isRemote) && (this.prevStep.containsKey(Integer.valueOf(event.entity.entityId))) && ((((EntityPlayer)event.entity).inventory.armorItemInSlot(0) == null) || (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.bootsMeteor.itemID && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.runicBootsMeteor.itemID && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.runicBootsComet.itemID &&((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.bootsComet.itemID)))
     {
       event.entity.stepHeight = ((Float)this.prevStep.get(Integer.valueOf(event.entity.entityId))).floatValue();
       this.prevStep.remove(Integer.valueOf(event.entity.entityId));
@@ -157,73 +157,7 @@ public class TXBootsEventHandler
     
   }
   
-  private void updateSpeed(EntityPlayer player)
-  {
-    if ((!player.capabilities.isFlying) && (player.inventory.armorItemInSlot(0) != null))
-    {
-      int haste = EnchantmentHelper.getEnchantmentLevel(Config.enchHaste.effectId, player.inventory.armorItemInSlot(0));
-      if (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)
-      {
-        if (player.worldObj.isRemote)
-        {
-          if (!this.prevStep.containsKey(Integer.valueOf(player.entityId))) {
-            this.prevStep.put(Integer.valueOf(player.entityId), Float.valueOf(player.stepHeight));
-          }
-          player.stepHeight = 1.0F;
-        }
-        float bonus = 0.0F;
-        if (haste > 0) {
-          bonus = haste * 0.007F;
-        }
-        Utils.setWalkSpeed(player.capabilities, Utils.getWalkSpeed(player.capabilities) + 0.055F + bonus);
-        
 
-        player.jumpMovementFactor = (0.033F + bonus * 0.66F);
-        if (player.isInWater())
-        {
-          player.motionX *= 1.133000016212463D;
-          player.motionZ *= 1.133000016212463D;
-        }
-        if (player.fallDistance > 0.0F) {
-          player.fallDistance = 0.0F;
-        }
-      }
-      else if (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID)
-      {
-          if (player.worldObj.isRemote)
-          {
-            if (!this.prevStep.containsKey(Integer.valueOf(player.entityId))) {
-              this.prevStep.put(Integer.valueOf(player.entityId), Float.valueOf(player.stepHeight));
-            }
-            player.stepHeight = 1.0F;
-          }
-          if (!player.inventory.armorItemInSlot(0).hasTagCompound()) {
-    			NBTTagCompound par1NBTTagCompound = new NBTTagCompound();
-    			player.inventory.armorItemInSlot(0).setTagCompound(par1NBTTagCompound );
-    			player.inventory.armorItemInSlot(0).stackTagCompound.setInteger("runTicks",0);
-          }
-          int ticks = player.inventory.armorItemInSlot(0).stackTagCompound.getInteger("runTicks");
-          float bonus = 0.0F;
-          if (haste > 0) {
-            bonus = haste * 0.007F;
-          }
-          bonus = bonus + ((ticks/5) * 0.003F);
-          Utils.setWalkSpeed(player.capabilities, Utils.getWalkSpeed(player.capabilities) + 0.110F + bonus);
-          
-
-          player.jumpMovementFactor = (0.033F + bonus * 0.66F);
-          if (player.isInWater())
-          {
-            player.motionX *= 1.133000016212463D;
-            player.motionZ *= 1.133000016212463D;
-          }
-          if (player.fallDistance > 0.25F) {
-              player.fallDistance -= 0.25F;
-          }
-        }
-      
-    }
-  }
   
   @ForgeSubscribe
   public void joinWorld(EntityJoinWorldEvent event)
@@ -231,7 +165,7 @@ public class TXBootsEventHandler
     if ((event.entity instanceof EntityPlayer))
     {
       EntityPlayer player = (EntityPlayer)event.entity;
-      updateSpeed(player);
+      //updateSpeed(player);
     }
   }
   
@@ -241,7 +175,7 @@ public class TXBootsEventHandler
   public void playerJumps(LivingEvent.LivingJumpEvent event)
   {
 	  
-    if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)) {
+    if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID || ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID)) {
       if (((EntityPlayer)event.entity).isSneaking()) {
     	  Vec3 vector = event.entityLiving.getLook(0.5F);
 	      double total = Math.abs(vector.zCoord + vector.xCoord);
@@ -268,7 +202,7 @@ public class TXBootsEventHandler
     	  event.entityLiving.motionY += 0.2750000059604645D;
       }
     }
-    else if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID)) {
+    else if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID || ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsComet.itemID)) {
     	event.entityLiving.motionY += 0.2750000059604645D;
       }
     
@@ -276,7 +210,7 @@ public class TXBootsEventHandler
   
   public void checkAir(EntityPlayer player)
   {  
-    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)) {
+    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID || player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID)) {
       
       Vec3 vector = player.getLook(1.0F);
       ItemStack item = player.inventory.armorItemInSlot(0);
@@ -333,7 +267,7 @@ public class TXBootsEventHandler
       item.stackTagCompound.setInteger("smashTicks", ticks);
       item.stackTagCompound.setInteger("airTicks", ticksAir);
     }
-    else if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID)) {
+    else if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID || player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsComet.itemID)) {
         
         Vec3 vector = player.getLook(1.0F);
         ItemStack item = player.inventory.armorItemInSlot(0);

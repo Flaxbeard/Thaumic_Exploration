@@ -19,7 +19,7 @@ public class TileEntityNecroFire extends TileEntity implements IAspectContainer 
 		// TODO Auto-generated method stub
     	if (worldObj.getBlockTileEntity(xCoord,yCoord-1,zCoord) != null &&  worldObj.getBlockTileEntity(xCoord,yCoord-1,zCoord) instanceof TileEntityNecroPedestal) {
     		TileEntityNecroPedestal pedesetal = (TileEntityNecroPedestal)worldObj.getBlockTileEntity(xCoord,yCoord-1,zCoord);
-    		return pedesetal.infusionRequirements;
+    		return pedesetal.getAspects();
     	}
     	return null;
 	}

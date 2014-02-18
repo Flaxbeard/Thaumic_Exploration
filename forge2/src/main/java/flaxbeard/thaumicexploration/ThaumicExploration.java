@@ -19,14 +19,13 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -79,6 +78,8 @@ import flaxbeard.thaumicexploration.item.ItemChestSealLinked;
 import flaxbeard.thaumicexploration.item.ItemFoodTalisman;
 import flaxbeard.thaumicexploration.item.ItemTXArmorSpecial;
 import flaxbeard.thaumicexploration.item.ItemTXArmorSpecialDiscount;
+import flaxbeard.thaumicexploration.item.ItemTXRuneCometBoots;
+import flaxbeard.thaumicexploration.item.ItemTXRuneMeteorBoots;
 import flaxbeard.thaumicexploration.item.ItemTaintSeedFood;
 import flaxbeard.thaumicexploration.item.focus.ItemFocusNecromancy;
 import flaxbeard.thaumicexploration.misc.FauxAspect;
@@ -97,6 +98,8 @@ import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 import flaxbeard.thaumicexploration.tile.TileEntityReplicator;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodBreadOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodNecromancerOnUpdate;
 import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
 
 
@@ -124,16 +127,26 @@ public class ThaumicExploration {
 	public static int transmutationCoreID;
 	public static Item amberCore;
 	public static int amberCoreID;
+	public static Item necroCore;
+	public static int necroCoreID;
+	public static Item breadCore;
+	public static int breadCoreID;
 	
 	public static EnumArmorMaterial armorMaterialCrystal;
 	public static Item maskEvil;
 	public static int maskEvilID;
 	public static Item focusNecromancy;
 	public static int focusNecromancyID;
+	
 	public static Item bootsMeteor;
 	public static int bootsMeteorID;
 	public static Item bootsComet;
 	public static int bootsCometID;
+	public static Item runicBootsMeteor;
+	public static int runicBootsMeteorID;
+	public static Item runicBootsComet;
+	public static int runicBootsCometID;
+	
 	public static Item charmNoTaint;
 	public static int charmNoTaintID;
 	public static Item charmTaint;
@@ -143,6 +156,9 @@ public class ThaumicExploration {
 	
 	public static Item taintBerry;
 	public static int taintBerryID;
+	
+	public static Item itemAltar;
+	public static int itemAltarID;
 	
 	public static Block boundChest;
 	public static int boundChestID;
@@ -170,6 +186,8 @@ public class ThaumicExploration {
 	public static int skullCandleID;
 	public static WandRod WAND_ROD_CRYSTAL;
 	public static WandRod WAND_ROD_AMBER;
+	public static WandRod WAND_ROD_NECRO;
+	public static WandRod WAND_ROD_BREAD;
 	
 	public WorldGenTX worldGen;
 	
@@ -200,6 +218,7 @@ public class ThaumicExploration {
 	
 	public static boolean brainsGolem;
 	public static boolean taintBloom;
+	public static boolean breadWand;
 	
 	public static int potionBindingID;
 	public static int potionTaintWithdrawlID;
@@ -271,6 +290,11 @@ public class ThaumicExploration {
 		taintBerryID = config.getItem("Taintberry", 11015).getInt();
 		talismanFoodID = config.getItem("Talisman of Nourishment", 11013).getInt();
 		focusNecromancyID = config.getItem("Focus of Necromancy", 11009).getInt();
+		necroCoreID = config.getItem("Necromancer's Wand Core", 11016).getInt();
+		breadCoreID = config.getItem("Baguette Wand Core", 11020).getInt();
+		itemAltarID = config.getItem("Necromantic Pedestal (Item)", 11017).getInt();
+		runicBootsMeteorID = config.getItem("Runic Boots of the Meteor", 11018).getInt();
+		runicBootsCometID = config.getItem("Runic Boots of the Comet", 11019).getInt();
 		
 		//Block IDs
 		boundChestID = config.getBlock("Bound Chest", 700).getInt();
@@ -295,6 +319,7 @@ public class ThaumicExploration {
 
 		//allowOsmotic = config.get("Miscellaneous", "Add new enchantments to Thaumic Tinkerer's Osmotic Enchanter (Requires TT Build 72+)", true).getBoolean(true);
 		prefix = config.get("Miscellaneous", "Display [TX] prefix before Thaumic Exploration research", true).getBoolean(true);
+		breadWand = config.get("Easter Eggs", "Enable Thaumic Frenchurgy", false).getBoolean(true);
 		brainsGolem = config.get("Miscellaneous", "Use Purified Brains in advanced golems", true).getBoolean(true);
 		taintBloom = config.get("Miscellaneous", "Move the Etheral Bloom to the Tainturgy tab", true).getBoolean(true);
 		allowBoundInventories = config.get("Miscellaneous", "Allow bound inventories", true).getBoolean(true);
@@ -350,7 +375,7 @@ public class ThaumicExploration {
 		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucible3");
 		replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setUnlocalizedName("thaumicexploration:replicator").setCreativeTab(tab).setTextureName("thaumicexploration:replicatorBottom");
 		
-		necroPedestal = new BlockNecroPedestal(necroPedestalID, Material.ground).setUnlocalizedName("thaumicexploration:necroPedestal");
+		necroPedestal = new BlockNecroPedestal(necroPedestalID, Material.rock).setUnlocalizedName("thaumicexploration:necroPedestal");
 		
 		necroFire = (BlockFire)(new BlockNecroFire(necroFireID)).setUnlocalizedName("thaumicexploration:necroFire").setTextureName("thaumicexploration:fire").setHardness(0.0F).setLightValue(1.0F).setStepSound(Block.soundWoodFootstep);
 		
@@ -378,6 +403,10 @@ public class ThaumicExploration {
 		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");
 		talismanFood = (new ItemFoodTalisman(talismanFoodID)).setUnlocalizedName("thaumicexploration:talismanFood").setCreativeTab(tab).setTextureName("thaumicexploration:talismanFood");
 		amberCore = (new Item(amberCoreID)).setUnlocalizedName("thaumicexploration:amberCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber");
+		necroCore = (new Item(necroCoreID)).setUnlocalizedName("thaumicexploration:necroCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodNecro");
+		if (this.breadWand) {
+			breadCore = (new Item(breadCoreID)).setUnlocalizedName("thaumicexploration:breadCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodBread");
+		}
 		pureZombieBrain = (new ItemBrain(pureZombieBrainID)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(tab).setTextureName("thaumicexploration:pureZombieBrain");
 		blankSeal = (new ItemBlankSeal(blankSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealBlank"));
 		chestSeal = (new ItemChestSeal(chestSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
@@ -390,13 +419,20 @@ public class ThaumicExploration {
 		maskEvil = (new ItemTXArmorSpecialDiscount(maskEvilID, ThaumcraftApi.armorMatSpecial, 2, 0)).setUnlocalizedName("thaumicexploration:maskEvil").setCreativeTab(tab).setTextureName("thaumicexploration:maskEvil");
 		bootsMeteor = (new ItemTXArmorSpecial(bootsMeteorID, ThaumcraftApi.armorMatSpecial, 4, 3)).setUnlocalizedName("thaumicexploration:bootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:bootsMeteor");
 		bootsComet = (new ItemTXArmorSpecial(bootsCometID, ThaumcraftApi.armorMatSpecial, 4, 3)).setUnlocalizedName("thaumicexploration:bootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:bootsComet");
+		runicBootsMeteor = (new ItemTXRuneMeteorBoots(runicBootsMeteorID, ThaumcraftApi.armorMatSpecial, 0, 3)).setUnlocalizedName("thaumicexploration:runicBootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:runicBootsMeteor");
+		runicBootsComet = (new ItemTXRuneCometBoots(runicBootsCometID, ThaumcraftApi.armorMatSpecial, 0, 3)).setUnlocalizedName("thaumicexploration:runicBootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:runicBootsComet");
 		focusNecromancy = (new ItemFocusNecromancy(focusNecromancyID)).setUnlocalizedName("thaumicexploration:necromancy").setCreativeTab(tab).setTextureName("thaumicexploration:focusNecromancy");
 		taintBerry = (new ItemTaintSeedFood(taintBerryID, 1, 0.3F, Block.tnt.blockID, ConfigBlocks.blockTaint.blockID)).setCreativeTab(tab).setUnlocalizedName("thaumicexploration:taintBerry").setTextureName("thaumicExploration:taintBerry");
 		//Item skull = (new ItemSkullCandle(11016)).setUnlocalizedName("skull").setTextureName("skull");
+		itemAltar = (new ItemReed(itemAltarID, necroPedestal)).setUnlocalizedName("thaumicexploration:necroAltar").setCreativeTab(tab).setTextureName("thaumicExploration:necroAltar");
 		
 		//Wands
-		WAND_ROD_AMBER = new WandRod("amber",10,new ItemStack(ThaumicExploration.amberCore),8,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
+		WAND_ROD_AMBER = new WandRod("AMBER",10,new ItemStack(ThaumicExploration.amberCore),8,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
 		WAND_ROD_CRYSTAL = new WandRod("transmutation",100,new ItemStack(ThaumicExploration.transmutationCore),1,new WandRodTransmutationOnUpdate());
+		WAND_ROD_NECRO = new WandRod("NECROMANCER",100,new ItemStack(ThaumicExploration.necroCore),15,new WandRodNecromancerOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodNecro.png"));
+		if (this.breadWand) {
+			WAND_ROD_BREAD = new WandRod("BREAD",39,new ItemStack(ThaumicExploration.breadCore),8,new WandRodBreadOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodBread.png"));
+		}
 		//WandRod.rods.put("transmutation1", WAND_ROD_CRYSTAL1);
 		enchantmentBinding = new EnchantmentBinding(enchantmentBindingID, 1);
 		enchantmentNightVision = new EnchantmentNightVision(enchantmentNightVisionID, 1);
@@ -417,6 +453,7 @@ public class ThaumicExploration {
 		//Researches, Thaumcraft Recipes
 		ModRecipes.initRecipes();
 		ModResearch.initResearch();
+		//NecromanticAltarAPI.initNecromanticRecipes();
 		proxy.setUnicode();
 
 		allowedItems.add(MutablePair.of(Block.stone.blockID,0));
@@ -589,13 +626,6 @@ public class ThaumicExploration {
 	}
 
 
-	
-	@ForgeSubscribe
-	public void onSound(SoundLoadEvent event) {
-	// You add them the same way as you add blocks.
-	//event.manager.addSound("steamcraft:wobble.ogg");
-	}
-	
 	private class TXTab extends CreativeTabs {
 
 		public TXTab(int par1, String par2Str) {
