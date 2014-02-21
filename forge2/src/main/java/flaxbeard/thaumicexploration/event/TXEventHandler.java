@@ -76,11 +76,11 @@ public class TXEventHandler {
 		if (event.entity instanceof EntityPlayer) {
 	
 			//PacketHandler.sendAspectDiscoveryPacket(ThaumicExploration.fakeAspectNecro.getTag(), (EntityPlayerMP)event.entity);
-			PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
-			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);
-			if (rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
-				System.out.println(event.entity.worldObj.isRemote+" has discovered fake aspect");
-			}
+//			PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
+//			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);
+//			if (rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
+//				System.out.println(event.entity.worldObj.isRemote+" has discovered fake aspect");
+//			}
 		}
 		if (event.entity instanceof ITaintedMob) {
 			EntityLiving mob = (EntityLiving) event.entity;

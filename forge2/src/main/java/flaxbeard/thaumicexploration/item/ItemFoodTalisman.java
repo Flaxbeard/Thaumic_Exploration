@@ -8,8 +8,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
 import thaumcraft.common.config.ConfigItems;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import flaxbeard.thaumicexploration.misc.FakePlayerPotion;
 
 public class ItemFoodTalisman extends Item {
@@ -19,8 +21,8 @@ public class ItemFoodTalisman extends Item {
 		this.maxStackSize = 1;
 		//this.setMaxDamage(100);
 	}
-	
-	
+
+
 	@Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
     	if (!par1ItemStack.hasTagCompound()) {
@@ -35,13 +37,13 @@ public class ItemFoodTalisman extends Item {
     	par3List.add("Currently holds " + (int)par1ItemStack.stackTagCompound.getFloat("food") + " food points and " + (int)par1ItemStack.stackTagCompound.getFloat("saturation") + " saturation points.");
     	//super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
     }
-	
+
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-		
+
 		if (par3Entity instanceof EntityPlayer && !par2World.isRemote && par3Entity.ticksExisted % 20 == 0) {
 			EntityPlayer player = (EntityPlayer)par3Entity;
-		
+
 			if (!par1ItemStack.hasTagCompound()) {
 				par1ItemStack.setTagCompound(new NBTTagCompound());
 			}
@@ -84,7 +86,7 @@ public class ItemFoodTalisman extends Item {
 					finalSat = sat - (20 - player.getFoodStats().getFoodLevel());
 					sat = 20 - player.getFoodStats().getFoodLevel();
 				}
-				player.getFoodStats().addStats((int) sat, 0);
+				ReflectionHelper.setPrivateValue(FoodStats.class, player.getFoodStats(),  (int) (player.getFoodStats().getFoodLevel() + sat), "foodLevel");
 				par1ItemStack.stackTagCompound.setFloat("food", finalSat);
 				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage());
 			}
@@ -95,16 +97,16 @@ public class ItemFoodTalisman extends Item {
 					finalSat = sat - (player.getFoodStats().getFoodLevel() - player.getFoodStats().getSaturationLevel());
 					sat = player.getFoodStats().getFoodLevel() - player.getFoodStats().getSaturationLevel();	
 				}
-				player.getFoodStats().addStats(0, sat);
+				ReflectionHelper.setPrivateValue(FoodStats.class, player.getFoodStats(),(player.getFoodStats().getFoodLevel() + sat), "foodSaturationLevel");
 				par1ItemStack.stackTagCompound.setFloat("saturation", finalSat);
 				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage());
 			}
 		}
 	}
-	
+
 	private boolean isEdible(ItemStack food, EntityPlayer player) {
 		if (food.getItem() instanceof ItemFood && food.itemID != ConfigItems.itemManaBean.itemID) {
-			
+
 			for (int i = 1; i < 25; i++) {
 				EntityPlayer fakePlayer = new FakePlayerPotion(player.worldObj, "foodTabletPlayer");
 				fakePlayer.setPosition(0.0F, 999.0F, 0.0F);

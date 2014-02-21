@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagByte;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -16,6 +17,7 @@ import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
+import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ConfigResearch;
@@ -204,6 +206,16 @@ public final class ModRecipes {
 				new ItemStack(ConfigBlocks.blockCosmeticSolid,1,6),new ItemStack(ConfigBlocks.blockStoneDevice,1,2),
 				new ItemStack(ConfigBlocks.blockCosmeticSolid,1,6));
 		
+		registerResearchItemI("CAP_SOJOURNER", new ItemStack(ThaumicExploration.sojournerCap), 5, 
+				new AspectList().add(Aspect.AURA, 6).add(Aspect.MAGIC, 12).add(Aspect.EXCHANGE, 16).add(Aspect.ENERGY, 12), 
+				new ItemStack(ThaumicExploration.sojournerCapUncharged),new ItemStack(ConfigItems.itemResource, 1, 14), 
+				new ItemStack(ConfigItems.itemResource, 1, 14));
+		
+		registerResearchItemI("CAP_MECHANIST", new ItemStack(ThaumicExploration.mechanistCap), 5, 
+				new AspectList().add(Aspect.MECHANISM, 16).add(Aspect.MAGIC, 12).add(Aspect.AURA, 6).add(Aspect.ENERGY, 12), 
+				new ItemStack(ThaumicExploration.mechanistCapUncharged),new ItemStack(ConfigItems.itemResource, 1, 14), 
+				new ItemStack(ConfigItems.itemResource, 1, 14));
+		
 //		for (int i = 0; i<16; i++) {
 //			registerResearchItemI("JARSEAL", new ItemStack(ThaumicExploration.jarSeal, 1, i), 7, 
 //					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12).add(Aspect.MAGIC, 2), 
@@ -226,7 +238,139 @@ public final class ModRecipes {
 	        InfusionRecipe recipe2 = ThaumcraftApi.addInfusionCraftingRecipe("ADVANCEDGOLEM", recipe.recipeOutput, recipe.instability, recipe.aspects, recipe.recipeInput, recipe.components);
 			ConfigResearch.recipes.put("AdvancedGolem", recipe2);
 		}
+		
+
+
+
+
+
+
+//		registerResearchItemI("ENHANCEDRUNICARMOR","EnhancedRunicArmorHelm", new ItemStack(ThaumicExploration.enhancedHelmetRunic), 3, new AspectList().add(Aspect.ARMOR, 5).add(Aspect.MAGIC, 20).add(Aspect.ENERGY, 20), new ItemStack(ConfigItems.itemHelmetRunic, 1, 32767), new ItemStack[] { new ItemStack(Item.helmetDiamond, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15), new ItemStack(ConfigItems.itemResource, 1, 7), new ItemStack(ConfigItems.itemResource, 1, 15)});
+//	    registerResearchItemI("ENHANCEDRUNICARMOR","EnhancedRunicArmorBoots", new ItemStack(ThaumicExploration.enhancedBootsRunic), 3, new AspectList().add(Aspect.ARMOR, 5).add(Aspect.MAGIC, 20).add(Aspect.ENERGY, 20), new ItemStack(ConfigItems.itemBootsRunic, 1, 32767), new ItemStack[] { new ItemStack(Item.bootsDiamond, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15), new ItemStack(ConfigItems.itemBootsRobe, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15)});
+//	    registerResearchItemI("ENHANCEDRUNICARMOR","EnhancedRunicArmorChest", new ItemStack(ThaumicExploration.enhancedChestRunic), 4, new AspectList().add(Aspect.ARMOR, 15).add(Aspect.MAGIC, 30).add(Aspect.ENERGY, 30), new ItemStack(ConfigItems.itemChestRunic, 1, 32767), new ItemStack[] { new ItemStack(Item.plateDiamond, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15), new ItemStack(ConfigItems.itemChestRobe, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15)});
+//	    registerResearchItemI("ENHANCEDRUNICARMOR","EnhancedRunicArmorLegs", new ItemStack(ThaumicExploration.enhancedLegsRunic), 4, new AspectList().add(Aspect.ARMOR, 10).add(Aspect.MAGIC, 25).add(Aspect.ENERGY, 25), new ItemStack(ConfigItems.itemLegsRunic, 1, 32767), new ItemStack[] { new ItemStack(Item.legsDiamond, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15), new ItemStack(ConfigItems.itemLegsRobe, 1, 32767), new ItemStack(ConfigItems.itemResource, 1, 15)});
+//		
+	    registerResearchItemIU("RBCU1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)1), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.runicBootsComet), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+		registerResearchItemIU("RBCU2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)2), 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.runicBootsComet), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+		registerResearchItemIU("RBCU3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)3), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.runicBootsComet), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+		registerResearchItemIU("RBCU4", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)4), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.runicBootsComet), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+		registerResearchItemIU("RBCU5", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)5), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.runicBootsComet), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+		registerResearchItemIU("RBCU6", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)6), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.runicBootsComet), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+		
+		registerResearchItemIU("RBMU1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)1), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.runicBootsMeteor), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+		registerResearchItemIU("RBMU2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)2), 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.runicBootsMeteor), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+		registerResearchItemIU("RBMU3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)3), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.runicBootsMeteor), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+		registerResearchItemIU("RBMU4", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)4), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.runicBootsMeteor), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+		registerResearchItemIU("RBMU5", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)5), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.runicBootsMeteor), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+		registerResearchItemIU("RBMU6", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)6), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.runicBootsMeteor), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+		
+//		ItemStack result;
+//		
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)1));
+//		registerResearchItemIUI("RAUE1_0", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedHelmetRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		result = new ItemStack(ThaumicExploration.enhancedChestRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)1));
+//		registerResearchItemIUI("RAUE1_1", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedChestRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		result = new ItemStack(ThaumicExploration.enhancedLegsRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)1));
+//		registerResearchItemIUI("RAUE1_2", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedLegsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		result = new ItemStack(ThaumicExploration.enhancedBootsRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)1));
+//		registerResearchItemIUI("RAUE1_3", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedBootsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)2));
+//		registerResearchItemIUI("RAUE2_0", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)2));
+//		registerResearchItemIUI("RAUE2_1", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedChestRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)2));
+//		registerResearchItemIUI("RAUE2_2", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)2));
+//		registerResearchItemIUI("RAUE2_3", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)3));
+//		registerResearchItemIUI("RAUE3_0", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)3));
+//		registerResearchItemIUI("RAUE3_1", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedChestRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)3));
+//		registerResearchItemIUI("RAUE3_2", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)3));
+//		registerResearchItemIUI("RAUE3_3", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)4));
+//		registerResearchItemIUI("RAUE4_0", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)4));
+//		registerResearchItemIUI("RAUE4_1", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedChestRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)4));
+//		registerResearchItemIUI("RAUE4_2", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)4));
+//		registerResearchItemIUI("RAUE4_3", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)5));
+//		registerResearchItemIUI("RAUE5_0", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)5));
+//		registerResearchItemIUI("RAUE5_1", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedChestRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)5));
+//		registerResearchItemIUI("RAUE5_2", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)5));
+//		registerResearchItemIUI("RAUE5_3", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+////			
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)6));
+//		registerResearchItemIUI("RAUE6_0", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)6));
+//		registerResearchItemIUI("RAUE6_1", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedChestRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)6));
+//		registerResearchItemIUI("RAUE6_2", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		result = new ItemStack(ThaumicExploration.enhancedHelmetRunic2);
+//		result.setTagInfo("upgrade2", new NBTTagByte("upgrade2", (byte)6));
+//		registerResearchItemIUI("RAUE6_3", "RUNICARMORUPGRADES", result, 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		
+//		
+//		registerResearchItemIU("RAUE21_0", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)1), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedHelmetRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		registerResearchItemIU("RAUE21_1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)1), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedChestRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		registerResearchItemIU("RAUE21_2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)1), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedLegsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		registerResearchItemIU("RAUE21_3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)1), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 32), new ItemStack(ThaumicExploration.enhancedBootsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.redstone), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1), new ItemStack(ConfigItems.itemShard.itemID, 1, 1) });
+//		registerResearchItemIU("RAUE22_0", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)2), 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		registerResearchItemIU("RAUE22_1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)2), 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedChestRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		registerResearchItemIU("RAUE22_2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)2), 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		registerResearchItemIU("RAUE22_3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)2), 3, new AspectList().add(Aspect.MAGIC, 32).add(Aspect.ARMOR, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.flint), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4), new ItemStack(ConfigItems.itemShard.itemID, 1, 4) });
+//		registerResearchItemIU("RAUE23_0", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)3), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		registerResearchItemIU("RAUE23_1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)3), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedChestRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		registerResearchItemIU("RAUE23_2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)3), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		registerResearchItemIU("RAUE23_3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)3), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.AIR, 16).add(Aspect.MOTION, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.gunpowder), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5), new ItemStack(ConfigItems.itemShard.itemID, 1, 5) });
+//		registerResearchItemIU("RAUE24_0", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)4), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		registerResearchItemIU("RAUE24_1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)4), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedChestRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		registerResearchItemIU("RAUE24_2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)4), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		registerResearchItemIU("RAUE24_3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)4), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.LIFE, 16).add(Aspect.HEAL, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.appleGold), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2), new ItemStack(ConfigItems.itemShard.itemID, 1, 2) });
+//		registerResearchItemIU("RAUE25_0", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)5), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		registerResearchItemIU("RAUE25_1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)5), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedChestRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		registerResearchItemIU("RAUE25_2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)5), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		registerResearchItemIU("RAUE25_3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)5), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.STONE, 16).add(Aspect.METAL, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Item.ingotIron), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3), new ItemStack(ConfigItems.itemShard.itemID, 1, 3) });
+//		registerResearchItemIU("RAUE26_0", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)6), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedHelmetRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		registerResearchItemIU("RAUE26_1", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)6), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedChestRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		registerResearchItemIU("RAUE26_2", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)6), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedLegsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
+//		registerResearchItemIU("RAUE26_3", "RUNICARMORUPGRADES", new NBTTagByte("upgrade", (byte)6), 3, new AspectList().add(Aspect.MAGIC, 16).add(Aspect.ENERGY, 16).add(Aspect.CRYSTAL, 16), new ItemStack(ThaumicExploration.enhancedBootsRunic2), new ItemStack[] { new ItemStack(ConfigItems.itemResource, 1, 14), new ItemStack(Block.glass), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0), new ItemStack(ConfigItems.itemShard.itemID, 1, 0) });
 	}
+
 
 	private static void initArcaneRecipes() {
 		
@@ -243,6 +387,22 @@ public final class ModRecipes {
                 'P', new ItemStack(ConfigBlocks.blockWoodenDevice,1,6),
                 'S', new ItemStack(ConfigItems.itemResource,1, 12),
                 'F', "tendrilTaint");
+        
+        registerResearchItem("UNCHARGEDSOJOURNER", "CAP_SOJOURNER", new ItemStack(ThaumicExploration.sojournerCapUncharged), new AspectList().add(Aspect.AIR, 6).add(Aspect.ENTROPY, 6).add(Aspect.ORDER, 6),
+                "ABA", "A A",
+                'A', new ItemStack(Item.dyePowder,1,4),
+                'B', new ItemStack(Item.diamond));
+        
+        registerResearchItem("UNCHARGEDMECHANIST", "CAP_MECHANIST", new ItemStack(ThaumicExploration.mechanistCapUncharged), new AspectList().add(Aspect.FIRE, 6).add(Aspect.ENTROPY, 6).add(Aspect.ORDER, 6),
+                "AAA", "ABA", " C ",
+                'A', new ItemStack(Item.redstone),
+                'B', new ItemStack(Block.pistonBase),
+                'C', new ItemStack(Item.redstoneRepeater));
+        
+        registerResearchItem("ROD_AMBER_staff","ROD_AMBER_staff", new ItemStack(ThaumicExploration.amberStaffCore), new AspectList().add(Aspect.ORDER, ((WandRod)WandRod.rods.get("AMBER_staff")).getCraftCost()),
+                "  S", " G ", "G  ",
+                'S', new ItemStack(ConfigItems.itemResource, 1, 15),
+                'G', new ItemStack(ThaumicExploration.amberCore));
 	}
 
 	private static void initCraftingRecipes() {
@@ -258,12 +418,12 @@ public final class ModRecipes {
 		registerCrucibleRecipe("FLESHCURE","FLESHCURE", new ItemStack(Item.leather,2), new ItemStack(Item.rottenFlesh), new AspectList().add(Aspect.FLESH, 2).add(Aspect.CLOTH, 1));
 		for (int i = 0; i<16; i++) {
 			registerCrucibleRecipe("CHESTSEAL","CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal,1,i), new ItemStack(ThaumicExploration.blankSeal,1,i), 
-					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12));
+					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 6));
 		}
 		
 		for (int i = 0; i<16; i++) {
 			registerCrucibleRecipe("JARSEAL","JARSEAL", new ItemStack(ThaumicExploration.jarSeal,1,i), new ItemStack(ThaumicExploration.blankSeal,1,i), 
-					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.CRYSTAL, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12));
+					new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.CRYSTAL, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 6));
 		}
 		//registerCrucibleRecipe("CHESTSEAL","CHESTSEAL", new ItemStack(ThaumicExploration.chestSeal,1,1), new ItemStack(ThaumicExploration.blankSeal,1,32767), 
 				//new AspectList().add(Aspect.ELDRITCH, 6).add(Aspect.EXCHANGE,4).add(Aspect.VOID, 4).add(Aspect.TRAP, 4).add(Aspect.TRAVEL, 12));
@@ -309,11 +469,20 @@ public final class ModRecipes {
         ConfigResearch.recipes.put(research, recipe);
 	}
 	
+	private static void registerResearchItemIUI(String research, String name, Object output, int instability, AspectList aspects, ItemStack input, ItemStack... stuff) {
+        InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe(name, output, instability, aspects, input, stuff);
+        ConfigResearch.recipes.put(research, recipe);
+	}
+	
 	private static void registerResearchItemIE(String name, String research, Enchantment output, int instability, AspectList aspects, ItemStack... stuff) {
 		InfusionEnchantmentRecipe recipe = ThaumcraftApi.addInfusionEnchantmentRecipe(name, output, instability, aspects, stuff);
         ConfigResearch.recipes.put(research, recipe);
 	}
 	
+	private static void registerResearchItemIU(String research, String name,NBTTagByte nbtTagByte, int instability, AspectList aspects, ItemStack input, ItemStack... stuff) {
+		InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe(name, nbtTagByte, instability, aspects, input, stuff);	
+        ConfigResearch.recipes.put(research, recipe);
+	}
 
 	private static void registerResearchItemC(String string, List<Object> asList) {
 		ConfigResearch.recipes.put(string, asList);

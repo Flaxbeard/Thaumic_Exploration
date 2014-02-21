@@ -73,16 +73,31 @@ public final class ModResearch {
 	        research.setPages(new ResearchPage("1"), infusionPage("RUNICBOOTSMETEOR"),infusionPage("RUNICBOOTSMETEOR2"), infusionPage("RUNICBOOTSCOMET"),infusionPage("RUNICBOOTSCOMET2"));
         }
         
-        //Taintiturgy
-        ResourceLocation taint = new ResourceLocation("thaumicexploration:textures/tabs/taintResearch2.png");
-        research = new TXResearchItem("TAINTBASICS", "TAINT", new AspectList(), 0, 0, 0, taint).setAutoUnlock().setStub().setRound().registerResearchItem();
-        research.setPages(new ResearchPage("1"), new ResearchPage("2"));
-        research = new TXResearchItem("DREAMCATCHER", "TAINT", new AspectList().add(Aspect.MIND, 5).add(Aspect.TOOL, 5).add(Aspect.TAINT, 6), 2,2, 2, new ItemStack(ThaumicExploration.charmNoTaint)).setParents("TAINTBASICS").setHidden().setAspectTriggers(new Aspect[] { Aspect.TAINT }).registerResearchItem();
-        research.setPages(new ResearchPage("1"), arcaneRecipePage("DREAMCATCHER"));
+//        research = new TXResearchItem("ENHANCEDRUNICARMOR", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 12).add(Aspect.ENERGY, 7).add(Aspect.MAGIC, 7).add(Aspect.AIR, 7).add(Aspect.MIND, 7).add(Aspect.ORDER, 5), 7,4, 3, new ItemStack(ThaumicExploration.enhancedChestRunic)).setParents("RUNICARMOR","RUNICARMORUPGRADES").setParentsHidden("RUNICBOOTS","INFUSION","RUNICGOGGLES","RUNICBOOTSTRAVELLER").setConcealed().registerResearchItem();
+//        research.setPages(new ResearchPage("1"),new ResearchPage("2"),infusionPage("EnhancedRunicArmorHelm"),infusionPage("EnhancedRunicArmorChest"),infusionPage("EnhancedRunicArmorLegs"),infusionPage("EnhancedRunicArmorBoots"));
         
-        if (ThaumicExploration.taintBloom) {
-	        ResearchCategories.researchCategories.get("ALCHEMY").research.remove("ETHEREALBLOOM");
-	        research = new ResearchItem("ETHEREALBLOOM", "ALCHEMY", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.PLANT, 8).add(Aspect.HEAL, 5).add(Aspect.TAINT, 8), -2, -3, 2, new ItemStack(Config.blockCustomPlantId, 1, 4)).setPages(new ResearchPage[] { new ResearchPage("tc.research_page.ETHEREALBLOOM.1"), cruciblePage("EtherealBloom"), new ResearchPage("tc.research_page.ETHEREALBLOOM.2") }).setHidden().setAspectTriggers(new Aspect[] { Aspect.TAINT }).setConcealed().setParents(new String[] { "CRUCIBLE", "INFUSION" }).registerResearchItem();
+        if (ThaumicExploration.allowSojourner) {
+        	research = new TXResearchItem("CAP_SOJOURNER", "THAUMATURGY", new AspectList().add(Aspect.EXCHANGE, 5).add(Aspect.ENERGY, 5).add(Aspect.AURA, 8).add(Aspect.GREED, 5).add(Aspect.TOOL, 3), 6, 6, 2, new ItemStack(ThaumicExploration.sojournerCap)).setParents("CAP_thaumium").setParentsHidden("WANDPED").setConcealed().registerResearchItem();
+        	research.setPages(new ResearchPage("1"),arcaneRecipePage("UNCHARGEDSOJOURNER"),infusionPage("CAP_SOJOURNER"));
+        }
+        
+        if (ThaumicExploration.allowMechanist) {
+        	research = new TXResearchItem("CAP_MECHANIST", "THAUMATURGY", new AspectList().add(Aspect.MECHANISM, 5).add(Aspect.ENERGY, 5).add(Aspect.AURA, 8).add(Aspect.GREED, 5).add(Aspect.TOOL, 3), 8, 5, 2, new ItemStack(ThaumicExploration.mechanistCap)).setParents("CAP_thaumium").setParentsHidden("NODETAPPER2").setConcealed().registerResearchItem();
+        	research.setPages(new ResearchPage("1"),arcaneRecipePage("UNCHARGEDMECHANIST"),infusionPage("CAP_MECHANIST"));
+        }
+        
+        //Taintiturgy
+        if (ThaumicExploration.allowTainturgy) {
+	        ResourceLocation taint = new ResourceLocation("thaumicexploration:textures/tabs/taintResearch2.png");
+	        research = new TXResearchItem("TAINTBASICS", "TAINT", new AspectList(), 0, 0, 0, taint).setAutoUnlock().setStub().setRound().registerResearchItem();
+	        research.setPages(new ResearchPage("1"), new ResearchPage("2"));
+	        research = new TXResearchItem("DREAMCATCHER", "TAINT", new AspectList().add(Aspect.MIND, 5).add(Aspect.TOOL, 5).add(Aspect.TAINT, 6), 2,2, 2, new ItemStack(ThaumicExploration.charmNoTaint)).setParents("TAINTBASICS").setHidden().setAspectTriggers(new Aspect[] { Aspect.TAINT }).registerResearchItem();
+	        research.setPages(new ResearchPage("1"), arcaneRecipePage("DREAMCATCHER"));
+	        
+	        if (ThaumicExploration.taintBloom) {
+		        ResearchCategories.researchCategories.get("ALCHEMY").research.remove("ETHEREALBLOOM");
+		        research = new ResearchItem("ETHEREALBLOOM", "ALCHEMY", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.PLANT, 8).add(Aspect.HEAL, 5).add(Aspect.TAINT, 8), -2, -3, 2, new ItemStack(Config.blockCustomPlantId, 1, 4)).setPages(new ResearchPage[] { new ResearchPage("tc.research_page.ETHEREALBLOOM.1"), cruciblePage("EtherealBloom"), new ResearchPage("tc.research_page.ETHEREALBLOOM.2") }).setHidden().setAspectTriggers(new Aspect[] { Aspect.TAINT }).setConcealed().setParents(new String[] { "CRUCIBLE", "INFUSION" }).registerResearchItem();
+	        }
         }
         
         //Necromancy
@@ -100,35 +115,28 @@ public final class ModResearch {
 //        }
 //        research.setPages(test.toArray(new ResearchPage[0]));
 //        
-        //Enchantment
-//        if (Loader.isModLoaded("ThaumicTinkerer")) {
-//	        research = new TXResearchItem("ENCHBINDING", TTIntegration.enchantCategory(), new AspectList().add(Aspect.TRAP, 2).add(Aspect.ENTROPY, 1).add(Aspect.TRAVEL, 1), 6, -1, 2, new ResourceLocation("thaumicexploration:textures/tabs/binding.png")).setParents(TTIntegration.keyEnchanter()).setConcealed().registerResearchItem();
-//	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHBINDING"));
-//	        research = new TXResearchItem("ENCHNIGHTVISION", TTIntegration.enchantCategory(), new AspectList().add(Aspect.SENSES, 2).add(Aspect.DARKNESS, 1).add(Aspect.LIGHT, 1), 5, 1, 2, new ResourceLocation("thaumicexploration:textures/tabs/nightVision.png")).setParents(TTIntegration.keyEnchanter()).setConcealed().registerResearchItem();
-//	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHNIGHTVISION"));
-//	        research = new TXResearchItem("ENCHDISARM", TTIntegration.enchantCategory(), new AspectList().add(Aspect.SLIME, 2).add(Aspect.TRAP, 1).add(Aspect.WEAPON, 1), 3, 2, 2, new ResourceLocation("thaumicexploration:textures/tabs/disarm.png")).setParents(TTIntegration.keyEnchanter()).setConcealed().registerResearchItem();
-//	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHDISARM"));
-//        }
-//        else
 //        {
-        	if (Loader.isModLoaded("ForbiddenMagic")) {
-    	        research = new TXResearchItem("ENCHBINDING", "ARTIFICE", new AspectList().add(Aspect.TRAP, 6).add(Aspect.ENTROPY, 5).add(Aspect.TRAVEL, 3), -8, 9, 1, new ResourceLocation("thaumicexploration:textures/tabs/binding.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
-    	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHBINDING"));
+        	if (ThaumicExploration.allowEnchants) {
+	        	if (Loader.isModLoaded("ForbiddenMagic")) {
+	    	        research = new TXResearchItem("ENCHBINDING", "ARTIFICE", new AspectList().add(Aspect.TRAP, 6).add(Aspect.ENTROPY, 5).add(Aspect.TRAVEL, 3), -8, 9, 1, new ResourceLocation("thaumicexploration:textures/tabs/binding.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
+	    	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHBINDING"));
+	        	}
+	        	else
+	        	{
+	    	        research = new TXResearchItem("ENCHBINDING", "ARTIFICE", new AspectList().add(Aspect.TRAP, 6).add(Aspect.ENTROPY, 5).add(Aspect.TRAVEL, 3), -8, 13, 1, new ResourceLocation("thaumicexploration:textures/tabs/binding.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
+	    	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHBINDING"));
+	        	}
+		        research = new TXResearchItem("ENCHNIGHTVISION", "ARTIFICE", new AspectList().add(Aspect.SENSES, 6).add(Aspect.DARKNESS, 2).add(Aspect.LIGHT, 6), -6, 13, 1, new ResourceLocation("thaumicexploration:textures/tabs/nightVision.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
+		        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHNIGHTVISION"));
+		        research = new TXResearchItem("ENCHDISARM", "ARTIFICE", new AspectList().add(Aspect.SLIME, 6).add(Aspect.TRAP, 4).add(Aspect.WEAPON, 4), -4, 13, 1, new ResourceLocation("thaumicexploration:textures/tabs/disarm.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
+		        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHDISARM"));
         	}
-        	else
-        	{
-    	        research = new TXResearchItem("ENCHBINDING", "ARTIFICE", new AspectList().add(Aspect.TRAP, 6).add(Aspect.ENTROPY, 5).add(Aspect.TRAVEL, 3), -8, 13, 1, new ResourceLocation("thaumicexploration:textures/tabs/binding.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
-    	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHBINDING"));
-        	}
-	        research = new TXResearchItem("ENCHNIGHTVISION", "ARTIFICE", new AspectList().add(Aspect.SENSES, 6).add(Aspect.DARKNESS, 2).add(Aspect.LIGHT, 6), -6, 13, 1, new ResourceLocation("thaumicexploration:textures/tabs/nightVision.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
-	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHNIGHTVISION"));
-	        research = new TXResearchItem("ENCHDISARM", "ARTIFICE", new AspectList().add(Aspect.SLIME, 6).add(Aspect.TRAP, 4).add(Aspect.WEAPON, 4), -4, 13, 1, new ResourceLocation("thaumicexploration:textures/tabs/disarm.png")).setParents("INFUSIONENCHANTMENT").setConcealed().setSecondary().registerResearchItem();
-	        research.setPages(new ResearchPage("1"), infusionEnchantPage("ENCHDISARM"));
-//        }
         
         //Wandcraft
         research = new TXResearchItem("ROD_AMBER", "THAUMATURGY", new AspectList().add(Aspect.TOOL, 5).add(Aspect.AURA, 8).add(Aspect.TRAP, 5).add(Aspect.MAGIC, 8), -11, 2, 2, new ItemStack(ThaumicExploration.amberCore)).setParents("ROD_obsidian","ROD_reed","ROD_blaze","ROD_ice","ROD_quartz","ROD_bone").setConcealed().registerResearchItem();
         research.setPages(new ResearchPage("1"), infusionPage("ROD_AMBER"));
+        research = new TXResearchItem("ROD_AMBER_staff", "THAUMATURGY", new AspectList().add(Aspect.TOOL, 5).add(Aspect.AURA, 8).add(Aspect.TRAP, 5).add(Aspect.MAGIC, 8), -12, 2, 2, new ItemStack(ThaumicExploration.amberStaffCore)).setParents("ROD_AMBER").setParentsHidden("ROD_greatwood_staff").setConcealed().setSecondary().registerResearchItem();
+        research.setPages(new ResearchPage("1"), arcaneRecipePage("ROD_AMBER_staff"));
         if (ThaumicExploration.breadWand) {
             research = new TXResearchItem("ROD_BREAD", "THAUMATURGY", new AspectList().add(Aspect.MAGIC, 5).add(Aspect.SEED, 3).add(Aspect.HUNGER, 4).add(Aspect.HARVEST, 3), -11, 0, 1, new ItemStack(ThaumicExploration.breadCore)).setParents("ROD_AMBER").setConcealed().registerResearchItem().setSecondary();
             research.setPages(new ResearchPage("1"), infusionPage("ROD_BREAD"));

@@ -20,6 +20,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.entities.golems.EntityGolemBase;
 import thaumcraft.common.entities.monster.EntityThaumicSlime;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.event.DamageSourceTX;
@@ -320,7 +321,7 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 					this.distance = this.range + 1.0F;
 					List<EntityLivingBase> mobs = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(this.xCoord-this.range, this.yCoord-this.yRange, this.zCoord-this.range, this.xCoord+this.range, this.yCoord+this.yRange, this.zCoord+this.range));
 					for (EntityLivingBase mob : mobs) {
-						if (!(mob instanceof EntityPlayer) && !(mob instanceof EntityThaumicSlime)) {
+						if (!(mob instanceof EntityPlayer) && !(mob instanceof EntityThaumicSlime)  && !(mob instanceof EntityGolemBase)) {
 							float myDistance=(float) Math.sqrt(Math.pow(this.xCoord-mob.posX,2) + Math.pow(this.yCoord-mob.posY,2) + Math.pow(this.zCoord-mob.posZ,2));
 							if (myDistance < distance) {
 								this.drainTicks = (int) (mob.getMaxHealth()*10);

@@ -20,19 +20,31 @@ public class TileEntityBoundJar extends TileJarFillable {
     
     public int getMinimumSuction()
     {
-      return 80;
+      return 40;
     }
     
-    public AspectList getSuction(ForgeDirection loc)
+    public Aspect getSuctionType(ForgeDirection loc)
+    {
+      return this.aspect;
+    }
+    
+    public int getSuctionAmount(ForgeDirection loc)
     {
       if (this.amount < this.maxAmount)
       {
-        if ((this.amount == 0)) {
-          return ThaumcraftApiHelper.getAllAspects(80);
-        }
-        return new AspectList().merge(this.aspect, 80);
+        return 40;
       }
-      return new AspectList();
+      return 0;
+    }
+    
+    public Aspect getEssentiaType(ForgeDirection loc)
+    {
+      return this.aspect;
+    }
+    
+    public int getEssentiaAmount(ForgeDirection loc)
+    {
+      return this.amount;
     }
     
     @Override

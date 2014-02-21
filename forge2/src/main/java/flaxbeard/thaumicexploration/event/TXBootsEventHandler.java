@@ -1,26 +1,30 @@
 package flaxbeard.thaumicexploration.event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.nodes.INode;
 import thaumcraft.common.Thaumcraft;
-import thaumcraft.common.config.Config;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.PotionFluxTaint;
-import thaumcraft.common.lib.Utils;
-import thaumcraft.common.lib.research.PlayerKnowledge;
+import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
+import thaumcraft.common.tiles.TileNode;
 import cpw.mods.fml.common.Loader;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.integration.TTIntegration;
@@ -30,20 +34,21 @@ public class TXBootsEventHandler
   
   public static final PlayerCapabilities genericPlayerCapabilities = new PlayerCapabilities();
   
+  
   @ForgeSubscribe
   public void livingTick(LivingEvent.LivingUpdateEvent event)
   {
 	if (event.entity instanceof EntityPlayer) {
-		PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
-		if (!rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
-			System.out.println(event.entity.worldObj.isRemote+" Discovering fake aspect");
-			//PacketHandler.sendAspectDiscoveryPacket(ThaumicExploration.fakeAspectNecro.getTag(), (EntityPlayerMP)event.entity);
-			
-			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);
-			if (rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
-				System.out.println(event.entity.worldObj.isRemote+" has discovered fake aspect");
-			}
-		}
+//		PlayerKnowledge rp = Thaumcraft.proxy.getPlayerKnowledge();
+//		if (!rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
+//			System.out.println(event.entity.worldObj.isRemote+" Discovering fake aspect");
+//			//PacketHandler.sendAspectDiscoveryPacket(ThaumicExploration.fakeAspectNecro.getTag(), (EntityPlayerMP)event.entity);
+//			
+//			rp.addDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro);
+//			if (rp.hasDiscoveredAspect(((EntityPlayer)event.entity).username, ThaumicExploration.fakeAspectNecro)) {
+//				System.out.println(event.entity.worldObj.isRemote+" has discovered fake aspect");
+//			}
+//		}
 	}
     if ((event.entity instanceof EntityPlayer))
     {
@@ -55,6 +60,102 @@ public class TXBootsEventHandler
 	        if (player.getCurrentItemOrArmor(4).itemID == ThaumicExploration.maskEvil.itemID && player.username.equalsIgnoreCase("Succubism")) {
 	        	player.worldObj.spawnParticle("heart", (double)(player.posX + Math.random()-0.5F), (double)(player.boundingBox.maxY + Math.random()/2), (double)(player.posZ + Math.random()-0.5F), 0.0D, 0.0D, 0.0D);        	
 	        }
+        }
+        
+        if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemWandCasting) {
+        	ItemWandCasting wand = (ItemWandCasting) player.getHeldItem().getItem();
+        	if (wand.getObjectInUse(player.getHeldItem(), player.worldObj) != null && wand.getCap(player.getHeldItem()) == ThaumicExploration.WAND_CAP_MECHANIST) {
+        		if (wand.getObjectInUse(player.getHeldItem(), player.worldObj) instanceof INode) {
+            		if (!player.getHeldItem().hasTagCompound()) {
+            			player.getHeldItem().setTagCompound(new NBTTagCompound());
+            		}
+            		if (!player.getHeldItem().stackTagCompound.hasKey("nodeTicks")) {
+            			player.getHeldItem().stackTagCompound.setInteger("nodeTicks", 0);
+            		}
+            		int nodeTicks = player.getHeldItem().stackTagCompound.getInteger("nodeTicks");
+            		nodeTicks++;
+            		
+        			TileNode node = (TileNode) wand.getObjectInUse(player.getHeldItem(), player.worldObj);
+					node.onUsingWandTick(player.getHeldItem(), player, nodeTicks);
+					if (nodeTicks%3==0) {
+						if (player.worldObj.rand.nextBoolean()) {
+							player.worldObj.playSound(node.xCoord, node.yCoord, node.zCoord, "tile.piston.in", 0.1F+(float)(0.5F*Math.random()), 0.75F, false);
+						}
+						else
+						{
+							player.worldObj.playSound(node.xCoord, node.yCoord, node.zCoord, "tile.piston.out", 0.1F+(float)(0.5F*Math.random()), 0.75F, false);
+						}
+					}
+        			player.getHeldItem().stackTagCompound.setInteger("nodeTicks", nodeTicks);
+        		}
+        	}
+        	if (wand.getCap(player.getHeldItem()) == ThaumicExploration.WAND_CAP_SOJOURNER && !player.worldObj.isRemote) {
+        		if (!player.getHeldItem().hasTagCompound()) {
+        			player.getHeldItem().setTagCompound(new NBTTagCompound());
+        		}
+        		if (!player.getHeldItem().stackTagCompound.hasKey("nodeTicks")) {
+        			player.getHeldItem().stackTagCompound.setInteger("nodeTicks", 0);
+        			player.getHeldItem().stackTagCompound.setInteger("drainX", 0);
+        			player.getHeldItem().stackTagCompound.setInteger("drainY", 0);
+        			player.getHeldItem().stackTagCompound.setInteger("drainZ", 0);
+        		}
+        		int nodeTicks = player.getHeldItem().stackTagCompound.getInteger("nodeTicks");
+        		nodeTicks++;
+        		if (nodeTicks >= 20) {
+        			AspectList emptyAspects = new AspectList();
+        			for (Aspect aspect : Aspect.getPrimalAspects()) {
+        				if (wand.getVis(player.getHeldItem(), aspect) < wand.getMaxVis(player.getHeldItem())) {
+        					emptyAspects.add(aspect, 1);
+        				}
+        			}
+        			ArrayList<ChunkCoordinates> nodes = new ArrayList<ChunkCoordinates>();
+        		    for (int xx = -8; xx <= 8; xx++) {
+        		      for (int yy = -8; yy <= 8; yy++) {
+        		        for (int zz = -8; zz <= 8; zz++)
+        		        {
+        		          TileEntity te = player.worldObj.getBlockTileEntity(((int)player.posX) + xx, ((int)player.posY) + yy, ((int)player.posZ) + zz);
+        		          if ((te instanceof INode) && emptyAspects.size() > 0) {
+        		        	boolean canAdd = false;
+        		        	for (Aspect aspect : emptyAspects.getAspects()) {
+        		        		if (((INode) te).getAspects().getAmount(aspect) > 1) {
+        		        			canAdd = true;
+        		        		}
+        		        	}
+        		        	if (canAdd)
+        		        		nodes.add(new ChunkCoordinates(((int)player.posX) + xx, ((int)player.posY) + yy,((int)player.posZ) + zz));
+        		          }
+        		        }
+        		      }
+        		    }
+        		    ChunkCoordinates randNode;
+        		    if (nodes.size() != 0) {
+	        		    if (!nodes.contains(new ChunkCoordinates(player.getHeldItem().stackTagCompound.getInteger("drainX"),player.getHeldItem().stackTagCompound.getInteger("drainY"),player.getHeldItem().stackTagCompound.getInteger("drainZ")))) {
+	        		    	randNode = nodes.get(player.worldObj.rand.nextInt(nodes.size()));
+	            			player.getHeldItem().stackTagCompound.setInteger("drainX", randNode.posX);
+	            			player.getHeldItem().stackTagCompound.setInteger("drainY", randNode.posY);
+	            			player.getHeldItem().stackTagCompound.setInteger("drainZ", randNode.posZ);
+	        		    }
+	        		    else
+	        		    {
+	        		    	randNode = new ChunkCoordinates(new ChunkCoordinates(player.getHeldItem().stackTagCompound.getInteger("drainX"),player.getHeldItem().stackTagCompound.getInteger("drainY"),player.getHeldItem().stackTagCompound.getInteger("drainZ")));
+	        		    }
+	        		    INode node = (INode) player.worldObj.getBlockTileEntity(randNode.posX, randNode.posY, randNode.posZ);
+	        		    AspectList possibleAspects = new AspectList();
+    		        	for (Aspect aspect : emptyAspects.getAspects()) {
+    		        		if (node.getAspects().getAmount(aspect) > 1) {
+    		        			possibleAspects.add(aspect, 1);
+    		        		}
+    		        	}
+    		        	Aspect takeAspect = possibleAspects.getAspects()[player.worldObj.rand.nextInt(possibleAspects.getAspects().length)];
+	        		    node.takeFromContainer(takeAspect, 1);
+	        		    player.worldObj.markBlockForUpdate(randNode.posX, randNode.posY, randNode.posZ);
+	        		    wand.addVis(player.getHeldItem(), takeAspect, 1, true);
+        		    }
+
+        		    nodeTicks = 0;
+        		}
+        		player.getHeldItem().stackTagCompound.setInteger("nodeTicks", nodeTicks);
+        	}
         }
         
         boolean isTainted = false;

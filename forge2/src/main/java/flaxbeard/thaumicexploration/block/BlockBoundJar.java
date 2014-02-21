@@ -1,10 +1,10 @@
 package flaxbeard.thaumicexploration.block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,10 +17,11 @@ import thaumcraft.common.blocks.ItemJarFilled;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.ItemEssence;
+import thaumcraft.common.tiles.TileJarFillable;
+import thaumcraft.common.tiles.TileJarFillableVoid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
-import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 
 
@@ -39,7 +40,6 @@ public class BlockBoundJar extends BlockJar {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	@Override
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(par1, 1, 0));
@@ -51,6 +51,7 @@ public class BlockBoundJar extends BlockJar {
         return ConfigBlocks.blockJar.blockID;
     }
     
+    
     public int quantityDropped(Random par1Random)
     {
         return 0;
@@ -61,25 +62,31 @@ public class BlockBoundJar extends BlockJar {
     {
 		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
 
-		if ((te != null) && ((te instanceof TileEntityBoundJar)))
-		{
-			((TileEntityBoundJar)te).emptyJar();
-			
-	    	ItemStack drop = new ItemStack(ConfigItems.itemJarFilled);
-	    	if (((TileEntityBoundJar)te).amount > 0) {
-	        	((ItemJarFilled)drop.getItem()).setAspects(drop, new AspectList().add(((TileEntityBoundJar)te).aspect, ((TileEntityBoundJar)te).amount));
-        	}
-	    	else
-	    	{
-	    		drop = new ItemStack(ConfigBlocks.blockJar);
-	    	}
-  		dropBlockAsItem_do(par1World, par2, par3, par4, drop);
-  		drop = new ItemStack(ThaumicExploration.blankSeal, 1, 15-((TileEntityBoundJar)te).getSealColor());
+  		ItemStack drop = new ItemStack(ThaumicExploration.blankSeal, 1, 15-((TileEntityBoundJar)te).getSealColor());
   		dropBlockAsItem_do(par1World, par2, par3, par4, drop);
 	}
     
-	//super.breakBlock(par1World, par2, par3, par4, par5, par6);
+    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+    {
+      ArrayList<ItemStack> drops = new ArrayList();
+      int md = world.getBlockMetadata(x, y, z);
+        TileEntity te = world.getBlockTileEntity(x, y, z);
+        if ((te != null) && ((te instanceof TileJarFillable)))
+        {
+          ItemStack drop = new ItemStack(ConfigItems.itemJarFilled);
+          if ((((TileJarFillable)te).amount <= 0) && (((TileJarFillable)te).aspectFilter == null)) {
+            drop = new ItemStack(ConfigBlocks.blockJar);
+          }
+          if (((TileJarFillable)te).amount > 0) {
+            ((ItemJarFilled)drop.getItem()).setAspects(drop, new AspectList().add(((TileJarFillable)te).aspect, ((TileJarFillable)te).amount));
+          }
+         
+          drops.add(drop);
+        }
+        return drops;
+      
     }
+    
     
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
