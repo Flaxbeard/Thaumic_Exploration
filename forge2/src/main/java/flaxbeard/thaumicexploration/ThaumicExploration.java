@@ -105,7 +105,7 @@ import flaxbeard.thaumicexploration.wand.WandRodNecromancerOnUpdate;
 import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
 
 
-@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.4.0", dependencies="required-after:Thaumcraft;after:ThaumicTinkerer")
+@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.5.1", dependencies="required-after:Thaumcraft;after:ThaumicTinkerer")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, channels={"tExploration"}, packetHandler = TXPacketHandler.class)
 public class ThaumicExploration {
 	
