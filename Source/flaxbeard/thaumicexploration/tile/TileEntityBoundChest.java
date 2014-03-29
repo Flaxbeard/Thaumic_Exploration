@@ -3,20 +3,19 @@ package flaxbeard.thaumicexploration.tile;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.Constants;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
@@ -92,7 +91,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
             {
                 itemstack = this.chestContents[par1];
                 this.chestContents[par1] = null;
-                this.onInventoryChanged();
+                this.markDirty();
                 return itemstack;
             }
             else
@@ -104,7 +103,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
                     this.chestContents[par1] = null;
                 }
 
-                this.onInventoryChanged();
+                this.markDirty();
                 return itemstack;
             }
         }
@@ -144,32 +143,30 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
 
-        this.onInventoryChanged();
+        this.markDirty();
     }
     
     @Override
-    public void onInventoryChanged() {
+    public void markDirty() {
     	if (myChest != null) {
     		myChest.updateChestContents(this.chestContents);
     	}
     	this.accessTicks = 80;
     	this.updateAccessTicks();
-    	super.onInventoryChanged();
+    	super.markDirty();
     }
 
     /**
      * Returns the name of the inventory.
      */
-    public String getInvName()
+    @Override
+    public String getInventoryName()
     {
-        return this.isInvNameLocalized() ? this.customName : "container.chest";
+        return this.hasCustomInventoryName() ? this.customName : "container.chest";
     }
 
-    /**
-     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
-     * language. Otherwise it will be used directly.
-     */
-    public boolean isInvNameLocalized()
+    @Override
+    public boolean hasCustomInventoryName()
     {
         return this.customName != null && this.customName.length() > 0;
     }
@@ -188,7 +185,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Items");
+        NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Items",Constants.NBT.TAG_COMPOUND);
         this.chestContents = new ItemStack[this.getSizeInventory()];
 
         if (par1NBTTagCompound.hasKey("chestID"))
@@ -208,7 +205,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
 
         for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
-            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 255;
 
             if (j >= 0 && j < this.chestContents.length)
@@ -239,7 +236,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
 
         par1NBTTagCompound.setTag("Items", nbttaglist);
 
-        if (this.isInvNameLocalized())
+        if (this.hasCustomInventoryName())
         {
             par1NBTTagCompound.setString("CustomName", this.customName);
         }
@@ -261,7 +258,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
      */
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
     /**
@@ -281,11 +278,6 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
      */
    
 
-    private boolean func_94044_a(int par1, int par2, int par3)
-    {
-        Block block = Block.blocksList[this.worldObj.getBlockId(par1, par2, par3)];
-        return false;
-    }
 
     /**
      * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
@@ -392,7 +384,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
         access.setInteger("accessTicks", this.accessTicks);
         access.setInteger("color", this.getSealColor());
         
-        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, access);
     }
     
     public void setColor(int color) {
@@ -405,13 +397,13 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     }
 
     @Override
-    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
     {
-    	NBTTagCompound access = pkt.data;
+    	NBTTagCompound access = pkt.func_148857_g();
     	this.accessTicks = access.getInteger("accessTicks");
     	this.setColor(access.getInteger("color"));
     	this.clientColor = access.getInteger("color");
-        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     private void updateAccessTicks() {
@@ -462,32 +454,7 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
     
 
 
-    public void openChest()
-    {
-        if (this.numUsingPlayers < 0)
-        {
-            this.numUsingPlayers = 0;
-        }
-        
-        
 
-        ++this.numUsingPlayers;
-        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 1, this.numUsingPlayers);
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType().blockID);
-    }
-
-    public void closeChest()
-    {
-        if (this.getBlockType() != null && this.getBlockType() instanceof BlockBoundChest)
-        {
-        	
-            --this.numUsingPlayers;
-            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, 1, this.numUsingPlayers);
-            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType().blockID);
-        }
-    }
 
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
@@ -544,4 +511,37 @@ public class TileEntityBoundChest extends TileEntity implements IInventory
 		// TODO Auto-generated method stub
 		this.accessTicks = tick;
 	}
+
+
+
+	@Override
+    public void openInventory()
+    {
+        if (this.numUsingPlayers < 0)
+        {
+            this.numUsingPlayers = 0;
+        }
+        
+        
+
+        ++this.numUsingPlayers;
+        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
+    }
+
+	@Override
+    public void closeInventory()
+    {
+        if (this.getBlockType() != null && this.getBlockType() instanceof BlockBoundChest)
+        {
+        	
+            --this.numUsingPlayers;
+            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
+        }
+    }
+
+
 }

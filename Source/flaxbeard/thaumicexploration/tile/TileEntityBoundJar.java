@@ -1,13 +1,11 @@
 package flaxbeard.thaumicexploration.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraftforge.common.ForgeDirection;
-import thaumcraft.api.ThaumcraftApiHelper;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.tiles.TileJarFillable;
 import flaxbeard.thaumicexploration.data.BoundJarWorldData;
 
@@ -58,7 +56,7 @@ public class TileEntityBoundJar extends TileJarFillable {
         }
         access.setInteger("color", this.getSealColor());
         
-        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, access);
     }
     
 	public int getAccessTicks() {
@@ -76,9 +74,9 @@ public class TileEntityBoundJar extends TileJarFillable {
     }
 
     @Override
-    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
     {
-    	NBTTagCompound access = pkt.data;
+    	NBTTagCompound access = pkt.func_148857_g();
     	this.accessTicks = access.getInteger("accessTicks");
     	this.amount = access.getInteger("amount");
     	if (access.getString(("aspect")) != null) {
@@ -87,7 +85,7 @@ public class TileEntityBoundJar extends TileJarFillable {
     	this.setColor(access.getInteger("color"));
     	this.clientColor = access.getInteger("color");
     	
-        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     public void readCustomNBT(NBTTagCompound nbttagcompound)

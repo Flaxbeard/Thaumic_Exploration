@@ -2,10 +2,9 @@ package flaxbeard.thaumicexploration.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -22,9 +21,9 @@ import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class ItemEnhancedRunicArmor extends ItemRunicArmor {
 
-	public ItemEnhancedRunicArmor(int lvl,int i, EnumArmorMaterial enumarmormaterial,
+	public ItemEnhancedRunicArmor(int lvl,int i, ItemArmor.ArmorMaterial enumarmormaterial,
 			int j, int k) {
-		super(i, enumarmormaterial, j, k);
+		super(enumarmormaterial, j, k);
 		if (lvl == 1) {
 			this.setCreativeTab(ThaumicExploration.tab);
 		}
@@ -131,7 +130,7 @@ public class ItemEnhancedRunicArmor extends ItemRunicArmor {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister ir)
+	public void registerIcons(IIconRegister ir)
 	{
 		this.iconHelm = ir.registerIcon("thaumicexploration:enhancedRunicHelmet");
 	    this.iconChest = ir.registerIcon("thaumicexploration:enhancedRunicChest");

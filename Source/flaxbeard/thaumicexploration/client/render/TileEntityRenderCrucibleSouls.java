@@ -2,12 +2,14 @@ package flaxbeard.thaumicexploration.client.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
 import thaumcraft.client.lib.UtilsFX;
+import thaumcraft.common.config.ConfigBlocks;
 import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
 
 public class TileEntityRenderCrucibleSouls
@@ -22,7 +24,7 @@ public class TileEntityRenderCrucibleSouls
   
   public void renderFluid(TileEntityCrucibleSouls cr, double x, double y, double z)
   {
-    Icon icon = Block.waterStill.getIcon(0, 0);
+    IIcon icon = Blocks.water.getIcon(0, 0);
     
     GL11.glPushMatrix();
     GL11.glTranslated(x, y + cr.getFluidHeight(), z + 1.0D);
@@ -33,7 +35,7 @@ public class TileEntityRenderCrucibleSouls
       if (recolor > 0.0F) {
         recolor = 0.5F + recolor / 2.0F;
       }
-      UtilsFX.renderQuadFromIcon(true, icon, 1.0F, 1.0F - recolor / 3.0F, 1.0F - recolor, 1.0F - recolor / 2.0F, Block.blocksList[thaumcraft.common.config.Config.blockMetalDeviceId].getMixedBrightnessForBlock(cr.worldObj, cr.xCoord, cr.yCoord, cr.zCoord), 771, 1.0F);
+      UtilsFX.renderQuadFromIcon(true, icon, 1.0F, 1.0F - recolor / 3.0F, 1.0F - recolor, 1.0F - recolor / 2.0F, ConfigBlocks.blockMetalDevice.getMixedBrightnessForBlock(cr.getWorldObj(), cr.xCoord, cr.yCoord, cr.zCoord), 771, 1.0F);
     }
     GL11.glPopMatrix();
   }

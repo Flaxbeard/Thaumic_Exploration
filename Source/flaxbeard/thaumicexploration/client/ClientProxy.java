@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -19,25 +20,20 @@ import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.client.render.BlockCrucibleSoulsRenderer;
 import flaxbeard.thaumicexploration.client.render.BlockEverfullUrnRenderer;
 import flaxbeard.thaumicexploration.client.render.BlockFloatyCandleRenderer;
-import flaxbeard.thaumicexploration.client.render.BlockNecroPedestalRenderer;
 import flaxbeard.thaumicexploration.client.render.BlockReplicatorRenderer;
-import flaxbeard.thaumicexploration.client.render.BlockSkullCandleRenderer;
 import flaxbeard.thaumicexploration.client.render.ItemRenderThinkTank;
-import flaxbeard.thaumicexploration.client.render.RenderCandleFlame;
 import flaxbeard.thaumicexploration.client.render.TileEntityBoundChestRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityBoundJarRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityFloatyCandleRender;
-import flaxbeard.thaumicexploration.client.render.TileEntityNecroPedestalRenderer;
 import flaxbeard.thaumicexploration.client.render.TileEntityRenderCrucibleSouls;
 import flaxbeard.thaumicexploration.client.render.TileEntityReplicatorRender;
 import flaxbeard.thaumicexploration.client.render.TileEntityThinkTankRender;
 import flaxbeard.thaumicexploration.common.CommonProxy;
-import flaxbeard.thaumicexploration.entity.EntityCandleFlame;
+import flaxbeard.thaumicexploration.packet.TXClientPacketHandler;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
 import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
 import flaxbeard.thaumicexploration.tile.TileEntityFloatyCandle;
-import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 import flaxbeard.thaumicexploration.tile.TileEntityReplicator;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 public class ClientProxy extends CommonProxy
@@ -46,24 +42,25 @@ public class ClientProxy extends CommonProxy
     @Override
     public void registerRenderers()
     {
-    	  RenderingRegistry.registerEntityRenderingHandler(EntityCandleFlame.class, new RenderCandleFlame(ThaumicExploration.theCandle));
+    	 ThaumicExploration.channel.register(new TXClientPacketHandler());
+    	 //RenderingRegistry.registerEntityRenderingHandler(EntityCandleFlame.class, new RenderCandleFlame(ThaumicExploration.theCandle));
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoundJar.class, new TileEntityBoundJarRender());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoundChest.class, new TileEntityBoundChestRender());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrucibleSouls.class, new TileEntityRenderCrucibleSouls());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityReplicator.class, new TileEntityReplicatorRender());
-    	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNecroPedestal.class, new TileEntityNecroPedestalRenderer());
+    	 //ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNecroPedestal.class, new TileEntityNecroPedestalRenderer());
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFloatyCandle.class, new TileEntityFloatyCandleRender());
     	 
     	 TileEntitySpecialRenderer renderThinkTank = new TileEntityThinkTankRender();
     	 ClientRegistry.bindTileEntitySpecialRenderer(TileEntityThinkTank.class, renderThinkTank);
     	
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.floatCandleRenderID, new BlockFloatyCandleRenderer());
-    	 RenderingRegistry.registerBlockHandler(ThaumicExploration.necroPedestalRenderID, new BlockNecroPedestalRenderer());
-    	 RenderingRegistry.registerBlockHandler(ThaumicExploration.candleSkullRenderID, new BlockSkullCandleRenderer());
+    	// RenderingRegistry.registerBlockHandler(ThaumicExploration.necroPedestalRenderID, new BlockNecroPedestalRenderer());
+    	 //RenderingRegistry.registerBlockHandler(ThaumicExploration.candleSkullRenderID, new BlockSkullCandleRenderer());
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.everfullUrnRenderID, new BlockEverfullUrnRenderer());
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.replicatorRenderID, new BlockReplicatorRenderer());
     	 RenderingRegistry.registerBlockHandler(ThaumicExploration.crucibleSoulsRenderID, new BlockCrucibleSoulsRenderer());
-    	 MinecraftForgeClient.registerItemRenderer(ThaumicExploration.thinkTankJar.blockID, new ItemRenderThinkTank(renderThinkTank, new TileEntityThinkTank()));
+    	 MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ThaumicExploration.thinkTankJar), new ItemRenderThinkTank(renderThinkTank, new TileEntityThinkTank()));
     	 //MinecraftForgeClient.registerItemRenderer(ThaumicExploration.everfullUrn.blockID, new ItemRenderEverfullUrn(new TileEntityEverfullUrnRender(), new TileEntityEverfullUrn()));
     }
     @Override
@@ -116,7 +113,7 @@ public class ClientProxy extends CommonProxy
     
     @Override
     public void spawnHarvestParticle(World worldObj, double xCoord, double yCoord, double zCoord, double x2, double y2, double z2) {
-	    FXBoreParticles fb = new FXBoreParticles(worldObj, xCoord, yCoord, zCoord, x2, y2, z2, Item.coal, worldObj.rand.nextInt(6), 3);
+	    FXBoreParticles fb = new FXBoreParticles(worldObj, xCoord, yCoord, zCoord, x2, y2, z2, Items.coal, worldObj.rand.nextInt(6), 3);
 	    
 		
 	    fb.setAlphaF(0.3F);

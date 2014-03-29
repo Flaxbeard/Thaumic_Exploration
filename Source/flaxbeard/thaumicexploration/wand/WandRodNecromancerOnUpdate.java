@@ -29,7 +29,7 @@ public class WandRodNecromancerOnUpdate implements IWandRodOnUpdate {
 			  for (Aspect aspect : Aspect.getPrimalAspects()) {
 				  tag.setInteger(aspect.getName(), wand.getVis(itemstack, aspect));
 			  }
-			  itemstack.stackTagCompound.setCompoundTag("lastAspects", tag);
+			  itemstack.stackTagCompound.setTag("lastAspects", tag);
 		  }
 		  ItemWandCasting thisWand = (ItemWandCasting)itemstack.getItem();
 		  NBTTagCompound lastAspectTag = itemstack.stackTagCompound.getCompoundTag("lastAspects");
@@ -57,7 +57,7 @@ public class WandRodNecromancerOnUpdate implements IWandRodOnUpdate {
 		  for (Aspect aspect : Aspect.getPrimalAspects()) {
 			  tag.setInteger(aspect.getName(), lastAspects.getAmount(aspect));
 		  }
-		  itemstack.stackTagCompound.setCompoundTag("lastAspects", tag);
+		  itemstack.stackTagCompound.setTag("lastAspects", tag);
 		  
           for(EntityAspectOrb orb : orbs) {
         	  if (!orb.isDead) {

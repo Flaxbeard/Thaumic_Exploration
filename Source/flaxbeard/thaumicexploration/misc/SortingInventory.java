@@ -11,13 +11,13 @@ public class SortingInventory implements IInventory {
 
 	@Override
 	public int getSizeInventory() {
-		// TODO Auto-generated method stub
+		
 		return inventory.length;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
+		
 		return inventory[i];
 	}
 
@@ -53,7 +53,7 @@ public class SortingInventory implements IInventory {
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
+
 		return inventory[i];
 	}
 
@@ -63,52 +63,52 @@ public class SortingInventory implements IInventory {
 		
 	}
 
+
 	@Override
-	public String getInvName() {
+	public int getInventoryStackLimit() {
+		
+		return 64;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		
+		return false;
+	}
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		
+		return true;
+	}
+
+	@Override
+	public String getInventoryName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 64;
-	}
-
-	@Override
-	public void onInventoryChanged() {
+	public void markDirty() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void openChest() {
+	public void openInventory() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void closeChest() {
+	public void closeInventory() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return true;
 	}
 	
 }

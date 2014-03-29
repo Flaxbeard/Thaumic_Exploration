@@ -3,16 +3,17 @@ package flaxbeard.thaumicexploration.tile;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApi.EntityTags;
 import thaumcraft.api.aspects.Aspect;
@@ -51,9 +52,9 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 			Object next = iterator.next();
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("Amount", this.myAspects.getAmount(Aspect.getAspect((String) next)));
-			aspects.setCompoundTag((String) next, tag);
+			aspects.setTag((String) next, tag);
 		}
-		par1NBTTagCompound.setCompoundTag("Aspects", aspects);
+		par1NBTTagCompound.setTag("Aspects", aspects);
     }
     
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -88,7 +89,7 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
     	access.setFloat("myFlux",this.myFlux);
         if (this.drainTicks > 0) {
 
-        	access.setInteger("targetID",this.targetMob.entityId);
+        	access.setInteger("targetID",this.targetMob.getEntityId());
         }
     	NBTTagCompound aspects = new NBTTagCompound();
     	
@@ -97,20 +98,20 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 			Object next = iterator.next();
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("Amount", this.myAspects.getAmount(Aspect.getAspect((String) next)));
-			aspects.setCompoundTag((String) next, tag);
+			aspects.setTag((String) next, tag);
 		}
-    	access.setCompoundTag("Aspects", aspects);
+    	access.setTag("Aspects", aspects);
     	
         
-        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, access);
     }
     
 
     @Override
-    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
     {
     	super.onDataPacket(net, pkt);
-    	NBTTagCompound access = pkt.data;
+    	NBTTagCompound access = pkt.func_148857_g();
     	this.drainTicks = access.getInteger("drainTicks");
     	this.myFlux = access.getFloat("myFlux");
     	if (this.drainTicks >0) {
@@ -134,7 +135,7 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 		}
 		this.myAspects = readAspects;
     	
-    	worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
     
     public float getFluidHeight()
@@ -157,22 +158,22 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 		if (this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord))
 		{
 			if (this.worldObj.rand.nextBoolean()) {
-				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGas.blockID, 0, 3);
+				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGas, 0, 3);
 			} else {
-				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGoo.blockID, 0, 3);
+				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGoo, 0, 3);
 			}
 		}
 		else
 		{
-			int bi = this.worldObj.getBlockId(this.xCoord, this.yCoord + 1, this.zCoord);
+			Block bi = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
 			int md = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord + 1, this.zCoord);
-			if ((bi == ConfigBlocks.blockFluxGoo.blockID) && (md < 7))
+			if ((bi == ConfigBlocks.blockFluxGoo) && (md < 7))
 			{
-				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGoo.blockID, md + 1, 3);
+				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGoo, md + 1, 3);
 			}
-			else if ((bi == ConfigBlocks.blockFluxGas.blockID) && (md < 7))
+			else if ((bi == ConfigBlocks.blockFluxGas) && (md < 7))
 			{
-				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGas.blockID, md + 1, 3);
+				this.worldObj.setBlock(this.xCoord, this.yCoord + 1, this.zCoord, ConfigBlocks.blockFluxGas, md + 1, 3);
 			}
 			else
 			{
@@ -181,9 +182,9 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 				int z = -1 + this.worldObj.rand.nextInt(3);
 				if (this.worldObj.isAirBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z)) {
 					if (this.worldObj.rand.nextBoolean()) {
-						this.worldObj.setBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z, ConfigBlocks.blockFluxGas.blockID, 0, 3);
+						this.worldObj.setBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z, ConfigBlocks.blockFluxGas, 0, 3);
 					} else {
-						this.worldObj.setBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z, ConfigBlocks.blockFluxGoo.blockID, 0, 3);
+						this.worldObj.setBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z, ConfigBlocks.blockFluxGoo, 0, 3);
 					}
 				}
 			}
@@ -204,7 +205,7 @@ public class TileEntityCrucibleSouls extends TileEntity implements IAspectContai
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (this.worldObj.isAirBlock(this.xCoord, this.yCoord+1, this.zCoord) || this.worldObj.getBlockId(this.xCoord, this.yCoord+1, this.zCoord) == ConfigBlocks.blockFluxGas.blockID || this.worldObj.getBlockId(this.xCoord, this.yCoord+1, this.zCoord) == ConfigBlocks.blockFluxGoo.blockID) {
+		if (this.worldObj.isAirBlock(this.xCoord, this.yCoord+1, this.zCoord) || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord) == ConfigBlocks.blockFluxGas || this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord) == ConfigBlocks.blockFluxGoo) {
 			if (this.myFlux > 1.0F) {
 				this.spill();
 				this.myFlux = this.myFlux - 1.0F;

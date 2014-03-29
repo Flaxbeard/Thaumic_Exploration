@@ -1,10 +1,12 @@
 package flaxbeard.thaumicexploration.data;
 
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraftforge.common.util.Constants;
 
 
 public class BoundChestWorldData extends WorldSavedData {
@@ -27,12 +29,12 @@ public class BoundChestWorldData extends WorldSavedData {
         	if (nbt.hasKey("myColor")) {
         		myColor = nbt.getInteger("myColor");
         	}
-        	NBTTagList nbttaglist = nbt.getTagList("Items");
+        	NBTTagList nbttaglist = nbt.getTagList("Items",Constants.NBT.TAG_COMPOUND);
             this.chestContents = new ItemStack[36];
 
             for (int i = 0; i < nbttaglist.tagCount(); ++i)
             {
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+                NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
                 int j = nbttagcompound1.getByte("Slot") & 255;
 
                 if (j >= 0 && j < this.chestContents.length)

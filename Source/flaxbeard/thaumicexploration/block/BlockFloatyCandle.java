@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -18,7 +17,7 @@ import flaxbeard.thaumicexploration.tile.TileEntityFloatyCandle;
 public class BlockFloatyCandle extends BlockCandle implements ITileEntityProvider {
 
 	public BlockFloatyCandle(int i) {
-		super(i);
+		super();
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -44,10 +43,7 @@ public class BlockFloatyCandle extends BlockCandle implements ITileEntityProvide
 //	}
 //	  
 
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityFloatyCandle();
-	}
+
 
 	public int getRenderType()
 	{
@@ -68,5 +64,11 @@ public class BlockFloatyCandle extends BlockCandle implements ITileEntityProvide
 		 float move = 0.2F*MathHelper.sin( (((offset*10)+ticks)/30.0F));
 		 par1World.spawnParticle("smoke", var7, var9+move, var11, 0.0D, 0.0D, 0.0D);
 		 par1World.spawnParticle("flame", var7, var9+move, var11, 0.0D, 0.0D, 0.0D);
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		// TODO Auto-generated method stub
+		return new TileEntityFloatyCandle();
 	}
 }

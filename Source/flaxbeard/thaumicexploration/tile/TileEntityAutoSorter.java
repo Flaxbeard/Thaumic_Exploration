@@ -27,7 +27,7 @@ public class TileEntityAutoSorter extends TileEntity implements IInventory{
 		ArrayList<MutablePair> chestsToRemove = new ArrayList<MutablePair>();
     	for (MutablePair loc : chests) {
     		ChunkCoordinates chest = (ChunkCoordinates) loc.left;
-    		if (this.worldObj.getBlockTileEntity(chest.posX, chest.posY, chest.posZ) == null) {
+    		if (this.worldObj.getTileEntity(chest.posX, chest.posY, chest.posZ) == null) {
     			chestsToRemove.add(loc);
     		}
     	}
@@ -39,7 +39,7 @@ public class TileEntityAutoSorter extends TileEntity implements IInventory{
     	chestsToRemove = new ArrayList<MutablePair>();
     	for (MutablePair loc : chests) {
     		ChunkCoordinates chest = (ChunkCoordinates) loc.left;
-    		TileEntity te = this.worldObj.getBlockTileEntity(chest.posX, chest.posY, chest.posZ);
+    		TileEntity te = this.worldObj.getTileEntity(chest.posX, chest.posY, chest.posZ);
     		if (te instanceof ISidedInventory) {
     			int[] accessibleSlots = ((ISidedInventory) te).getAccessibleSlotsFromSide((Integer) loc.right);
 
@@ -78,7 +78,7 @@ public class TileEntityAutoSorter extends TileEntity implements IInventory{
     		if (sort != null) {
 	    		if (sort.type == 1) {
 	    			ChunkCoordinates chest = (ChunkCoordinates) info.right.left;
-	        		TileEntity te = this.worldObj.getBlockTileEntity(chest.posX, chest.posY, chest.posZ);
+	        		TileEntity te = this.worldObj.getTileEntity(chest.posX, chest.posY, chest.posZ);
 	        		for (int i = 0; i<info.left.length; i++) {
 	        			if (te instanceof ISidedInventory) {
 	        				ISidedInventory tile = (ISidedInventory) te;
@@ -125,74 +125,71 @@ public class TileEntityAutoSorter extends TileEntity implements IInventory{
 
 	@Override
 	public int getSizeInventory() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
-	public String getInvName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
-	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		
+		return false;
+	}
+	@Override
+	public String getInventoryName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean hasCustomInventoryName() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public void openInventory() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void closeInventory() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

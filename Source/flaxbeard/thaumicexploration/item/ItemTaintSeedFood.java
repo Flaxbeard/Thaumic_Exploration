@@ -1,16 +1,15 @@
 package flaxbeard.thaumicexploration.item;
 
-import flaxbeard.thaumicexploration.ThaumicExploration;
-import thaumcraft.common.config.ConfigBlocks;
-import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeedFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.IPlantable;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
+import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class ItemTaintSeedFood extends ItemSeedFood implements IPlantable
 {
@@ -20,9 +19,9 @@ public class ItemTaintSeedFood extends ItemSeedFood implements IPlantable
     /** Block ID of the soil this seed food should be planted on. */
     private int soilId;
 
-    public ItemTaintSeedFood(int par1, int par2, float par3, int par4, int par5)
+    public ItemTaintSeedFood(int par1, int par2, float par3, Block par4, Block par5)
     {
-        super(par1, par2, par3, par4, par5);
+        super(par2, par3, par4, par5);
     }
 
     /**
@@ -38,12 +37,12 @@ public class ItemTaintSeedFood extends ItemSeedFood implements IPlantable
         }
         else if (par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4, par5 + 1, par6, par7, par1ItemStack))
         {
-            int i1 = par3World.getBlockId(par4, par5, par6);
-            Block soil = Block.blocksList[i1];
 
-            if (soil != null && ((soil.blockID == Block.grass.blockID && par3World.getBiomeGenForCoords(par4, par6) == ThaumcraftWorldGenerator.biomeTaint) || (soil.blockID == ConfigBlocks.blockTaint.blockID && par3World.getBlockMetadata(par4, par5, par6) == 1)) && par3World.isAirBlock(par4, par5 + 1, par6))
+            Block soil = par3World.getBlock(par4, par5, par6);
+
+            if (soil != null && ((soil == Blocks.grass && par3World.getBiomeGenForCoords(par4, par6) == ThaumcraftWorldGenerator.biomeTaint) || (soil == ConfigBlocks.blockTaint && par3World.getBlockMetadata(par4, par5, par6) == 1)) && par3World.isAirBlock(par4, par5 + 1, par6))
             {
-                par3World.setBlock(par4, par5 + 1, par6, ThaumicExploration.taintBerryCrop.blockID);
+                par3World.setBlock(par4, par5 + 1, par6, ThaumicExploration.taintBerryCrop);
                 --par1ItemStack.stackSize;
                 return true;
             }

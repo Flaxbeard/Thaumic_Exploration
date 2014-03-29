@@ -4,23 +4,24 @@ import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class ItemChestSealLinked extends Item {
-	public Icon theIcon;
+	public IIcon theIcon;
 	public static final String[] itemNames = {"Pale", "Orange", "Magenta", "Light Blue", "Yellow", "Lime", "Pink", "Gray", "Light Gray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Dark"} ;
 	public ItemChestSealLinked(int par1) {
-		super(par1);
+		super();
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 		this.setMaxStackSize(64);
@@ -75,7 +76,7 @@ public class ItemChestSealLinked extends Item {
     
 	@Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister) {
+    public void registerIcons(IIconRegister par1IconRegister) {
 		super.registerIcons(par1IconRegister);
 		this.theIcon = par1IconRegister.registerIcon(this.iconString + "Inset");
     }
@@ -88,9 +89,9 @@ public class ItemChestSealLinked extends Item {
         }
         else
         {
-        	int var11 = world.getBlockId(x, y, z);
-        	if (var11 == Block.chest.blockID) {
-        		stack = new ItemStack(ThaumicExploration.chestSealLinked.itemID, 1, stack.getItemDamage());
+        	Block var11 = world.getBlock(x, y, z);
+        	if (var11 == Blocks.chest) {
+        		stack = new ItemStack(ThaumicExploration.chestSealLinked, 1, stack.getItemDamage());
         		return true;
         		
         	}
@@ -103,7 +104,7 @@ public class ItemChestSealLinked extends Item {
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(int itemID, CreativeTabs tab,
+    public void getSubItems(Item itemID, CreativeTabs tab,
                     List itemList) {
             for(int i = 0; i < itemNames.length; i++){
                     itemList.add(new ItemStack(itemID,1,i));
@@ -133,7 +134,7 @@ public class ItemChestSealLinked extends Item {
     }
     
     
-    public Icon getIconFromDamageForRenderPass(int par1, int par2)
+    public IIcon getIconFromDamageForRenderPass(int par1, int par2)
     {
         return par2 > 0 ? this.theIcon : super.getIconFromDamageForRenderPass(par1, par2);
     }

@@ -2,6 +2,7 @@ package flaxbeard.thaumicexploration.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
@@ -125,7 +126,7 @@ public class ContainerAutoCrafter extends Container
             }
             else if (par2 != 1 && par2 != 0)
             {
-                if (itemstack1.itemID == Item.book.itemID || itemstack1.itemID == Item.enchantedBook.itemID)
+                if (itemstack1.getItem() == Items.book || itemstack1.getItem() == Items.enchanted_book)
                 {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false))
                     {

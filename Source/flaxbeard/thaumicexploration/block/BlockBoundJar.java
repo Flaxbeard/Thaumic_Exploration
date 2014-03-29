@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
@@ -18,7 +19,6 @@ import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.ItemEssence;
 import thaumcraft.common.tiles.TileJarFillable;
-import thaumcraft.common.tiles.TileJarFillableVoid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
@@ -30,7 +30,7 @@ public class BlockBoundJar extends BlockJar {
 	private Random random;
 
 	public BlockBoundJar(int i) {
-		super(i);
+		super();
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -40,15 +40,16 @@ public class BlockBoundJar extends BlockJar {
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	@Override
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(par1, 1, 0));
     }
 	
-	
-    public int idDropped(int par1, Random par2Random, int par3)
+	@Override
+    public Item getItemDropped(int par1, Random par2Random, int par3)
     {
-        return ConfigBlocks.blockJar.blockID;
+        return Item.getItemFromBlock(ConfigBlocks.blockJar);
     }
     
     
@@ -58,19 +59,19 @@ public class BlockBoundJar extends BlockJar {
     }
     
     @Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
     {
-		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+		TileEntity te = par1World.getTileEntity(par2, par3, par4);
 
   		ItemStack drop = new ItemStack(ThaumicExploration.blankSeal, 1, 15-((TileEntityBoundJar)te).getSealColor());
-  		dropBlockAsItem_do(par1World, par2, par3, par4, drop);
+  		dropBlockAsItem(par1World, par2, par3, par4, drop);
 	}
     
     public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
     {
       ArrayList<ItemStack> drops = new ArrayList();
       int md = world.getBlockMetadata(x, y, z);
-        TileEntity te = world.getBlockTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(x, y, z);
         if ((te != null) && ((te instanceof TileJarFillable)))
         {
           ItemStack drop = new ItemStack(ConfigItems.itemJarFilled);
@@ -94,7 +95,7 @@ public class BlockBoundJar extends BlockJar {
     	if (!world.isRemote) {
     		world.markBlockForUpdate(x,  y,  z);
     	}
-    	TileEntity te = world.getBlockTileEntity(x,  y,  z);
+    	TileEntity te = world.getTileEntity(x,  y,  z);
 	    if (te == null || !(te instanceof TileEntityBoundJar))
 	        return false;
 	            
@@ -120,7 +121,7 @@ public class BlockBoundJar extends BlockJar {
             jar.aspect = aspect;
             jar.addToContainer(aspect, amount);
             if(!player.inventory.addItemStackToInventory(new ItemStack(ConfigItems.itemEssence, 1 ,0))) {
-            	player.dropPlayerItem(new ItemStack(ConfigItems.itemEssence, 1 ,0));
+            	player.dropItem(ConfigItems.itemEssence,1);
             }
             world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
         }
@@ -131,7 +132,7 @@ public class BlockBoundJar extends BlockJar {
             AspectList setAspect = new AspectList().add(jar.aspect, 8);
             ((ItemEssence)newPhial.getItem()).setAspects(newPhial, setAspect);
             if(!player.inventory.addItemStackToInventory(newPhial)) {
-            	player.dropPlayerItem(newPhial);
+            	player.dropItem(newPhial.getItem(),1);
             }
             jar.takeFromContainer(jar.aspect, 8);
             world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);

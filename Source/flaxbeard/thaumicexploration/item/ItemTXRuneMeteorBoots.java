@@ -2,16 +2,16 @@ package flaxbeard.thaumicexploration.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thaumcraft.common.Thaumcraft;
@@ -23,31 +23,32 @@ import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
-	protected Icon[] icons = new Icon[2];
-	 public Icon icon;
+	protected IIcon[] icons = new IIcon[2];
+	 public IIcon icon;
 	
-		public ItemTXRuneMeteorBoots(int par1, EnumArmorMaterial par2EnumArmorMaterial,
+		public ItemTXRuneMeteorBoots(int par1, ItemArmor.ArmorMaterial par2EnumArmorMaterial,
 	            int par3, int par4) {
-	    super(par1, par2EnumArmorMaterial, par3, par4);
+	    super(par2EnumArmorMaterial, par3, par4);
 	}
 		
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister ir)
+    public void registerIcons(IIconRegister ir)
     {
         this.icon = ir.registerIcon("thaumcraft:runicbootstraveler");
     	this.icons[0] = ir.registerIcon("thaumicexploration:runicBootsComet");
     	this.icons[1] = ir.registerIcon("thaumicexploration:runicBootsMeteor");
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
-    public Icon getIconFromDamage(int par1)
+    public IIcon getIconFromDamage(int par1)
     {
       return this.icons[1];
     }
 	
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
-	if (stack.itemID == ThaumicExploration.runicBootsMeteor.itemID)
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String layer) {
+	if (stack.getItem() == ThaumicExploration.runicBootsMeteor)
 		return "thaumicexploration:textures/models/armor/runicBootsMeteor.png";
 	return "thaumicexploration:textures/models/armor/runicBootsComet.png";
 	}
@@ -70,10 +71,10 @@ public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
 	      list.add(EnumChatFormatting.DARK_AQUA + StatCollector.translateToLocal(new StringBuilder().append("item.runic.upgrade.").append(u).toString()));
 	    }
 	  }
-	
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack)
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
 	{
-	if (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID)
+	if (player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsMeteor)
 	{
 	 if (player.fallDistance > 0.0F) {
 	     player.fallDistance = 0.0F;
@@ -82,12 +83,12 @@ public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
 	if ((!player.capabilities.isFlying) && (player.moveForward > 0.0F))
 	{
 	int haste = EnchantmentHelper.getEnchantmentLevel(Config.enchHaste.effectId, player.inventory.armorItemInSlot(0));
-	if (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID)
+	if (player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsMeteor)
 	{
 	  if (player.worldObj.isRemote)
 	  {
-	    if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(Integer.valueOf(player.entityId))) {
-	    	Thaumcraft.instance.entityEventHandler.prevStep.put(Integer.valueOf(player.entityId), Float.valueOf(player.stepHeight));
+	    if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(Integer.valueOf(player.getEntityId()))) {
+	    	Thaumcraft.instance.entityEventHandler.prevStep.put(Integer.valueOf(player.getEntityId()), Float.valueOf(player.stepHeight));
 	    }
 	    player.stepHeight = 1.0F;
 	  }
@@ -99,7 +100,7 @@ public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
 	  {
 	    player.moveFlying(0.0F, 1.0F, bonus);
 	  }
-	  else if (Hover.getHover(player.entityId))
+	  else if (Hover.getHover(player.getEntityId()))
 	  {
 	    player.jumpMovementFactor = 0.03F;
 	  }
@@ -111,12 +112,12 @@ public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
 	    player.fallDistance = 0.0F;
 	  }
 	}
-	else if (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsComet.itemID)
+	else if (player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsComet)
 	{
 	    if (player.worldObj.isRemote)
 	    {
-	      if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(Integer.valueOf(player.entityId))) {
-	    	  Thaumcraft.instance.entityEventHandler.prevStep.put(Integer.valueOf(player.entityId), Float.valueOf(player.stepHeight));
+	      if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(Integer.valueOf(player.getEntityId()))) {
+	    	  Thaumcraft.instance.entityEventHandler.prevStep.put(Integer.valueOf(player.getEntityId()), Float.valueOf(player.stepHeight));
 	      }
 	      player.stepHeight = 1.0F;
 	    }
@@ -135,7 +136,7 @@ public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
 	    {
 	      player.moveFlying(0.0F, 1.0F, bonus);
 	    }
-	    else if (Hover.getHover(player.entityId))
+	    else if (Hover.getHover(player.getEntityId()))
 	    {
 	      player.jumpMovementFactor = 0.03F;
 	    }
@@ -149,6 +150,6 @@ public class ItemTXRuneMeteorBoots extends ItemRunicArmor {
 	  }
 	
 	}
-	super.onArmorTickUpdate(world, player, itemStack);
+	super.onArmorTick(world, player, itemStack);
 	}
 }

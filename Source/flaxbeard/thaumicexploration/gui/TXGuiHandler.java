@@ -17,7 +17,7 @@ public class TXGuiHandler implements IGuiHandler {
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity entity = world.getBlockTileEntity(x, y, z);
+		TileEntity entity = world.getTileEntity(x, y, z);
 		int side = 5;
 		switch(id) {
 		case 0:
@@ -44,7 +44,7 @@ public class TXGuiHandler implements IGuiHandler {
 			side--;
 		case 2:
 			ItemStack stack = player.getCurrentEquippedItem();
-			TileEntityAutoSorter sorter = (TileEntityAutoSorter) player.worldObj.getBlockTileEntity(stack.getTagCompound().getInteger("brainx"), stack.getTagCompound().getInteger("brainy"), stack.getTagCompound().getInteger("brainz"));
+			TileEntityAutoSorter sorter = (TileEntityAutoSorter) player.worldObj.getTileEntity(stack.getTagCompound().getInteger("brainx"), stack.getTagCompound().getInteger("brainy"), stack.getTagCompound().getInteger("brainz"));
 			
 			return new ContainerBrainMachine(player.inventory, player,sorter,new ChunkCoordinates(x,y,z),side);
 		default:
@@ -54,7 +54,7 @@ public class TXGuiHandler implements IGuiHandler {
 		
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity entity = world.getBlockTileEntity(x, y, z);
+		TileEntity entity = world.getTileEntity(x, y, z);
 		int side = 5;
 		switch(id) {
 		case 0:
@@ -81,7 +81,7 @@ public class TXGuiHandler implements IGuiHandler {
 			side--;
 		case 2:
 			ItemStack stack = player.getCurrentEquippedItem();
-			TileEntityAutoSorter sorter = (TileEntityAutoSorter) player.worldObj.getBlockTileEntity(stack.getTagCompound().getInteger("brainx"), stack.getTagCompound().getInteger("brainy"), stack.getTagCompound().getInteger("brainz"));
+			TileEntityAutoSorter sorter = (TileEntityAutoSorter) player.worldObj.getTileEntity(stack.getTagCompound().getInteger("brainx"), stack.getTagCompound().getInteger("brainy"), stack.getTagCompound().getInteger("brainz"));
 			
 			return new GuiBrainMachine(player.inventory, player,sorter,new ChunkCoordinates(x,y,z),side);
 		default:

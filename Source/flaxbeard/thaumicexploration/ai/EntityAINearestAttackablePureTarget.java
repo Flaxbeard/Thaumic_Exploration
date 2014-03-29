@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTargetSorter;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAITarget;
 
 public class EntityAINearestAttackablePureTarget extends EntityAITarget
@@ -16,7 +16,7 @@ public class EntityAINearestAttackablePureTarget extends EntityAITarget
     private final int targetChance;
 
     /** Instance of EntityAINearestAttackableTargetSorter. */
-    private final EntityAINearestAttackableTargetSorter theNearestAttackableTargetSorter;
+    private final EntityAINearestAttackableTarget.Sorter theNearestAttackableTargetSorter;
 
     /**
      * This filter is applied to the Entity search.  Only matching entities will be targetted.  (null -> no
@@ -40,7 +40,7 @@ public class EntityAINearestAttackablePureTarget extends EntityAITarget
         super(par1EntityCreature, par4, par5);
         this.targetClass = par2Class;
         this.targetChance = par3;
-        this.theNearestAttackableTargetSorter = new EntityAINearestAttackableTargetSorter(par1EntityCreature);
+        this.theNearestAttackableTargetSorter = new EntityAINearestAttackableTarget.Sorter(par1EntityCreature);
         this.setMutexBits(1);
         this.targetEntitySelector = new EntityAINearestAttackableTargetSelectorReplacement(this, par6IEntitySelector);
     }

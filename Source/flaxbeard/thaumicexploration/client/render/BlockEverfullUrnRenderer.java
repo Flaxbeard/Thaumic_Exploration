@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
@@ -25,7 +25,7 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
 		float x = 0;
 		float y = 0;
 		float z = 0;
-		Icon icon = block.getBlockTextureFromSide(2);
+		IIcon icon = block.getBlockTextureFromSide(2);
         float f4 = 0;
         Tessellator tessellator = Tessellator.instance;
     	block.setBlockBounds(f1, 0.0F, f1, f, 1.0F, f);
@@ -50,7 +50,7 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
         tessellator.draw();
         
         f4 = (3.0F/16.0F);
-        Icon icon1 = BlockEverfullUrn.middleSide;
+        IIcon icon1 = BlockEverfullUrn.middleSide;
         
         tessellator.startDrawingQuads();
         tessellator.setNormal(1.0F, 0.0F, 0.0F);
@@ -73,7 +73,7 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
         tessellator.draw();
         
         f4 = (2.0F/16.0F);
-        Icon icon2 = BlockEverfullUrn.topSide;
+        IIcon icon2 = BlockEverfullUrn.topSide;
         
         tessellator.startDrawingQuads();
         tessellator.setNormal(1.0F, 0.0F, 0.0F);
@@ -95,8 +95,8 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
         renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z - f4), icon2);
         tessellator.draw();
         
-        Icon icon3 = BlockEverfullUrn.topTop;
-        Icon icon4 = BlockEverfullUrn.bottomTop;
+        IIcon icon3 = BlockEverfullUrn.topTop;
+        IIcon icon4 = BlockEverfullUrn.bottomTop;
         f4 = (7.0F/16.0F);
         
         tessellator.startDrawingQuads();
@@ -109,12 +109,12 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
         renderer.renderFaceYPos(block, (double)x, (double)((float)y ), (double)z, icon3);
         tessellator.draw();
         
-        Icon icon5 = BlockEverfullUrn.bottomBottom;
+        IIcon icon5 = BlockEverfullUrn.bottomBottom;
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, -1.0F, 0.0F);
         renderer.renderFaceYNeg(block, (double)x, (double)((float)y), (double)z, icon5);
         tessellator.draw();
-        Icon icon6 = BlockEverfullUrn.topBottom;
+        IIcon icon6 = BlockEverfullUrn.topBottom;
         f4 = (13.0F/16.0F);
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, -1.0F, 0.0F);
@@ -155,7 +155,7 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
 	
 	        tessellator.setColorOpaque_F(f * f1, f * f2, f * f3);
 		
-        Icon icon = block.getBlockTextureFromSide(2);
+        IIcon icon = block.getBlockTextureFromSide(2);
        f4 = (2.0F/16.0F);
        f4 =0;
 		block.setBlockBounds(0.0F,0.0F,0.0F,1.0F,1.0F,1.0F);
@@ -164,25 +164,25 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
         renderer.renderFaceZNeg(block, (double)x, (double)y, (double)((float)z  + f4), icon);
         renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z - f4), icon);
         f4 = (3.0F/16.0F);
-        Icon icon1 = BlockEverfullUrn.middleSide;
+        IIcon icon1 = BlockEverfullUrn.middleSide;
         renderer.renderFaceXPos(block, (double)((float)x  - f4), (double)y, (double)z, icon1);
         renderer.renderFaceXNeg(block, (double)((float)x  + f4), (double)y, (double)z, icon1);
         renderer.renderFaceZNeg(block, (double)x, (double)y, (double)((float)z  + f4), icon1);
         renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z - f4), icon1);
         f4 = (2.0F/16.0F);
-        Icon icon2 = BlockEverfullUrn.topSide;
+        IIcon icon2 = BlockEverfullUrn.topSide;
         renderer.renderFaceXPos(block, (double)((float)x  - f4), (double)y, (double)z, icon2);
         renderer.renderFaceXNeg(block, (double)((float)x  + f4), (double)y, (double)z, icon2);
         renderer.renderFaceZNeg(block, (double)x, (double)y, (double)((float)z  + f4), icon2);
         renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z - f4), icon2);
-        Icon icon3 = BlockEverfullUrn.topTop;
-        Icon icon4 = BlockEverfullUrn.bottomTop;
+        IIcon icon3 = BlockEverfullUrn.topTop;
+       IIcon icon4 = BlockEverfullUrn.bottomTop;
         f4 = (7.0F/16.0F);
         renderer.renderFaceYPos(block, (double)x, (double)((float)y-f4), (double)z, icon4);
         renderer.renderFaceYPos(block, (double)x, (double)((float)y ), (double)z, icon3);
         f4 = (13.0F/16.0F);
-        Icon icon5 = BlockEverfullUrn.bottomBottom;
-        Icon icon6 = BlockEverfullUrn.topBottom;
+        IIcon icon5 = BlockEverfullUrn.bottomBottom;
+        IIcon icon6 = BlockEverfullUrn.topBottom;
         renderer.renderFaceYNeg(block, (double)x, (double)((float)y), (double)z, icon5);
         renderer.renderFaceYNeg(block, (double)x, (double)((float)y+f4), (double)z, icon6);
         
@@ -191,17 +191,20 @@ public class BlockEverfullUrnRenderer implements ISimpleBlockRenderingHandler {
 	}
 	
 
-	@Override
-	public boolean shouldRender3DInInventory() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 
 	@Override
 	public int getRenderId() {
 		// TODO Auto-generated method stub
 		
 		return ThaumicExploration.everfullUrnRenderID;
+	}
+
+
+
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		// TODO Auto-generated method stub
+		return modelId == ThaumicExploration.everfullUrnRenderID;
 	}
 
 }

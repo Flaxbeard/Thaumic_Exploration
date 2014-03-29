@@ -1,8 +1,8 @@
 package flaxbeard.thaumicexploration.research;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -17,11 +17,10 @@ import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 import thaumcraft.common.config.Config;
-import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigResearch;
 import cpw.mods.fml.common.Loader;
 import flaxbeard.thaumicexploration.ThaumicExploration;
-import flaxbeard.thaumicexploration.api.NecromanticAltarAPI;
 
 public final class ModResearch {
 
@@ -32,7 +31,7 @@ public final class ModResearch {
 
         
         //Curing
-        research = new TXResearchItem("FLESHCURE", "ALCHEMY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.FLESH, 3).add(Aspect.EXCHANGE, 2), -4, 0, 1, new ItemStack(Item.rottenFlesh)).setParents("TALLOW").setHidden().setSecondary().setItemTriggers(new ItemStack[] {new ItemStack(Item.rottenFlesh.itemID,1,32767)}).registerResearchItem();
+        research = new TXResearchItem("FLESHCURE", "ALCHEMY", new AspectList().add(Aspect.ARMOR, 1).add(Aspect.FLESH, 3).add(Aspect.EXCHANGE, 2), -4, 0, 1, new ItemStack(Items.rotten_flesh)).setParents("TALLOW").setHidden().setSecondary().setItemTriggers(new ItemStack[] {new ItemStack(Items.rotten_flesh,1,32767)}).registerResearchItem();
         research.setPages(new ResearchPage("1"), cruciblePage("FLESHCURE"));
         
         research = new TXResearchItem("FLOATCANDLE", "ALCHEMY", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.FLESH, 2).add(Aspect.AIR, 3), -4, -2, 1, new ItemStack(ThaumicExploration.floatCandle)).setParents("TALLOW").setConcealed().setSecondary().registerResearchItem();
@@ -75,7 +74,7 @@ public final class ModResearch {
 	        research = new TXResearchItem("METEORBOOTS", "ARTIFICE", new AspectList().add(Aspect.FIRE, 5).add(Aspect.ENERGY, 5).add(Aspect.TRAVEL, 10).add(Aspect.FLIGHT, 5), 5,7 , 2, new ItemStack(ThaumicExploration.bootsMeteor)).setParents("BOOTSTRAVELLER","FOCUSFIRE").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
 	        research.setPages(new ResearchPage("1"), infusionPage("METEORBOOTS"));
 	        
-	        research = new TXResearchItem("COMETBOOTS", "ARTIFICE", new AspectList().add(Aspect.WATER, 5).add(Aspect.ICE, 5).add(Aspect.TRAVEL, 10).add(Aspect.MOTION, 5), 3,8 , 2, new ItemStack(ThaumicExploration.bootsComet)).setParents("BOOTSTRAVELLER","FOCUSFROST").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
+	        research = new TXResearchItem("COMETBOOTS", "ARTIFICE", new AspectList().add(Aspect.WATER, 5).add(Aspect.COLD, 5).add(Aspect.TRAVEL, 10).add(Aspect.MOTION, 5), 3,8 , 2, new ItemStack(ThaumicExploration.bootsComet)).setParents("BOOTSTRAVELLER","FOCUSFROST").setParentsHidden("INFUSION").setConcealed().registerResearchItem();
 	        research.setPages(new ResearchPage("1"), infusionPage("COMETBOOTS"));
 	        ResourceLocation runicBoots = new ResourceLocation("thaumicexploration:textures/tabs/runicBoots.png");
 	        research = new TXResearchItem("RUNICBOOTS", "ARTIFICE", new AspectList().add(Aspect.ARMOR, 5).add(Aspect.WATER, 8).add(Aspect.FIRE, 8).add(Aspect.TRAVEL, 10), 3,6, 1, runicBoots).setParents("METEORBOOTS","COMETBOOTS","RUNICBOOTSTRAVELLER").setParentsHidden("INFUSION").setConcealed().setSecondary().registerResearchItem();
@@ -105,7 +104,7 @@ public final class ModResearch {
 	        
 	        if (ThaumicExploration.taintBloom) {
 		        ResearchCategories.researchCategories.get("ALCHEMY").research.remove("ETHEREALBLOOM");
-		        research = new ResearchItem("ETHEREALBLOOM", "ALCHEMY", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.PLANT, 8).add(Aspect.HEAL, 5).add(Aspect.TAINT, 8), -2, -3, 2, new ItemStack(Config.blockCustomPlantId, 1, 4)).setPages(new ResearchPage[] { new ResearchPage("tc.research_page.ETHEREALBLOOM.1"), cruciblePage("EtherealBloom"), new ResearchPage("tc.research_page.ETHEREALBLOOM.2") }).setHidden().setAspectTriggers(new Aspect[] { Aspect.TAINT }).setConcealed().setParents(new String[] { "CRUCIBLE", "INFUSION" }).registerResearchItem();
+		        research = new ResearchItem("ETHEREALBLOOM", "ALCHEMY", new AspectList().add(Aspect.MAGIC, 1).add(Aspect.PLANT, 8).add(Aspect.HEAL, 5).add(Aspect.TAINT, 8), -2, -3, 2, new ItemStack(ConfigBlocks.blockCustomPlant, 1, 4)).setPages(new ResearchPage[] { new ResearchPage("tc.research_page.ETHEREALBLOOM.1"), cruciblePage("EtherealBloom"), new ResearchPage("tc.research_page.ETHEREALBLOOM.2") }).setHidden().setAspectTriggers(new Aspect[] { Aspect.TAINT }).setConcealed().setParents(new String[] { "CRUCIBLE", "INFUSION" }).registerResearchItem();
 	        }
         }
         
@@ -145,7 +144,7 @@ public final class ModResearch {
         research = new TXResearchItem("ROD_AMBER_staff", "THAUMATURGY", new AspectList().add(Aspect.TOOL, 5).add(Aspect.AURA, 8).add(Aspect.TRAP, 5).add(Aspect.MAGIC, 8), -12, 2, 2, new ItemStack(ThaumicExploration.amberStaffCore)).setParents("ROD_AMBER").setParentsHidden("ROD_greatwood_staff").setConcealed().setSecondary().registerResearchItem();
         research.setPages(new ResearchPage("1"), arcaneRecipePage("ROD_AMBER_staff"));
         if (ThaumicExploration.breadWand) {
-            research = new TXResearchItem("ROD_BREAD", "THAUMATURGY", new AspectList().add(Aspect.MAGIC, 5).add(Aspect.SEED, 3).add(Aspect.HUNGER, 4).add(Aspect.HARVEST, 3), -11, 0, 1, new ItemStack(ThaumicExploration.breadCore)).setParents("ROD_AMBER").setConcealed().registerResearchItem().setSecondary();
+            research = new TXResearchItem("ROD_BREAD", "THAUMATURGY", new AspectList().add(Aspect.MAGIC, 5).add(Aspect.CROP, 3).add(Aspect.HUNGER, 4).add(Aspect.HARVEST, 3), -11, 0, 1, new ItemStack(ThaumicExploration.breadCore)).setParents("ROD_AMBER").setConcealed().registerResearchItem().setSecondary();
             research.setPages(new ResearchPage("1"), infusionPage("ROD_BREAD"));
         }
         

@@ -1,14 +1,17 @@
 package flaxbeard.thaumicexploration.misc;
 
-import net.minecraft.network.packet.Packet41EntityEffect;
+import com.mojang.authlib.GameProfile;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.FakePlayer;
 
-public class FakePlayerPotion extends FakePlayer {
+public class FakePlayerPotion extends EntityPlayer {
 
-	public FakePlayerPotion(World world, String name) {
+	public FakePlayerPotion(World world, GameProfile name) {
 		super(world, name);
 		// TODO Auto-generated constructor stub
 	}
@@ -21,5 +24,23 @@ public class FakePlayerPotion extends FakePlayer {
             Potion.potionTypes[par1PotionEffect.getPotionID()].applyAttributesModifiersToEntity(this, this.getAttributeMap(), par1PotionEffect.getAmplifier());
         }
     }
+
+	@Override
+	public void addChatMessage(IChatComponent var1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean canCommandSenderUseCommand(int var1, String var2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ChunkCoordinates getPlayerCoordinates() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

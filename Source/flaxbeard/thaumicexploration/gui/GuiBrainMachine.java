@@ -7,24 +7,16 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.lwjgl.opengl.GL11;
 
-import vazkii.tinkerer.client.gui.button.GuiButtonAT;
-import vazkii.tinkerer.client.gui.button.IRadioButton;
-import vazkii.tinkerer.common.network.PacketManager;
-import vazkii.tinkerer.common.network.packet.PacketTabletButton;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.misc.SortingInventory;
-import flaxbeard.thaumicexploration.packet.TXPacketHandler;
+import flaxbeard.thaumicexploration.packet.TXClientPacketHandler;
 import flaxbeard.thaumicexploration.tile.TileEntityAutoSorter;
 
 @SideOnly(Side.CLIENT)
@@ -81,7 +73,7 @@ public class GuiBrainMachine extends GuiContainer {
 			if (par1GuiButton instanceof GuiButtonSelector) {
 				GuiButtonSelector button = (GuiButtonSelector) par1GuiButton;
 				ContainerBrainMachine container = (ContainerBrainMachine) this.inventorySlots;
-				TXPacketHandler.sendTypeChangePacket(container.te, container.cc, button.myID, container.side);
+				TXClientPacketHandler.sendTypeChangePacket(container.te, container.cc, button.myID, container.side);
 				TileEntityAutoSorter switcher = container.te;
 			    SortingInventory inv = switcher.chestSorts.get(MutablePair.of(container.cc,container.side));
 			    inv.type = button.myID;

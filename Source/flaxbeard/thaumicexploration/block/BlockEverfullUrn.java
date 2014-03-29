@@ -5,14 +5,15 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -26,17 +27,17 @@ import flaxbeard.thaumicexploration.tile.TileEntityEverfullUrn;
 
 public class BlockEverfullUrn extends BlockContainer {
 
-	public static Icon middleSide;
-	public static Icon topSide;
-	public static Icon topTop;
-	public static Icon bottomTop;
-	public static Icon bottomBottom;
-	public static Icon topBottom;
-	public Icon texture;
+	public static IIcon middleSide;
+	public static IIcon topSide;
+	public static IIcon topTop;
+	public static IIcon bottomTop;
+	public static IIcon bottomBottom;
+	public static IIcon topBottom;
+	public IIcon texture;
 	
 
 	public BlockEverfullUrn(int par1) {
-		super(par1, Material.rock);
+		super(Material.rock);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -44,17 +45,18 @@ public class BlockEverfullUrn extends BlockContainer {
     {
         return new TileEntityEverfullUrn();
     }
-    
+	  
+	@Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister par1IIconRegister)
     {
-       	super.registerIcons(par1IconRegister);
-        this.middleSide = par1IconRegister.registerIcon("thaumicExploration:everfullUrnMS");
-        this.topSide = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTS");
-        this.topTop = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTT");
-        this.bottomTop = par1IconRegister.registerIcon("thaumicExploration:everfullUrnBT");
-        this.bottomBottom = par1IconRegister.registerIcon("thaumicExploration:everfullUrnBB");
-        this.topBottom = par1IconRegister.registerIcon("thaumicExploration:everfullUrnTB");
+       	super.registerBlockIcons(par1IIconRegister);
+        this.middleSide = par1IIconRegister.registerIcon("thaumicExploration:everfullUrnMS");
+        this.topSide = par1IIconRegister.registerIcon("thaumicExploration:everfullUrnTS");
+        this.topTop = par1IIconRegister.registerIcon("thaumicExploration:everfullUrnTT");
+        this.bottomTop = par1IIconRegister.registerIcon("thaumicExploration:everfullUrnBT");
+        this.bottomBottom = par1IIconRegister.registerIcon("thaumicExploration:everfullUrnBB");
+        this.topBottom = par1IIconRegister.registerIcon("thaumicExploration:everfullUrnTB");
     }
     
     public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k)
@@ -127,10 +129,10 @@ public class BlockEverfullUrn extends BlockContainer {
 
 		
 			if (entityPlayer.inventory.getCurrentItem() != null){ 
-				if (entityPlayer.inventory.getCurrentItem().itemID == Item.bucketEmpty.itemID) {
+				if (entityPlayer.inventory.getCurrentItem().getItem() == Items.bucket) {
 					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
-					if (!entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketWater, 1))) {
-						entityPlayer.dropPlayerItem(new ItemStack(Item.bucketWater, 1));
+					if (!entityPlayer.inventory.addItemStackToInventory(new ItemStack(Items.water_bucket, 1))) {
+						entityPlayer.dropItem(Items.water_bucket, 1);
 					}
 		            world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
 				}
@@ -138,7 +140,7 @@ public class BlockEverfullUrn extends BlockContainer {
 					ItemStack newStack = entityPlayer.inventory.getCurrentItem();
 					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
 					if (!entityPlayer.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.WATER, 1000), newStack))) {
-						entityPlayer.dropPlayerItem(FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.WATER, 1000), newStack));
+						entityPlayer.dropItem(FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.WATER, 1000), newStack).getItem(),1);
 					}
 					world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
 				}
@@ -147,7 +149,7 @@ public class BlockEverfullUrn extends BlockContainer {
 					entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
 					((IFluidContainerItem)newStack.getItem()).fill(newStack, new FluidStack(FluidRegistry.WATER, 1000), true);
 					if (!entityPlayer.inventory.addItemStackToInventory(newStack)) {
-						entityPlayer.dropPlayerItem(newStack);
+						entityPlayer.dropItem(newStack.getItem(),newStack.stackSize);
 					}
 					world.playSoundAtEntity(entityPlayer, "liquid.swim", 0.5F, 1.0F);
 				}
@@ -156,5 +158,11 @@ public class BlockEverfullUrn extends BlockContainer {
         	return true;
         
     }
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		// TODO Auto-generated method stub
+		return new TileEntityEverfullUrn();
+	}
 
 }

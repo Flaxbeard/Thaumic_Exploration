@@ -7,7 +7,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -16,6 +15,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
@@ -38,6 +38,7 @@ import thaumcraft.common.blocks.BlockCandleItem;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -46,11 +47,13 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.block.BlockAutoSorter;
 import flaxbeard.thaumicexploration.block.BlockBootsIce;
 import flaxbeard.thaumicexploration.block.BlockBoundChest;
@@ -58,22 +61,17 @@ import flaxbeard.thaumicexploration.block.BlockBoundJar;
 import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
 import flaxbeard.thaumicexploration.block.BlockEverfullUrn;
 import flaxbeard.thaumicexploration.block.BlockFloatyCandle;
-import flaxbeard.thaumicexploration.block.BlockNecroFire;
-import flaxbeard.thaumicexploration.block.BlockNecroPedestal;
 import flaxbeard.thaumicexploration.block.BlockReplicator;
-import flaxbeard.thaumicexploration.block.BlockTaintBerries;
 import flaxbeard.thaumicexploration.block.BlockThinkTank;
 import flaxbeard.thaumicexploration.common.CommonProxy;
 import flaxbeard.thaumicexploration.enchantment.EnchantmentBinding;
 import flaxbeard.thaumicexploration.enchantment.EnchantmentDisarm;
 import flaxbeard.thaumicexploration.enchantment.EnchantmentNightVision;
 import flaxbeard.thaumicexploration.entity.EntityCandleFlame;
-import flaxbeard.thaumicexploration.event.TXArmorEventHandler;
 import flaxbeard.thaumicexploration.event.TXBootsEventHandler;
 import flaxbeard.thaumicexploration.event.TXEventHandler;
 import flaxbeard.thaumicexploration.event.TXTickHandler;
 import flaxbeard.thaumicexploration.gui.TXGuiHandler;
-import flaxbeard.thaumicexploration.integration.TTIntegration;
 import flaxbeard.thaumicexploration.item.ItemBlankSeal;
 import flaxbeard.thaumicexploration.item.ItemBrain;
 import flaxbeard.thaumicexploration.item.ItemChestSeal;
@@ -84,11 +82,8 @@ import flaxbeard.thaumicexploration.item.ItemTXArmorSpecialDiscount;
 import flaxbeard.thaumicexploration.item.ItemTXRuneCometBoots;
 import flaxbeard.thaumicexploration.item.ItemTXRuneMeteorBoots;
 import flaxbeard.thaumicexploration.item.ItemTaintSeedFood;
-import flaxbeard.thaumicexploration.item.focus.ItemFocusNecromancy;
 import flaxbeard.thaumicexploration.misc.TXPotion;
 import flaxbeard.thaumicexploration.misc.TXTaintPotion;
-import flaxbeard.thaumicexploration.misc.WorldGenTX;
-import flaxbeard.thaumicexploration.packet.TXPacketHandler;
 import flaxbeard.thaumicexploration.research.ModRecipes;
 import flaxbeard.thaumicexploration.research.ModResearch;
 import flaxbeard.thaumicexploration.tile.TileEntityAutoSorter;
@@ -97,8 +92,6 @@ import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
 import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
 import flaxbeard.thaumicexploration.tile.TileEntityEverfullUrn;
 import flaxbeard.thaumicexploration.tile.TileEntityFloatyCandle;
-import flaxbeard.thaumicexploration.tile.TileEntityNecroFire;
-import flaxbeard.thaumicexploration.tile.TileEntityNecroPedestal;
 import flaxbeard.thaumicexploration.tile.TileEntityReplicator;
 import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
 import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
@@ -109,13 +102,15 @@ import flaxbeard.thaumicexploration.wand.WandRodTransmutative;
 
 
 @Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.5.1", dependencies="required-after:Thaumcraft;after:ThaumicTinkerer")
-@NetworkMod(clientSideRequired=true, serverSideRequired=false, channels={"tExploration"}, packetHandler = TXPacketHandler.class)
+
 public class ThaumicExploration {
 	
     @Instance("ThaumicExploration")
     public static ThaumicExploration instance;
+    
+    public static FMLEventChannel channel;
 
-    public static ArrayList<MutablePair<Integer, Integer>> allowedItems = new ArrayList<MutablePair<Integer, Integer>>();
+    public static ArrayList<MutablePair<Item, Integer>> allowedItems = new ArrayList<MutablePair<Item, Integer>>();
 	public static Item pureZombieBrain;
 	public static int pureZombieBrainID;
 	public static Item blankSeal;
@@ -149,7 +144,7 @@ public class ThaumicExploration {
 	public static Item theCandle;
 	public static int theCandleID;
 	
-	public static EnumArmorMaterial armorMaterialCrystal;
+	//public static EnumArmorMaterial armorMaterialCrystal;
 	public static Item maskEvil;
 	public static int maskEvilID;
 	public static Item focusNecromancy;
@@ -232,7 +227,6 @@ public class ThaumicExploration {
 	public static WandCap WAND_CAP_SOJOURNER;
 	public static WandCap WAND_CAP_MECHANIST;
 	
-	public WorldGenTX worldGen;
 	
 	public static int everfullUrnRenderID;
 	public static int crucibleSoulsRenderID;
@@ -285,16 +279,14 @@ public class ThaumicExploration {
 	@SidedProxy(clientSide = "flaxbeard.thaumicexploration.client.ClientProxy", serverSide = "flaxbeard.thaumicexploration.common.CommonProxy")
 	public static CommonProxy proxy;
 
-
+	private TXTickHandler tickHandler;
 	private TXBootsEventHandler entityEventHandler;
-	private TXArmorEventHandler entityEventHandler2;
+	//private TXArmorEventHandler entityEventHandler2;
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		
-	    GameRegistry.registerWorldGenerator(this.worldGen = new WorldGenTX());
-	    
-	    this.worldGen.initialize();
-		
+	    //GameRegistry.registerWorldGenerator(this.worldGen = new WorldGenTX());
+	   
 		Potion[] potionTypes = null;
 
 		for (Field f : Potion.class.getDeclaredFields()) {
@@ -321,59 +313,59 @@ public class ThaumicExploration {
 		
 		
 		//Item IDs
-		pureZombieBrainID = config.getItem("Cured Zombie Brain", 11000).getInt();
-		blankSealID = config.getItem("Blank Tallow Seal", 11001).getInt();
-		chestSealID = config.getItem("Chest Binding Seal", 11002).getInt();
-		chestSealLinkedID = config.getItem("Linked Chest Binding Seal", 1100).getInt();
-		jarSealID = config.getItem("Jar Binding Seal", 11006).getInt();
-		jarSealLinkedID = config.getItem("Linked Jar Binding Seal", 11007).getInt();
-		transmutationCoreID = config.getItem("Transmutation Filter Wand Core", 11004).getInt();
-		amberCoreID = config.getItem("Amber Wand Core", 11005).getInt();
-		amberStaffCoreID = config.getItem("Amber Staff Core", 11033).getInt();
-		maskEvilID = config.getItem("Mask of Cruelty", 11008).getInt();
-		bootsMeteorID = config.getItem("Boots of the Meteor", 11010).getInt();
-		bootsCometID = config.getItem("Boots of the Comet", 11011).getInt();
-		charmNoTaintID = config.getItem("Wispy Dreamcatcher", 11012).getInt();
-		charmTaintID = config.getItem("Tainted Band", 11014).getInt();
-		taintBerryID = config.getItem("Taintberry", 11015).getInt();
-		talismanFoodID = config.getItem("Talisman of Nourishment", 11013).getInt();
-		focusNecromancyID = config.getItem("Focus of Necromancy", 11009).getInt();
-		necroCoreID = config.getItem("Necromancer's Wand Core", 11016).getInt();
-		breadCoreID = config.getItem("Baguette Wand Core", 11020).getInt();
-		itemAltarID = config.getItem("Necromantic Pedestal (Item)", 11017).getInt();
-		runicBootsMeteorID = config.getItem("Runic Boots of the Meteor", 11018).getInt();
-		runicBootsCometID = config.getItem("Runic Boots of the Comet", 11019).getInt();
+//		pureZombieBrainID = config.getItem("Cured Zombie Brain", 11000).getInt();
+//		blankSealID = config.getItem("Blank Tallow Seal", 11001).getInt();
+//		chestSealID = config.getItem("Chest Binding Seal", 11002).getInt();
+//		chestSealLinkedID = config.getItem("Linked Chest Binding Seal", 1100).getInt();
+//		jarSealID = config.getItem("Jar Binding Seal", 11006).getInt();
+//		jarSealLinkedID = config.getItem("Linked Jar Binding Seal", 11007).getInt();
+//		transmutationCoreID = config.getItem("Transmutation Filter Wand Core", 11004).getInt();
+//		amberCoreID = config.getItem("Amber Wand Core", 11005).getInt();
+//		amberStaffCoreID = config.getItem("Amber Staff Core", 11033).getInt();
+//		maskEvilID = config.getItem("Mask of Cruelty", 11008).getInt();
+//		bootsMeteorID = config.getItem("Boots of the Meteor", 11010).getInt();
+//		bootsCometID = config.getItem("Boots of the Comet", 11011).getInt();
+//		charmNoTaintID = config.getItem("Wispy Dreamcatcher", 11012).getInt();
+//		charmTaintID = config.getItem("Tainted Band", 11014).getInt();
+//		taintBerryID = config.getItem("Taintberry", 11015).getInt();
+//		talismanFoodID = config.getItem("Talisman of Nourishment", 11013).getInt();
+//		focusNecromancyID = config.getItem("Focus of Necromancy", 11009).getInt();
+//		necroCoreID = config.getItem("Necromancer's Wand Core", 11016).getInt();
+//		breadCoreID = config.getItem("Baguette Wand Core", 11020).getInt();
+//		itemAltarID = config.getItem("Necromantic Pedestal (Item)", 11017).getInt();
+//		runicBootsMeteorID = config.getItem("Runic Boots of the Meteor", 11018).getInt();
+//		runicBootsCometID = config.getItem("Runic Boots of the Comet", 11019).getInt();
 		//theCandleID = config.getItem("The Candle", 11033).getInt();
 		
-		enhancedHelmetRunicID = config.getItem("Enhanced Runic Headpiece", 11021).getInt();
-		enhancedChestRunicID = config.getItem("Enhanced Runic Chestpiece", 11022).getInt();
-		enhancedLegsRunicID = config.getItem("Enhanced Runic Legpiece", 11023).getInt();
-		enhancedBootsRunicID = config.getItem("Enhanced Runic Runic Footpiece", 11024).getInt();
-		enhancedHelmetRunic2ID = config.getItem("Enhanced Runic Headpiece (2)", 11025).getInt();
-		enhancedChestRunic2ID = config.getItem("Enhanced Runic Chestpiece (2)", 11026).getInt();
-		enhancedLegsRunic2ID = config.getItem("Enhanced Runic Legpiece (2)", 11027).getInt();
-		enhancedBootsRunic2ID = config.getItem("Enhanced Runic Runic Footpiece (2)", 11028).getInt();
-		
-		sojournerCapUnchargedID = config.getItem("Inert Sojourner's Cap", 11030).getInt();
-		sojournerCapID = config.getItem("Sojourner's Cap", 11029).getInt();
-		
-		mechanistCapUnchargedID = config.getItem("Inert Mechanist's Cap", 11031).getInt();
-		mechanistCapID = config.getItem("Mechanist's Cap", 11032).getInt();
-		
-		//Block IDs
-		boundChestID = config.getBlock("Bound Chest", 700).getInt();
-		boundJarID = config.getBlock("Bound Jar", 701).getInt();
-		everfullUrnID = config.getBlock("Everfull Urn", 702).getInt();
-		thinkTankJarID = config.getBlock("Think Tank", 703).getInt();
-		crucibleSoulsID = config.getBlock("Crucible of Souls", 704).getInt();
-		meltyIceID = config.getBlock("Fast-Melting Ice", 705).getInt();
-		skullCandleID = config.getBlock("Skull Candle", 707).getInt();
-		replicatorID = config.getBlock("Thaumic Replicator", 706).getInt();
-		taintBerryCropID = config.getBlock("Taintberry Crop Block", 708).getInt();
-		necroPedestalID = config.getBlock("Necromantic Pedestal", 709).getInt();
-		necroFireID = config.getBlock("Necromantic Fire", 710).getInt();
-		autoSorterID = config.getBlock("Auto Sorter", 711).getInt();
-		floatCandleID = config.getBlock("Floating Candles", 712).getInt();
+//		enhancedHelmetRunicID = config.getItem("Enhanced Runic Headpiece", 11021).getInt();
+//		enhancedChestRunicID = config.getItem("Enhanced Runic Chestpiece", 11022).getInt();
+//		enhancedLegsRunicID = config.getItem("Enhanced Runic Legpiece", 11023).getInt();
+//		enhancedBootsRunicID = config.getItem("Enhanced Runic Runic Footpiece", 11024).getInt();
+//		enhancedHelmetRunic2ID = config.getItem("Enhanced Runic Headpiece (2)", 11025).getInt();
+//		enhancedChestRunic2ID = config.getItem("Enhanced Runic Chestpiece (2)", 11026).getInt();
+//		enhancedLegsRunic2ID = config.getItem("Enhanced Runic Legpiece (2)", 11027).getInt();
+//		enhancedBootsRunic2ID = config.getItem("Enhanced Runic Runic Footpiece (2)", 11028).getInt();
+//		
+//		sojournerCapUnchargedID = config.getItem("Inert Sojourner's Cap", 11030).getInt();
+//		sojournerCapID = config.getItem("Sojourner's Cap", 11029).getInt();
+//		
+//		mechanistCapUnchargedID = config.getItem("Inert Mechanist's Cap", 11031).getInt();
+//		mechanistCapID = config.getItem("Mechanist's Cap", 11032).getInt();
+//		
+//		//Block IDs
+//		boundChestID = config.getBlock("Bound Chest", 700).getInt();
+//		boundJarID = config.getBlock("Bound Jar", 701).getInt();
+//		everfullUrnID = config.getBlock("Everfull Urn", 702).getInt();
+//		thinkTankJarID = config.getBlock("Think Tank", 703).getInt();
+//		crucibleSoulsID = config.getBlock("Crucible of Souls", 704).getInt();
+//		meltyIceID = config.getBlock("Fast-Melting Ice", 705).getInt();
+//		skullCandleID = config.getBlock("Skull Candle", 707).getInt();
+//		replicatorID = config.getBlock("Thaumic Replicator", 706).getInt();
+//		taintBerryCropID = config.getBlock("Taintberry Crop Block", 708).getInt();
+//		necroPedestalID = config.getBlock("Necromantic Pedestal", 709).getInt();
+//		necroFireID = config.getBlock("Necromantic Fire", 710).getInt();
+//		autoSorterID = config.getBlock("Auto Sorter", 711).getInt();
+//		floatCandleID = config.getBlock("Floating Candles", 712).getInt();
 
 		potionTaintWithdrawlID = config.get("Potion", "Taint Withdrawl", 32).getInt();
 		potionBindingID = config.get("Potion", "Binding", 31).getInt();
@@ -409,17 +401,18 @@ public class ThaumicExploration {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("tExploration");
 		//fakeAspectNecro = new FauxAspect("Necromantic Energy", 0x870404, null, new ResourceLocation("thaumicexploration", "textures/tabs/necroAspect.png"), 771);
-		
-		TickRegistry.registerTickHandler(new TXTickHandler(), Side.CLIENT);
-	    this.entityEventHandler = new TXBootsEventHandler();
+		this.tickHandler = new TXTickHandler();
+		FMLCommonHandler.instance().bus().register(this.tickHandler);
 	    
+	    this.entityEventHandler = new TXBootsEventHandler();
 	    MinecraftForge.EVENT_BUS.register(this.entityEventHandler);
 	    
-	    this.entityEventHandler2 = new TXArmorEventHandler();
+	   // this.entityEventHandler2 = new TXArmorEventHandler();
+	    //inecraftForge.EVENT_BUS.register(this.entityEventHandler2);
 	    
-	    MinecraftForge.EVENT_BUS.register(this.entityEventHandler2);
-		NetworkRegistry.instance().registerGuiHandler(instance, new TXGuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new TXGuiHandler());
 		
 		everfullUrnRenderID = RenderingRegistry.getNextAvailableRenderId();
 		crucibleSoulsRenderID = RenderingRegistry.getNextAvailableRenderId();
@@ -442,57 +435,47 @@ public class ThaumicExploration {
 		GameRegistry.registerTileEntity(TileEntityEverfullUrn.class, "tileEntityEverfullUrn");
 		GameRegistry.registerTileEntity(TileEntityCrucibleSouls.class, "tileEntityCrucibleSouls");
 		GameRegistry.registerTileEntity(TileEntityReplicator.class, "tileEntityReplicator");
-		GameRegistry.registerTileEntity(TileEntityNecroPedestal.class, "tileEntityNecroPedestal");
-		GameRegistry.registerTileEntity(TileEntityNecroFire.class, "tileEntityNecroFire");
+		//GameRegistry.registerTileEntity(TileEntityNecroPedestal.class, "tileEntityNecroPedestal");
+		//GameRegistry.registerTileEntity(TileEntityNecroFire.class, "tileEntityNecroFire");
 		//Blocks
-		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setUnlocalizedName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setTextureName("thaumicExploration:blankTexture");
-		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:everfullUrn").setCreativeTab(tab).setTextureName("thaumicExploration:everfullUrn");
-		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setUnlocalizedName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setTextureName("thaumicExploration:crucible3");
-		replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setUnlocalizedName("thaumicexploration:replicator").setCreativeTab(tab).setTextureName("thaumicexploration:replicatorBottom");
+		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setBlockName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setBlockTextureName("thaumicExploration:blankTexture");
+		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setBlockName("thaumicexploration:everfullUrn").setCreativeTab(tab).setBlockTextureName("thaumicExploration:everfullUrn");
+		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setBlockName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setBlockTextureName("thaumicExploration:crucible3");
+		//replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setBlockName("thaumicexploration:replicator").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
+		//meltyIce = new BlockBootsIce(meltyIceID).setBlockName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundTypeGlass).setBlockName("ice").setBlockTextureName("ice");
+		//taintBerryCrop = new BlockTaintBerries(taintBerryCropID).setBlockName("thaumicexploration:taintBerryCrop").setBlockTextureName("thaumicExploration:berries");
+		//boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("boundChest");
+		//boundJar = new BlockBoundJar(boundJarID).setBlockName("boundJar");
 		
-		necroPedestal = new BlockNecroPedestal(necroPedestalID, Material.rock).setUnlocalizedName("thaumicexploration:necroPedestal");
+		//autoSorter = new BlockAutoSorter(autoSorterID, Material.glass).setHardness(4.0F).setBlockName("thaumicexploration:autoSorter").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
+		//floatCandle = new BlockFloatyCandle(floatCandleID).setBlockName("thaumicexploration:floatCandle").setCreativeTab(tab);
 		
-		necroFire = (BlockFire)(new BlockNecroFire(necroFireID)).setUnlocalizedName("thaumicexploration:necroFire").setTextureName("thaumicexploration:fire").setHardness(0.0F).setLightValue(1.0F).setStepSound(Block.soundWoodFootstep);
-		
-		meltyIce = new BlockBootsIce(meltyIceID).setUnlocalizedName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundGlassFootstep).setUnlocalizedName("ice").setTextureName("ice");
-		//skullCandle = new BlockSkullCandle(skullCandleID).setUnlocalizedName("thaumicexploration:skullCandle");
-		
-		taintBerryCrop = new BlockTaintBerries(taintBerryCropID).setUnlocalizedName("thaumicexploration:taintBerryCrop").setTextureName("thaumicExploration:berries");
-	
-		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(new StepSound("wood", 1.0F, 1.0F)).setUnlocalizedName("boundChest");
-		boundJar = new BlockBoundJar(boundJarID).setUnlocalizedName("boundJar");
-		
-		autoSorter = new BlockAutoSorter(autoSorterID, Material.glass).setHardness(4.0F).setUnlocalizedName("thaumicexploration:autoSorter").setCreativeTab(tab).setTextureName("thaumicexploration:replicatorBottom");
-		floatCandle = new BlockFloatyCandle(floatCandleID).setUnlocalizedName("thaumicexploration:floatCandle").setCreativeTab(tab);
-		
-		GameRegistry.registerBlock(autoSorter, "autoSorter");
-		GameRegistry.registerBlock(boundChest, "boundChest");
-		GameRegistry.registerBlock(taintBerryCrop, "taintBerryCrop");
+		//GameRegistry.registerBlock(autoSorter, "autoSorter");
+		//GameRegistry.registerBlock(boundChest, "boundChest");
+		//GameRegistry.registerBlock(taintBerryCrop, "taintBerryCrop");
 		//GameRegistry.registerBlock(skullCandle, "skullCandle");
-		GameRegistry.registerBlock(floatCandle, BlockCandleItem.class,"floatCandle");
-		GameRegistry.registerBlock(meltyIce, "meltyIce");
-		GameRegistry.registerBlock(boundJar, "boundJar");
+		//GameRegistry.registerBlock(floatCandle, BlockCandleItem.class,"floatCandle");
+		//GameRegistry.registerBlock(meltyIce, "meltyIce");
+		//GameRegistry.registerBlock(boundJar, "boundJar");
 		GameRegistry.registerBlock(thinkTankJar, "thinkTankJar");
 		GameRegistry.registerBlock(everfullUrn, "everfullUrn");
 		GameRegistry.registerBlock(crucibleSouls, "crucibleSouls");
-		GameRegistry.registerBlock(replicator, "replicator");
-		GameRegistry.registerBlock(necroPedestal, "necroPedestal");
-		GameRegistry.registerBlock(necroFire, "necroFire");
-		
+		//GameRegistry.registerBlock(replicator, "replicator");
+
 		//Items
-		transmutationCore = (new Item(transmutationCoreID)).setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");
+		transmutationCore = new Item().setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");
 		talismanFood = (new ItemFoodTalisman(talismanFoodID)).setUnlocalizedName("thaumicexploration:talismanFood").setCreativeTab(tab).setTextureName("thaumicexploration:talismanFood");
-		amberCore = (new Item(amberCoreID)).setUnlocalizedName("thaumicexploration:amberCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber");
-		amberStaffCore = (new Item(amberStaffCoreID)).setUnlocalizedName("thaumicexploration:amberStaffCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber_staff");
-		necroCore = (new Item(necroCoreID)).setUnlocalizedName("thaumicexploration:necroCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodNecro");
+		amberCore = new Item().setUnlocalizedName("thaumicexploration:amberCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber");
+		amberStaffCore = new Item().setUnlocalizedName("thaumicexploration:amberStaffCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber_staff");
+		necroCore = new Item().setUnlocalizedName("thaumicexploration:necroCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodNecro");
 		if (this.breadWand) {
-			breadCore = (new Item(breadCoreID)).setUnlocalizedName("thaumicexploration:breadCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodBread");
+			breadCore = new Item().setUnlocalizedName("thaumicexploration:breadCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodBread");
 		}
-		sojournerCap = (new Item(sojournerCapID)).setUnlocalizedName("thaumicexploration:capSojourner").setCreativeTab(tab).setTextureName("thaumicexploration:capSojournerCharged");
-		sojournerCapUncharged = (new Item(sojournerCapUnchargedID)).setUnlocalizedName("thaumicexploration:capSojournerInert").setCreativeTab(tab).setTextureName("thaumicexploration:capSojourner");
+		sojournerCap = new Item().setUnlocalizedName("thaumicexploration:capSojourner").setCreativeTab(tab).setTextureName("thaumicexploration:capSojournerCharged");
+		sojournerCapUncharged = new Item().setUnlocalizedName("thaumicexploration:capSojournerInert").setCreativeTab(tab).setTextureName("thaumicexploration:capSojourner");
 		
-		mechanistCap = (new Item(mechanistCapID)).setUnlocalizedName("thaumicexploration:capMechanist").setCreativeTab(tab).setTextureName("thaumicexploration:capMechanistCharged");
-		mechanistCapUncharged = (new Item(mechanistCapUnchargedID)).setUnlocalizedName("thaumicexploration:capMechanistInert").setCreativeTab(tab).setTextureName("thaumicexploration:capMechanist");
+		mechanistCap = new Item().setUnlocalizedName("thaumicexploration:capMechanist").setCreativeTab(tab).setTextureName("thaumicexploration:capMechanistCharged");
+		mechanistCapUncharged = new Item().setUnlocalizedName("thaumicexploration:capMechanistInert").setCreativeTab(tab).setTextureName("thaumicexploration:capMechanist");
 		
 		//theCandle  = (new ItemTheCandle(theCandleID)).setUnlocalizedName("thaumicexploration:theCandle").setCreativeTab(tab).setTextureName("thaumicexploration:candle");
 		
@@ -503,17 +486,17 @@ public class ThaumicExploration {
 		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
 		jarSealLinked = (new ItemChestSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
 		
-		charmNoTaint = (new Item(charmNoTaintID)).setUnlocalizedName("thaumicexploration:dreamcatcher").setCreativeTab(tab).setTextureName("thaumicexploration:dreamcatcher");
-		charmTaint = (new Item(charmTaintID)).setUnlocalizedName("thaumicexploration:ringTaint").setCreativeTab(tab).setTextureName("thaumicexploration:taintRing");
-		maskEvil = (new ItemTXArmorSpecialDiscount(maskEvilID, ThaumcraftApi.armorMatSpecial, 2, 0)).setUnlocalizedName("thaumicexploration:maskEvil").setCreativeTab(tab).setTextureName("thaumicexploration:maskEvil");
-		bootsMeteor = (new ItemTXArmorSpecial(bootsMeteorID, ThaumcraftApi.armorMatSpecial, 4, 3)).setUnlocalizedName("thaumicexploration:bootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:bootsMeteor");
-		bootsComet = (new ItemTXArmorSpecial(bootsCometID, ThaumcraftApi.armorMatSpecial, 4, 3)).setUnlocalizedName("thaumicexploration:bootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:bootsComet");
-		runicBootsMeteor = (new ItemTXRuneMeteorBoots(runicBootsMeteorID, ThaumcraftApi.armorMatSpecial, 0, 3)).setUnlocalizedName("thaumicexploration:runicBootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:runicBootsMeteor");
-		runicBootsComet = (new ItemTXRuneCometBoots(runicBootsCometID, ThaumcraftApi.armorMatSpecial, 0, 3)).setUnlocalizedName("thaumicexploration:runicBootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:runicBootsComet");
-		focusNecromancy = (new ItemFocusNecromancy(focusNecromancyID)).setUnlocalizedName("thaumicexploration:necromancy").setCreativeTab(tab).setTextureName("thaumicexploration:focusNecromancy");
-		taintBerry = (new ItemTaintSeedFood(taintBerryID, 1, 0.3F, Block.tnt.blockID, ConfigBlocks.blockTaint.blockID)).setCreativeTab(tab).setUnlocalizedName("thaumicexploration:taintBerry").setTextureName("thaumicExploration:taintBerry");
+		charmNoTaint = new Item().setUnlocalizedName("thaumicexploration:dreamcatcher").setCreativeTab(tab).setTextureName("thaumicexploration:dreamcatcher");
+		charmTaint = new Item().setUnlocalizedName("thaumicexploration:ringTaint").setCreativeTab(tab).setTextureName("thaumicexploration:taintRing");
+		maskEvil = new ItemTXArmorSpecialDiscount(maskEvilID, ThaumcraftApi.armorMatSpecial, 2, 0).setUnlocalizedName("thaumicexploration:maskEvil").setCreativeTab(tab).setTextureName("thaumicexploration:maskEvil");
+		bootsMeteor = new ItemTXArmorSpecial(bootsMeteorID, ThaumcraftApi.armorMatSpecial, 4, 3).setUnlocalizedName("thaumicexploration:bootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:bootsMeteor");
+		bootsComet = new ItemTXArmorSpecial(bootsCometID, ThaumcraftApi.armorMatSpecial, 4, 3).setUnlocalizedName("thaumicexploration:bootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:bootsComet");
+		runicBootsMeteor = new ItemTXRuneMeteorBoots(runicBootsMeteorID, ThaumcraftApi.armorMatSpecial, 0, 3).setUnlocalizedName("thaumicexploration:runicBootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:runicBootsMeteor");
+		runicBootsComet = new ItemTXRuneCometBoots(runicBootsCometID, ThaumcraftApi.armorMatSpecial, 0, 3).setUnlocalizedName("thaumicexploration:runicBootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:runicBootsComet");
+		//focusNecromancy = new ItemFocusNecromancy(focusNecromancyID).setUnlocalizedName("thaumicexploration:necromancy").setCreativeTab(tab).setTextureName("thaumicexploration:focusNecromancy");
+		taintBerry = new ItemTaintSeedFood(taintBerryID, 1, 0.3F, Blocks.tnt, ConfigBlocks.blockTaint).setCreativeTab(tab).setUnlocalizedName("thaumicexploration:taintBerry").setTextureName("thaumicExploration:taintBerry");
 		//Item skull = (new ItemSkullCandle(11016)).setUnlocalizedName("skull").setTextureName("skull");
-		itemAltar = (new ItemReed(itemAltarID, necroPedestal)).setUnlocalizedName("thaumicexploration:necroAltar").setCreativeTab(tab).setTextureName("thaumicExploration:necroAltar");
+		itemAltar = new ItemReed(necroPedestal).setUnlocalizedName("thaumicexploration:necroAltar").setCreativeTab(tab).setTextureName("thaumicExploration:necroAltar");
 		
 		//Wands
 		STAFF_ROD_AMBER = new StaffRod("AMBER",25,new ItemStack(ThaumicExploration.amberStaffCore),18,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
@@ -534,7 +517,8 @@ public class ThaumicExploration {
 		enchantmentNightVision = new EnchantmentNightVision(enchantmentNightVisionID, 1);
 		enchantmentDisarm = new EnchantmentDisarm(enchantmentDisarmID, 1);
 		if (Loader.isModLoaded("ThaumicTinkerer")) {
-			TTIntegration.registerEnchants();
+			// TODO Fix when TT updates
+			//TTIntegration.registerEnchants();
 		}
 		EntityRegistry.registerModEntity(EntityCandleFlame.class, "Explosion Ball", EntityRegistry.findGlobalUniqueEntityId(), this, 16, 1, true);
 		
@@ -563,7 +547,7 @@ public class ThaumicExploration {
 		//NecromanticAltarAPI.initNecromanticRecipes();
 		proxy.setUnicode();
 
-		allowedItems.add(MutablePair.of(Block.stone.blockID,0));
+		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone),0));
 		String[] ores = OreDictionary.getOreNames();
 	    for (String ore : ores) {
 	    	if (ore != null) {
@@ -571,16 +555,16 @@ public class ThaumicExploration {
 	    			for (ItemStack is : OreDictionary.getOres(ore)) {
 	    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 	    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
-	    				if (!(is.itemID == ConfigBlocks.blockMagicalLog.blockID) && ot.getAspects().length > 0)
-	    					allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+	    				if (!(is.getItem() == Item.getItemFromBlock(ConfigBlocks.blockMagicalLog)) && ot.getAspects().length > 0)
+	    					allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 	    	        }
 	    		}
 	    		if (ore.equals("treeLeaves")) {
 	    			for (ItemStack is : OreDictionary.getOres(ore)) {
 	    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 	    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
-	    				if (!(is.itemID == ConfigBlocks.blockMagicalLeaves.blockID) && ot.getAspects().length > 0)
-	    					allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+	    				if (!(is.getItem() == Item.getItemFromBlock(ConfigBlocks.blockMagicalLeaves)) && ot.getAspects().length > 0)
+	    					allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 	    	        }
 	    		}
 	    		if (allowModWoodReplication) {
@@ -590,7 +574,7 @@ public class ThaumicExploration {
 			    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 			    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
 			    		        if (ot.getAspects().length > 0)
-			    		        	allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+			    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 			    	        }
 			    		}
 		    		}
@@ -600,8 +584,8 @@ public class ThaumicExploration {
 			    			for (ItemStack is : OreDictionary.getOres(ore)) {
 			    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 			    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
-			    		        if (!(is.itemID == ConfigBlocks.blockWoodenDevice.blockID) && ot.getAspects().length > 0)
-			    		        	allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+			    		        if (!(is.getItem() == Item.getItemFromBlock(ConfigBlocks.blockWoodenDevice)) && ot.getAspects().length > 0)
+			    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 			    	        }
 			    		}
 		    		}
@@ -611,7 +595,7 @@ public class ThaumicExploration {
 		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
 		    		        if (ot.getAspects().length > 0)
-		    		        	allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 		    	        }
 		    		}
 		    		if (ore.equals("stairWood")) {
@@ -619,22 +603,23 @@ public class ThaumicExploration {
 		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
 		    		        if (ot.getAspects().length > 0)
-		    		        	allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 		    	        }
 		    		}
 	    		}
 	    		else
 	    		{
-	    			allowedItems.add(MutablePair.of(Block.woodSingleSlab.blockID,OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.stairsWoodBirch.blockID,OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.stairsWoodOak.blockID,OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.stairsWoodJungle.blockID,OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.stairsWoodSpruce.blockID,OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.wood.blockID,OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.planks.blockID,OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.wooden_slab),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.birch_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.oak_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.jungle_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.spruce_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.log),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.log2),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.planks),OreDictionary.WILDCARD_VALUE));
 	    			if (allowMagicPlankReplication) {
-	    				allowedItems.add(MutablePair.of(ConfigBlocks.blockWoodenDevice.blockID,6));
-	    				allowedItems.add(MutablePair.of(ConfigBlocks.blockWoodenDevice.blockID,7));
+	    				allowedItems.add(MutablePair.of(Item.getItemFromBlock(ConfigBlocks.blockWoodenDevice),6));
+	    				allowedItems.add(MutablePair.of(Item.getItemFromBlock(ConfigBlocks.blockWoodenDevice),7));
 	    			}	
 	    		}
 	    		if (allowModStoneReplication) {
@@ -643,7 +628,7 @@ public class ThaumicExploration {
 		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
 		    		        if (ot.getAspects().length > 0)
-		    		        	allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 		    	        }
 		    		}
 		    		if (ore.equals("cobblestone")) {
@@ -651,53 +636,54 @@ public class ThaumicExploration {
 		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
 		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
 		    		        if (ot.getAspects().length > 0)
-		    		        	allowedItems.add(MutablePair.of(is.itemID,is.getItemDamage()));
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
 		    	        }
 		    		}
 	    		}
 	    		else
 	    		{
-	    			allowedItems.add(MutablePair.of(Block.stone.blockID, OreDictionary.WILDCARD_VALUE));
-	    			allowedItems.add(MutablePair.of(Block.cobblestone.blockID, OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone), OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.cobblestone), OreDictionary.WILDCARD_VALUE));
 	    		}
-	    		allowedItems.add(MutablePair.of(Block.cobblestoneMossy.blockID, OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,0));
-	    		allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,3));
-	    		allowedItems.add(MutablePair.of(Block.stairsCobblestone.blockID, OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.mossy_cobblestone), OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),0));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),3));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_stairs), OreDictionary.WILDCARD_VALUE));
 	    		
 	    		//All sandstone, stairs, slab
-	    		allowedItems.add(MutablePair.of(Block.sand.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.sandStone.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stairsSandStone.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,1));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.sand),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.sandstone),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.sandstone_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),1));
 	    		
 	    		//All stone bricks, stairs, slab
-	    		allowedItems.add(MutablePair.of(Block.stoneBrick.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stairsStoneBrick.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,5));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.brick_block),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.brick_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),5));
 	    		
 	    		//Bricks, stairs, slab
-	    		allowedItems.add(MutablePair.of(Block.brick.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stairsBrick.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,4));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stonebrick),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_brick_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),4));
 	    		
 	    		//All quartz, stairs, slab
-	    		//allowedItems.add(MutablePair.of(Block.blockNetherQuartz.blockID,OreDictionary.WILDCARD_VALUE));
-	    		//allowedItems.add(MutablePair.of(Block.stairsNetherQuartz.blockID,OreDictionary.WILDCARD_VALUE));
-	    		//allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,7));
+	    		//allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.blockNetherQuartz),OreDictionary.WILDCARD_VALUE));
+	    		//allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stairsNetherQuartz),OreDictionary.WILDCARD_VALUE));
+	    		//allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stoneSingleSlab),7));
 	    		
 	    		//Netherbrick, stairs, slab
-	    		allowedItems.add(MutablePair.of(Block.netherBrick.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stairsNetherBrick.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.stoneSingleSlab.blockID,6));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.nether_brick),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.nether_brick_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),6));
 	    		
-	    		allowedItems.add(MutablePair.of(Block.slowSand.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.gravel.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.glass.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.grass.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.dirt.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.blockSnow.blockID,OreDictionary.WILDCARD_VALUE));
-	    		allowedItems.add(MutablePair.of(Block.blockClay.blockID,OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.soul_sand),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.gravel),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.glass),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.grass),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.dirt),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.snow),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.clay),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.hardened_clay),OreDictionary.WILDCARD_VALUE));
 	    	}
 	    }
 	}
@@ -737,12 +723,19 @@ public class ThaumicExploration {
 
 		public TXTab(int par1, String par2Str) {
 			super(par1, par2Str);
-			// TODO Auto-generated constructor stub
+	
 		}
 		
         public ItemStack getIconItemStack() {
             return new ItemStack(ThaumicExploration.thinkTankJar, 1, 0);
-        }	
+        }
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem() {
+		
+			return Item.getItemFromBlock(ThaumicExploration.thinkTankJar);
+		}	
 		
 	}
 }

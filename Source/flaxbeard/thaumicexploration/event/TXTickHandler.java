@@ -1,5 +1,9 @@
 package flaxbeard.thaumicexploration.event;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.EnumSet;
@@ -9,20 +13,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import thaumcraft.client.fx.FXLightningBolt;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 
-public class TXTickHandler implements ITickHandler {
+public class TXTickHandler{
 	
 	private EntityLivingBase target;
 	private MovingObjectPosition objectMouseOver;
@@ -32,60 +33,52 @@ public class TXTickHandler implements ITickHandler {
 	private int watchTicks = 0;
 
 
-	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {
+	@SubscribeEvent
+	public void tickStart(TickEvent.ClientTickEvent event) {
 		
 		if(Minecraft.getMinecraft().thePlayer != null){
 
 			EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-			ItemStack item = player.getCurrentItemOrArmor(4);
-		    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID || player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID)) {
+			ItemStack item = player.getCurrentArmor(3);
+		    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsMeteor || player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.bootsMeteor)) {
 		    	if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isPressed()) {
-		    		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-			        DataOutputStream outputStream = new DataOutputStream(bos);
+		    		ByteBuf buf = Unpooled.buffer();
+            		ByteBufOutputStream out = new ByteBufOutputStream(buf);
 			        try
 			        {
-			            outputStream.writeByte(4);
-			            outputStream.writeInt(Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId);
-			            outputStream.writeInt(Minecraft.getMinecraft().thePlayer.entityId);
-			           
+			            out.writeByte(4);
+			            out.writeInt(Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId);
+			            out.writeInt(Minecraft.getMinecraft().thePlayer.getEntityId());
+				        FMLProxyPacket packet = new FMLProxyPacket(buf,"tExploration");
+				        ThaumicExploration.channel.sendToServer(packet);
+				        out.close();
 			        }
 			        catch (Exception ex)
 			        {
 			            ex.printStackTrace();
 			        }
-			
-			        Packet250CustomPayload packet = new Packet250CustomPayload();
-			        packet.channel = "tExploration";
-			        packet.data = bos.toByteArray();
-			        packet.length = bos.size();
-			        PacketDispatcher.sendPacketToServer(packet);
 		    	}
 		    	else
 		    	{
-		    		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-			        DataOutputStream outputStream = new DataOutputStream(bos);
+		    		ByteBuf buf = Unpooled.buffer();
+            		ByteBufOutputStream out = new ByteBufOutputStream(buf);
 			        try
 			        {
-			            outputStream.writeByte(5);
-			            outputStream.writeInt(Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId);
-			            outputStream.writeInt(Minecraft.getMinecraft().thePlayer.entityId);
-			           
+			            out.writeByte(5);
+			            out.writeInt(Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId);
+			            out.writeInt(Minecraft.getMinecraft().thePlayer.getEntityId());
+				        FMLProxyPacket packet = new FMLProxyPacket(buf,"tExploration");
+				        ThaumicExploration.channel.sendToServer(packet);
+				        out.close();
 			        }
 			        catch (Exception ex)
 			        {
 			            ex.printStackTrace();
 			        }
-			
-			        Packet250CustomPayload packet = new Packet250CustomPayload();
-			        packet.channel = "tExploration";
-			        packet.data = bos.toByteArray();
-			        packet.length = bos.size();
-			        PacketDispatcher.sendPacketToServer(packet);
 		    	}
 		    }
 			if (item != null) {
-				if (item.itemID == ThaumicExploration.maskEvil.itemID) {
+				if (item.getItem() == ThaumicExploration.maskEvil) {
 					this.lastPointedEntityLiving = pointedEntityLiving;
 					this.getMouseOver(0L);
 					if (this.pointedEntityLiving != null){
@@ -122,33 +115,26 @@ public class TXTickHandler implements ITickHandler {
 								FXLightningBolt bolt = new FXLightningBolt(player.worldObj, player.posX, player.boundingBox.minY + player.height / 2.0F + 0.75D - offset, player.posZ, this.pointedEntityLiving.posX, this.pointedEntityLiving.boundingBox.maxY - 0.5F, this.pointedEntityLiving.posZ, player.worldObj.rand.nextLong(), 6, 0.5F, 5);
 								bolt.defaultFractal();
 							    bolt.setType(5);
-			        	        if (player.username.equalsIgnoreCase("killajoke")) {
-			        	        	bolt.setType(3);
-			        	        }
 							    bolt.setWidth(0.125F);
 							    bolt.finalizeBolt();
 							
-							ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-					        DataOutputStream outputStream = new DataOutputStream(bos);
-					
+					        
+				    		ByteBuf buf = Unpooled.buffer();
+		            		ByteBufOutputStream out = new ByteBufOutputStream(buf);
 					        try
 					        {
-					            outputStream.writeByte(2);
-					            outputStream.writeInt(Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId);
-					            outputStream.writeInt(this.pointedEntityLiving.entityId);
-					            outputStream.writeInt(Minecraft.getMinecraft().thePlayer.entityId);
-					           
+					        	out.writeByte(2);
+						        out.writeInt(Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId);
+						        out.writeInt(this.pointedEntityLiving.getEntityId());
+						        out.writeInt(Minecraft.getMinecraft().thePlayer.getEntityId());
+						        FMLProxyPacket packet = new FMLProxyPacket(buf,"tExploration");
+						        ThaumicExploration.channel.sendToServer(packet);
+						        out.close();
 					        }
 					        catch (Exception ex)
 					        {
 					            ex.printStackTrace();
 					        }
-					
-					        Packet250CustomPayload packet = new Packet250CustomPayload();
-					        packet.channel = "tExploration";
-					        packet.data = bos.toByteArray();
-					        packet.length = bos.size();
-					        PacketDispatcher.sendPacketToServer(packet);
 							}
 					        
 
@@ -164,9 +150,6 @@ public class TXTickHandler implements ITickHandler {
 								FXLightningBolt bolt = new FXLightningBolt(player.worldObj, player.posX, player.boundingBox.minY + player.height / 2.0F + 0.75D - offset, player.posZ, this.pointedEntityLiving.posX, this.pointedEntityLiving.boundingBox.maxY - 0.5F, this.pointedEntityLiving.posZ, player.worldObj.rand.nextLong(), 6, 0.5F, 5);
 								bolt.defaultFractal();
 							    bolt.setType(5);
-			        	        if (player.username.equalsIgnoreCase("killajoke")) {
-			        	        	bolt.setType(3);
-			        	        }
 							    bolt.setWidth(0.0625F);
 							    bolt.finalizeBolt();
 							}
@@ -259,23 +242,5 @@ public class TXTickHandler implements ITickHandler {
             }
         }
     }
-
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		
-		
-	}
-
-	@Override
-	public EnumSet<TickType> ticks() {
-		// TODO Auto-generated method stub
-		return EnumSet.of(TickType.CLIENT);
-	}
-
-	@Override
-	public String getLabel() {
-		// TODO Auto-generated method stub
-		return null;
-	} 
 
 }

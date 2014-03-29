@@ -36,7 +36,7 @@ public class TileEntityFloatyCandleRender extends TileEntitySpecialRenderer {
         this.bindTexture(wickTexture);
         this.candleModel.renderWick();
         this.bindTexture(candleTexture);
-        Color color = new Color(ConfigBlocks.blockCandle.getRenderColor(tileentity.worldObj.getBlockMetadata(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord)));
+        Color color = new Color(ConfigBlocks.blockCandle.getRenderColor(tileentity.getWorldObj().getBlockMetadata(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord)));
         //System.out.println(ConfigBlocks.blockCandle.getRenderColor(tileentity.worldObj.getBlockMetadata(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord)));
         GL11.glColor3ub((byte)color.getRed(), (byte)color.getGreen(),(byte) color.getBlue());
         this.candleModel.renderAll(ticks);

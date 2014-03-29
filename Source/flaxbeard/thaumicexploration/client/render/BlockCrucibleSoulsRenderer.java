@@ -2,11 +2,9 @@ package flaxbeard.thaumicexploration.client.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import thaumcraft.client.renderers.block.BlockRenderer;
-import thaumcraft.common.tiles.TileCrucible;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
@@ -20,7 +18,7 @@ public class BlockCrucibleSoulsRenderer
   {
       block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
       renderer.setRenderBoundsFromBlock(block);
-      drawFaces(renderer, block, ((BlockCrucibleSouls)block).icon[2], ((BlockCrucibleSouls)block).icon[4], ((BlockCrucibleSouls)block).icon[3], ((BlockCrucibleSouls)block).icon[3], ((BlockCrucibleSouls)block).icon[3], ((BlockCrucibleSouls)block).icon[3], true);
+      drawFaces(renderer, block, ((BlockCrucibleSouls)block).IIcon[2], ((BlockCrucibleSouls)block).IIcon[4], ((BlockCrucibleSouls)block).IIcon[3], ((BlockCrucibleSouls)block).IIcon[3], ((BlockCrucibleSouls)block).IIcon[3], ((BlockCrucibleSouls)block).IIcon[3], true);
   }
   
   public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
@@ -28,18 +26,18 @@ public class BlockCrucibleSoulsRenderer
 	  
 	  int metadata = world.getBlockMetadata(x, y, z);
       block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-      TileEntityCrucibleSouls te = (TileEntityCrucibleSouls) world.getBlockTileEntity(x, y, z);
+      TileEntityCrucibleSouls te = (TileEntityCrucibleSouls) world.getTileEntity(x, y, z);
       renderer.setRenderBoundsFromBlock(block);
       renderer.renderStandardBlock(block, x, y, z);
-      Icon outerSide = null;
-      Icon innerSide = ((BlockCrucibleSouls)block).icon[5];
-      Icon bottom = ((BlockCrucibleSouls)block).icon[6];
+      IIcon outerSide = null;
+      IIcon innerSide = ((BlockCrucibleSouls)block).IIcon[5];
+      IIcon bottom = ((BlockCrucibleSouls)block).IIcon[6];
       if (te.drainTicks > 0) {
-    	  outerSide = ((BlockCrucibleSouls)block).icon[7];
+    	  outerSide = ((BlockCrucibleSouls)block).IIcon[7];
       }
       else
       {
-    	  outerSide = ((BlockCrucibleSouls)block).icon[3];
+    	  outerSide = ((BlockCrucibleSouls)block).IIcon[3];
       }
      
       float f5 = 0.123F;
@@ -74,4 +72,10 @@ public class BlockCrucibleSoulsRenderer
   {
     return ThaumicExploration.crucibleSoulsRenderID;
   }
+
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		// TODO Auto-generated method stub
+		return (modelId == ThaumicExploration.crucibleSoulsRenderID);
+	}
 }

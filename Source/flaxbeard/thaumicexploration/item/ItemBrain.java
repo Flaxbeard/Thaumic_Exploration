@@ -13,22 +13,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemBrain extends Item{
 
 	public ItemBrain(int par1) {
-		super(par1);
+		super();
 
 	}
-	
-	 @Override
-     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-             
-             return new EntityItemBrain(world, location.posX, location.posY, location.posZ, itemstack);
-     }
-     
-     @Override
-     public boolean hasCustomEntity(ItemStack stack) {
-             return true;
-     }
-     
-     
+//	
+//	 @Override
+//     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+//             
+//             //return new EntityItemBrain(world, location.posX, location.posY, location.posZ, itemstack);
+//     }
+//     
+//     @Override
+//     public boolean hasCustomEntity(ItemStack stack) {
+//             return true;
+//     }
+//     
+//     
      
 
 }

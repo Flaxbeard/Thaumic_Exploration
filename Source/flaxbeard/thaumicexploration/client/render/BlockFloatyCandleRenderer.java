@@ -49,4 +49,10 @@ public class BlockFloatyCandleRenderer
   {
     return ThaumicExploration.floatCandleRenderID;
   }
+
+@Override
+public boolean shouldRender3DInInventory(int modelId) {
+	// TODO Auto-generated method stub
+	return ThaumicExploration.floatCandleRenderID == modelId;
+}
 }

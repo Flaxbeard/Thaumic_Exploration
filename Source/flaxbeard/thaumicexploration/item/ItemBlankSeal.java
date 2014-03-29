@@ -3,12 +3,10 @@ package flaxbeard.thaumicexploration.item;
 import java.awt.Color;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -16,7 +14,7 @@ public class ItemBlankSeal extends Item {
 
 	public static final String[] itemNames = {"Pale", "Orange", "Magenta", "Light Blue", "Yellow", "Lime", "Pink", "Gray", "Light Gray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Dark"} ;
 	public ItemBlankSeal(int par1) {
-		super(par1);
+		super();
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
 	}
@@ -35,7 +33,7 @@ public class ItemBlankSeal extends Item {
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(int itemID, CreativeTabs tab,
+    public void getSubItems(Item itemID, CreativeTabs tab,
                     List itemList) {
             for(int i = 0; i < itemNames.length; i++){
                     itemList.add(new ItemStack(itemID,1,i));

@@ -2,6 +2,8 @@ package flaxbeard.thaumicexploration.item;
 
 import java.util.List;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -17,7 +19,7 @@ import flaxbeard.thaumicexploration.misc.FakePlayerPotion;
 public class ItemFoodTalisman extends Item {
 
 	public ItemFoodTalisman(int par1) {
-		super(par1);
+		super();
 		this.maxStackSize = 1;
 		//this.setMaxDamage(100);
 	}
@@ -57,9 +59,9 @@ public class ItemFoodTalisman extends Item {
 				if (player.inventory.getStackInSlot(i) != null) {
 					ItemStack food = player.inventory.getStackInSlot(i);
 					if (isEdible(food, player)) {
-						float sat = ((ItemFood)food.getItem()).getSaturationModifier() * 2;
+						float sat = ((ItemFood)food.getItem()).func_150906_h(food) * 2;
 
-						float heal = ((ItemFood)food.getItem()).getHealAmount();
+						float heal = ((ItemFood)food.getItem()).func_150905_g(food);
 						if (par1ItemStack.stackTagCompound.getFloat("food")+(int)heal < 100) {
 							if (par1ItemStack.stackTagCompound.getFloat("saturation") + sat <= 100) {
 								par1ItemStack.stackTagCompound.setFloat("saturation", par1ItemStack.stackTagCompound.getFloat("saturation") + sat);
@@ -105,10 +107,10 @@ public class ItemFoodTalisman extends Item {
 	}
 
 	private boolean isEdible(ItemStack food, EntityPlayer player) {
-		if (food.getItem() instanceof ItemFood && food.itemID != ConfigItems.itemManaBean.itemID) {
+		if (food.getItem() instanceof ItemFood && food.getItem() != ConfigItems.itemManaBean) {
 
 			for (int i = 1; i < 25; i++) {
-				EntityPlayer fakePlayer = new FakePlayerPotion(player.worldObj, "foodTabletPlayer");
+				EntityPlayer fakePlayer = new FakePlayerPotion(player.worldObj, new GameProfile(null, "foodTabletPlayer"));
 				fakePlayer.setPosition(0.0F, 999.0F, 0.0F);
 				((ItemFood)food.getItem()).onEaten(food.copy(), player.worldObj, fakePlayer);
 				if (fakePlayer.getActivePotionEffects().size() > 0) {

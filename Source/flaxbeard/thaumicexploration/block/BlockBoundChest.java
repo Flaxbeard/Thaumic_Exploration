@@ -1,23 +1,21 @@
 package flaxbeard.thaumicexploration.block;
 
-import static net.minecraftforge.common.ForgeDirection.DOWN;
-
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -25,6 +23,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
@@ -39,7 +38,7 @@ public class BlockBoundChest extends BlockContainer
 
     public BlockBoundChest(int par1, int par2)
     {
-        super(par1, Material.wood);
+        super(Material.wood);
         this.chestType = par2;
         this.setCreativeTab(CreativeTabs.tabDecorations);
         this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
@@ -86,31 +85,6 @@ public class BlockBoundChest extends BlockContainer
     public void onBlockAdded(World par1World, int par2, int par3, int par4)
     {
         super.onBlockAdded(par1World, par2, par3, par4);
-        this.unifyAdjacentChests(par1World, par2, par3, par4);
-        int l = par1World.getBlockId(par2, par3, par4 - 1);
-        int i1 = par1World.getBlockId(par2, par3, par4 + 1);
-        int j1 = par1World.getBlockId(par2 - 1, par3, par4);
-        int k1 = par1World.getBlockId(par2 + 1, par3, par4);
-
-        if (l == this.blockID)
-        {
-            //this.unifyAdjacentChests(par1World, par2, par3, par4 - 1);
-        }
-
-        if (i1 == this.blockID)
-        {
-            //this.unifyAdjacentChests(par1World, par2, par3, par4 + 1);
-        }
-
-        if (j1 == this.blockID)
-        {
-            //this.unifyAdjacentChests(par1World, par2 - 1, par3, par4);
-        }
-
-        if (k1 == this.blockID)
-        {
-            //this.unifyAdjacentChests(par1World, par2 + 1, par3, par4);
-        }
     }
 
     /**
@@ -150,7 +124,7 @@ public class BlockBoundChest extends BlockContainer
 
         if (par6ItemStack.hasDisplayName())
         {
-            ((TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4)).setChestGuiName(par6ItemStack.getDisplayName());
+            ((TileEntityBoundChest)par1World.getTileEntity(par2, par3, par4)).setChestGuiName(par6ItemStack.getDisplayName());
         }
     }
 
@@ -172,14 +146,15 @@ public class BlockBoundChest extends BlockContainer
        return true;
     }
     
-    public int idDropped(int par1, Random par2Random, int par3)
+    @Override
+    public Item getItemDropped(int par1, Random par2Random, int par3)
     {
-        return Block.chest.blockID;
+        return Item.getItemFromBlock(Blocks.chest);
     }
-   
-	public int idPicked(World par1World, int par2, int par3, int par4)
+    @Override
+	public Item getItem(World par1World, int par2, int par3, int par4)
 	{
-		return Block.chest.blockID;
+    	return Item.getItemFromBlock(Blocks.chest);
 	}
 
     /**
@@ -187,17 +162,17 @@ public class BlockBoundChest extends BlockContainer
      */
     private boolean isThereANeighborChest(World par1World, int par2, int par3, int par4)
     {
-        return par1World.getBlockId(par2, par3, par4) != this.blockID ? false : (par1World.getBlockId(par2 - 1, par3, par4) == this.blockID ? true : (par1World.getBlockId(par2 + 1, par3, par4) == this.blockID ? true : (par1World.getBlockId(par2, par3, par4 - 1) == this.blockID ? true : par1World.getBlockId(par2, par3, par4 + 1) == this.blockID)));
+        return par1World.getBlock(par2, par3, par4) != this ? false : (par1World.getBlock(par2 - 1, par3, par4) == this ? true : (par1World.getBlock(par2 + 1, par3, par4) == this ? true : (par1World.getBlock(par2, par3, par4 - 1) == this ? true : par1World.getBlock(par2, par3, par4 + 1) == this)));
     }
 
     /**
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
-    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5)
     {
         super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
-        TileEntityBoundChest tileentitychest = (TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4);
+        TileEntityBoundChest tileentitychest = (TileEntityBoundChest)par1World.getTileEntity(par2, par3, par4);
 
         if (tileentitychest != null)
         {
@@ -222,7 +197,7 @@ public class BlockBoundChest extends BlockContainer
                 }
 
                 itemstack.stackSize -= k1;
-                entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+                entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.getItem(), k1, itemstack.getItemDamage()));
                 float f3 = 0.05F;
                 entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
                 entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
@@ -241,13 +216,13 @@ public class BlockBoundChest extends BlockContainer
      * different metadata value, but before the new metadata value is set. Args: World, x, y, z, old block ID, old
      * metadata
      */
-    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
     {
-        TileEntityBoundChest tileentitychest = (TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4);
+        TileEntityBoundChest tileentitychest = (TileEntityBoundChest)par1World.getTileEntity(par2, par3, par4);
 
         if (tileentitychest != null)
         {
-            this.dropItem(new ItemStack(ThaumicExploration.blankSeal.itemID, 1, 15-((TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4)).getSealColor()), par1World, par2, par3, par4);
+            this.dropItem(new ItemStack(ThaumicExploration.blankSeal, 1, 15-((TileEntityBoundChest)par1World.getTileEntity(par2, par3, par4)).getSealColor()), par1World, par2, par3, par4);
             for (int j1 = 0; j1 < tileentitychest.getSizeInventory(); ++j1)
             {
                 ItemStack itemstack = tileentitychest.getStackInSlot(j1);
@@ -255,9 +230,9 @@ public class BlockBoundChest extends BlockContainer
                 
             }
 
-            par1World.func_96440_m(par2, par3, par4, par5);
+            par1World.func_147453_f(par2, par3, par4, par5);
         }
-
+        
         super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
 
@@ -291,33 +266,17 @@ public class BlockBoundChest extends BlockContainer
      */
     public IInventory getInventory(World par1World, int par2, int par3, int par4)
     {
-        Object object = (TileEntityBoundChest)par1World.getBlockTileEntity(par2, par3, par4);
+        Object object = (TileEntityBoundChest)par1World.getTileEntity(par2, par3, par4);
 
         if (object == null)
         {
             return null;
         }
-        else if (par1World.isBlockSolidOnSide(par2, par3 + 1, par4, DOWN))
+        else if (par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN))
         {
             return null;
         }
         else if (isOcelotBlockingChest(par1World, par2, par3, par4))
-        {
-            return null;
-        }
-        else if (par1World.getBlockId(par2 - 1, par3, par4) == this.blockID && (par1World.isBlockSolidOnSide(par2 - 1, par3 + 1, par4, DOWN) || isOcelotBlockingChest(par1World, par2 - 1, par3, par4)))
-        {
-            return null;
-        }
-        else if (par1World.getBlockId(par2 + 1, par3, par4) == this.blockID && (par1World.isBlockSolidOnSide(par2 + 1, par3 + 1, par4, DOWN) || isOcelotBlockingChest(par1World, par2 + 1, par3, par4)))
-        {
-            return null;
-        }
-        else if (par1World.getBlockId(par2, par3, par4 - 1) == this.blockID && (par1World.isBlockSolidOnSide(par2, par3 + 1, par4 - 1, DOWN) || isOcelotBlockingChest(par1World, par2, par3, par4 - 1)))
-        {
-            return null;
-        }
-        else if (par1World.getBlockId(par2, par3, par4 + 1) == this.blockID && (par1World.isBlockSolidOnSide(par2, par3 + 1, par4 + 1, DOWN) || isOcelotBlockingChest(par1World, par2, par3, par4 + 1)))
         {
             return null;
         }
@@ -359,7 +318,7 @@ public class BlockBoundChest extends BlockContainer
         }
         else
         {
-            int i1 = ((TileEntityBoundChest)par1IBlockAccess.getBlockTileEntity(par2, par3, par4)).numUsingPlayers;
+            int i1 = ((TileEntityBoundChest)par1IBlockAccess.getTileEntity(par2, par3, par4)).numUsingPlayers;
             return MathHelper.clamp_int(i1, 0, 15);
         }
     }
@@ -415,14 +374,21 @@ public class BlockBoundChest extends BlockContainer
         return Container.calcRedstoneFromInventory(this.getInventory(par1World, par2, par3, par4));
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
 
     /**
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister par1IconRegister)
     {
         this.blockIcon = par1IconRegister.registerIcon("planks_oak");
     }
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		TileEntityBoundChest tileentitychest = new TileEntityBoundChest();
+        return tileentitychest;
+	}
 }

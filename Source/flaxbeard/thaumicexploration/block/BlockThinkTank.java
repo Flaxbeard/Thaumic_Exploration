@@ -2,24 +2,23 @@ package flaxbeard.thaumicexploration.block;
 
 import java.util.Random;
 
-import thaumcraft.common.blocks.JarStepSound;
+import javax.swing.Icon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.FMLNetworkHandler;
+import thaumcraft.common.blocks.JarStepSound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import flaxbeard.thaumicexploration.ThaumicExploration;
@@ -47,19 +46,20 @@ public class BlockThinkTank extends BlockContainer
 
     public BlockThinkTank(int par1, boolean par2)
     {
-        super(par1, Material.glass);
+        super(Material.glass);
         this.isActive = par2;
         setStepSound(new JarStepSound("jar", 1.0F, 1.0F));
         setHardness(0.3F);
-        setLightValue(0.66F);
+        setLightLevel(0.66F);
     }
 
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int par1, Random par2Random, int par3)
+    @Override
+    public Item getItemDropped(int par1, Random par2Random, int par3)
     {
-        return ThaumicExploration.thinkTankJar.blockID;
+        return Item.getItemFromBlock(ThaumicExploration.thinkTankJar);
     }
 
     /**
@@ -141,11 +141,11 @@ public class BlockThinkTank extends BlockContainer
         }
         else
         {
-            TileEntityThinkTank tileentityfurnace = (TileEntityThinkTank)par1World.getBlockTileEntity(par2, par3, par4);
+            TileEntityThinkTank tileentityfurnace = (TileEntityThinkTank)par1World.getTileEntity(par2, par3, par4);
 
             if (tileentityfurnace != null)
             {
-            	FMLNetworkHandler.openGui(par5EntityPlayer, ThaumicExploration.instance, 0, par1World, par2,par3,par4);
+            	par5EntityPlayer.openGui(ThaumicExploration.instance, 0, par1World, par2,par3,par4);
             }
 
             return true;
@@ -158,7 +158,7 @@ public class BlockThinkTank extends BlockContainer
     public static void updateFurnaceBlockState(boolean par0, World par1World, int par2, int par3, int par4)
     {
         int l = par1World.getBlockMetadata(par2, par3, par4);
-        TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
+        TileEntity tileentity = par1World.getTileEntity(par2, par3, par4);
         keepFurnaceInventory = true;
 
 
@@ -169,7 +169,7 @@ public class BlockThinkTank extends BlockContainer
         if (tileentity != null)
         {
             tileentity.validate();
-            par1World.setBlockTileEntity(par2, par3, par4, tileentity);
+            par1World.setTileEntity(par2, par3, par4, tileentity);
         }
     }
 
@@ -182,10 +182,6 @@ public class BlockThinkTank extends BlockContainer
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
      */
-    public TileEntity createNewTileEntity(World par1World)
-    {
-        return new TileEntityThinkTank();
-    }
 
     /**
      * Called when the block is placed in the world.
@@ -216,7 +212,7 @@ public class BlockThinkTank extends BlockContainer
 
         if (par6ItemStack.hasDisplayName())
         {
-            ((TileEntityThinkTank)par1World.getBlockTileEntity(par2, par3, par4)).setGuiDisplayName(par6ItemStack.getDisplayName());
+            ((TileEntityThinkTank)par1World.getTileEntity(par2, par3, par4)).setGuiDisplayName(par6ItemStack.getDisplayName());
         }
     }
 
@@ -225,11 +221,12 @@ public class BlockThinkTank extends BlockContainer
      * different metadata value, but before the new metadata value is set. Args: World, x, y, z, old block ID, old
      * metadata
      */
-    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    @Override
+    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
     {
         if (!keepFurnaceInventory)
         {
-            TileEntityThinkTank tileentityfurnace = (TileEntityThinkTank)par1World.getBlockTileEntity(par2, par3, par4);
+            TileEntityThinkTank tileentityfurnace = (TileEntityThinkTank)par1World.getTileEntity(par2, par3, par4);
 
             if (tileentityfurnace != null)
             {
@@ -253,7 +250,7 @@ public class BlockThinkTank extends BlockContainer
                             }
 
                             itemstack.stackSize -= k1;
-                            EntityItem entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+                            EntityItem entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.getItem(), k1, itemstack.getItemDamage()));
 
                             if (itemstack.hasTagCompound())
                             {
@@ -269,7 +266,7 @@ public class BlockThinkTank extends BlockContainer
                     }
                 }
 
-                par1World.func_96440_m(par2, par3, par4, par5);
+                par1World.func_147453_f(par2, par3, par4, par5);
             }
         }
 
@@ -291,21 +288,30 @@ public class BlockThinkTank extends BlockContainer
      */
     public int getComparatorInputOverride(World par1World, int par2, int par3, int par4, int par5)
     {
-        return Container.calcRedstoneFromInventory((IInventory)par1World.getBlockTileEntity(par2, par3, par4));
+        return Container.calcRedstoneFromInventory((IInventory)par1World.getTileEntity(par2, par3, par4));
     }
     
+    @Override
     public int quantityDropped(Random par1Random)
     {
         return 1;
     }
 
-    @SideOnly(Side.CLIENT)
+   // @SideOnly(Side.CLIENT)
 
     /**
      * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
      */
-    public int idPicked(World par1World, int par2, int par3, int par4)
-    {
-        return ThaumicExploration.thinkTankJar.blockID;
-    }
+//    @Override
+//    public int getItemPicked(World par1World, int par2, int par3, int par4)
+//    {
+//    	super.getblock
+//        return ThaumicExploration.thinkTankJar.blockID;
+//    }
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+		// TODO Auto-generated method stub
+		return new TileEntityThinkTank();
+	}
 }

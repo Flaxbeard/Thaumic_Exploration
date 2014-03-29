@@ -2,14 +2,12 @@ package flaxbeard.thaumicexploration.client.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import thaumcraft.client.renderers.block.BlockRenderer;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import flaxbeard.thaumicexploration.ThaumicExploration;
-import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
 import flaxbeard.thaumicexploration.block.BlockReplicator;
-import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
 
 public class BlockReplicatorRenderer
   extends BlockRenderer
@@ -30,7 +28,7 @@ public class BlockReplicatorRenderer
       setBrightness(world, x, y, z, block);
       renderer.setRenderBoundsFromBlock(block);
       renderer.renderStandardBlock(block, x, y, z);
-      Icon top = ((BlockReplicator)block).icon[2];
+      IIcon top = ((BlockReplicator)block).icon[2];
      
       
 
@@ -68,4 +66,10 @@ public class BlockReplicatorRenderer
   {
     return ThaumicExploration.replicatorRenderID;
   }
+
+@Override
+public boolean shouldRender3DInInventory(int modelId) {
+	// TODO Auto-generated method stub
+	return modelId == ThaumicExploration.replicatorRenderID;
+}
 }

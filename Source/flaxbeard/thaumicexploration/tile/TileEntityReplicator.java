@@ -1,7 +1,5 @@
 package flaxbeard.thaumicexploration.tile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -12,10 +10,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -25,8 +22,7 @@ import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IAspectSource;
 import thaumcraft.api.wands.IWandable;
 import thaumcraft.common.config.Config;
-import thaumcraft.common.lib.ThaumcraftCraftingManager;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 
 public class TileEntityReplicator extends TileEntity implements ISidedInventory, IWandable, IAspectContainer{
@@ -100,7 +96,7 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 			AspectList ot = ThaumcraftCraftingManager.getObjectTags(example);
 	        ot = ThaumcraftCraftingManager.getBonusTags(example, ot);
 			for (int i = 0; i<5; i++) {
-				ThaumicExploration.proxy.spawnFragmentParticle(this.worldObj, this.xCoord + 0.5F + (2*Math.random() - 1.0F), this.yCoord  + 1.5F + (2*Math.random() - 1.0F), this.zCoord  + 0.5F + (2*Math.random() - 1.0F), this.xCoord  + 0.5F, this.yCoord + 1.5F, this.zCoord  + 0.5F, Block.blocksList[example.itemID], example.getItemDamage());
+				ThaumicExploration.proxy.spawnFragmentParticle(this.worldObj, this.xCoord + 0.5F + (2*Math.random() - 1.0F), this.yCoord  + 1.5F + (2*Math.random() - 1.0F), this.zCoord  + 0.5F + (2*Math.random() - 1.0F), this.xCoord  + 0.5F, this.yCoord + 1.5F, this.zCoord  + 0.5F, Block.getBlockFromItem(example.getItem()), example.getItemDamage());
 
 			}
 			
@@ -133,7 +129,7 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	                {
 	                  for (ChunkCoordinates cc : this.sources)
 	                  {
-	                    TileEntity te = this.worldObj.getBlockTileEntity(cc.posX, cc.posY, cc.posZ);
+	                    TileEntity te = this.worldObj.getTileEntity(cc.posX, cc.posY, cc.posZ);
 	                    if ((te != null) && ((te instanceof IAspectSource)))
 	                    {
 	                      IAspectSource as = (IAspectSource)te;
@@ -142,32 +138,32 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	                        as.takeFromContainer(aspect, 1);
 	                        this.recipeEssentia.reduce(aspect, 1);
 	                        
-	                        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-	            	        DataOutputStream outputStream = new DataOutputStream(bos);
-	            	
-	            	        try
-	            	        {
-	            	            outputStream.writeByte(6);
-	            	            outputStream.writeInt(this.worldObj.provider.dimensionId);
-	            	            outputStream.writeInt(this.xCoord);
-	            	            outputStream.writeInt(this.yCoord);
-	            	            outputStream.writeInt(this.zCoord);
-	            	            outputStream.writeInt(cc.posX);
-	            	            outputStream.writeInt(cc.posY);
-	            	            outputStream.writeInt(cc.posZ);
-	            	            outputStream.writeInt(aspect.getColor());
-	            	           
-	            	        }
-	            	        catch (Exception ex)
-	            	        {
-	            	            ex.printStackTrace();
-	            	        }
-	            	
-	            	        Packet250CustomPayload packet = new Packet250CustomPayload();
-	            	        packet.channel = "tExploration";
-	            	        packet.data = bos.toByteArray();
-	            	        packet.length = bos.size();
-	            	        PacketDispatcher.sendPacketToAllPlayers(packet);
+//	                        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+//	            	        DataOutputStream outputStream = new DataOutputStream(bos);
+//	            	
+//	            	        try
+//	            	        {
+//	            	            outputStream.writeByte(6);
+//	            	            outputStream.writeInt(this.worldObj.provider.dimensionId);
+//	            	            outputStream.writeInt(this.xCoord);
+//	            	            outputStream.writeInt(this.yCoord);
+//	            	            outputStream.writeInt(this.zCoord);
+//	            	            outputStream.writeInt(cc.posX);
+//	            	            outputStream.writeInt(cc.posY);
+//	            	            outputStream.writeInt(cc.posZ);
+//	            	            outputStream.writeInt(aspect.getColor());
+//	            	           
+//	            	        }
+//	            	        catch (Exception ex)
+//	            	        {
+//	            	            ex.printStackTrace();
+//	            	        }
+//	            	
+//	            	        Packet250CustomPayload packet = new Packet250CustomPayload();
+//	            	        packet.channel = "tExploration";
+//	            	        packet.data = bos.toByteArray();
+//	            	        packet.length = bos.size();
+//	            	        PacketDispatcher.sendPacketToAllPlayers(packet);
 
 	                        this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	                        return;
@@ -207,7 +203,7 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	
 	public boolean validLocation()
 	{
-		if (this.worldObj.getBlockMaterial(this.xCoord, this.yCoord + 1, this.zCoord) != Config.airyMaterial && this.worldObj.getBlockMaterial(this.xCoord, this.yCoord + 1, this.zCoord) != Material.air && !Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord + 1, this.zCoord)].isBlockReplaceable(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord)) {
+		if (this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord).getMaterial() != Config.airyMaterial && this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord).getMaterial() != Material.air && !this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord).isReplaceable(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord)) {
 			return false;
 		}
 		return true;
@@ -275,7 +271,7 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	            int y = this.yCoord - yy;
 	            int z = this.zCoord + zz;
 	            
-	            TileEntity te = this.worldObj.getBlockTileEntity(x, y, z);
+	            TileEntity te = this.worldObj.getTileEntity(x, y, z);
 	            if ((te != null) && ((te instanceof IAspectSource)))
 	            {
 	              this.sources.add(new ChunkCoordinates(x, y, z));
@@ -286,12 +282,12 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	    }
 	  }
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		// TODO Auto-generated method stub
 		return "replicator";
 	}
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -303,15 +299,15 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		// TODO Auto-generated method stub
-		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
 	}
 	@Override
-	public void openChest() {
+	public void openInventory() {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void closeChest() {
+	public void closeInventory() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -338,11 +334,11 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 	
 	public void readInventoryNBT(NBTTagCompound nbttagcompound)
 	{
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+		NBTTagList nbttaglist = (NBTTagList) nbttagcompound.getTag("Items");
 		this.inventory = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
 			byte b0 = nbttagcompound1.getByte("Slot");
 			if ((b0 >= 0) && (b0 < this.inventory.length)) {
 				this.inventory[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
@@ -386,14 +382,14 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 			Object next = iterator.next();
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("Amount", this.recipeEssentia.getAmount(Aspect.getAspect((String) next)));
-			aspects.setCompoundTag((String) next, tag);
+			aspects.setTag((String) next, tag);
 		}
-		nbttagcompound.setCompoundTag("Aspects", aspects);
+		nbttagcompound.setTag("Aspects", aspects);
 	}
 	
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
-		this.readInventoryNBT(pkt.data);
+		this.readInventoryNBT(pkt.func_148857_g());
 	}
 	
 	
@@ -403,7 +399,7 @@ public class TileEntityReplicator extends TileEntity implements ISidedInventory,
 		super.getDescriptionPacket();
 		NBTTagCompound access = new NBTTagCompound();
 		this.writeInventoryNBT(access);
-        return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, access);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, access);
 	}
 	@Override
 	public AspectList getAspects() {

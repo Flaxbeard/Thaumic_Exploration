@@ -7,13 +7,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import thaumcraft.api.aspects.Aspect;
@@ -26,6 +26,7 @@ import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 import thaumcraft.common.tiles.TileNode;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 import flaxbeard.thaumicexploration.integration.TTIntegration;
 
@@ -35,7 +36,7 @@ public class TXBootsEventHandler
   public static final PlayerCapabilities genericPlayerCapabilities = new PlayerCapabilities();
   
   
-  @ForgeSubscribe
+  @SubscribeEvent
   public void livingTick(LivingEvent.LivingUpdateEvent event)
   {
 	if (event.entity instanceof EntityPlayer) {
@@ -56,11 +57,6 @@ public class TXBootsEventHandler
         //Utils.setWalkSpeed(player.capabilities, Utils.getWalkSpeed(genericPlayerCapabilities));
         //updateSpeed(player);
         checkAir(player);
-        if (player.getCurrentItemOrArmor(4) != null) {
-	        if (player.getCurrentItemOrArmor(4).itemID == ThaumicExploration.maskEvil.itemID && player.username.equalsIgnoreCase("Succubism")) {
-	        	player.worldObj.spawnParticle("heart", (double)(player.posX + Math.random()-0.5F), (double)(player.boundingBox.maxY + Math.random()/2), (double)(player.posZ + Math.random()-0.5F), 0.0D, 0.0D, 0.0D);        	
-	        }
-        }
         
         if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemWandCasting) {
         	ItemWandCasting wand = (ItemWandCasting) player.getHeldItem().getItem();
@@ -113,7 +109,7 @@ public class TXBootsEventHandler
         		      for (int yy = -8; yy <= 8; yy++) {
         		        for (int zz = -8; zz <= 8; zz++)
         		        {
-        		          TileEntity te = player.worldObj.getBlockTileEntity(((int)player.posX) + xx, ((int)player.posY) + yy, ((int)player.posZ) + zz);
+        		          TileEntity te = player.worldObj.getTileEntity(((int)player.posX) + xx, ((int)player.posY) + yy, ((int)player.posZ) + zz);
         		          if ((te instanceof INode) && emptyAspects.size() > 0) {
         		        	boolean canAdd = false;
         		        	for (Aspect aspect : emptyAspects.getAspects()) {
@@ -139,7 +135,7 @@ public class TXBootsEventHandler
 	        		    {
 	        		    	randNode = new ChunkCoordinates(new ChunkCoordinates(player.getHeldItem().stackTagCompound.getInteger("drainX"),player.getHeldItem().stackTagCompound.getInteger("drainY"),player.getHeldItem().stackTagCompound.getInteger("drainZ")));
 	        		    }
-	        		    INode node = (INode) player.worldObj.getBlockTileEntity(randNode.posX, randNode.posY, randNode.posZ);
+	        		    INode node = (INode) player.worldObj.getTileEntity(randNode.posX, randNode.posY, randNode.posZ);
 	        		    AspectList possibleAspects = new AspectList();
     		        	for (Aspect aspect : emptyAspects.getAspects()) {
     		        		if (node.getAspects().getAmount(aspect) > 1) {
@@ -160,7 +156,7 @@ public class TXBootsEventHandler
         
         boolean isTainted = false;
         for (int i = 0; i<10; i++) {
-			if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmTaint.itemID) {
+			if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() == ThaumicExploration.charmTaint) {
 				isTainted = true;
 				break;
 			}
@@ -190,7 +186,7 @@ public class TXBootsEventHandler
 		        player.getEntityData().setInteger("taintGracePeriod", taintGP);
     			if (player.getActivePotionEffect(ThaumicExploration.potionTaintWithdrawl) == null && taintGP > 100) {
     				for (int i = 0; i<10; i++) {
-    					if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ConfigItems.itemResource.itemID && (player.inventory.getStackInSlot(i).getItemDamage() == 11 || player.inventory.getStackInSlot(i).getItemDamage() == 12)) {
+    					if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() == ConfigItems.itemResource && (player.inventory.getStackInSlot(i).getItemDamage() == 11 || player.inventory.getStackInSlot(i).getItemDamage() == 12)) {
     						player.inventory.decrStackSize(i, 1);
     	    				taintGP = 0;
     	    				player.getEntityData().setInteger("taintGracePeriod",0);
@@ -238,7 +234,7 @@ public class TXBootsEventHandler
         }
         if (player.getActivePotionEffect(PotionFluxTaint.fluxTaint) != null) {
         	for (int i = 0; i<10; i++) {
-    			if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).itemID == ThaumicExploration.charmTaint.itemID) {
+    			if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() == ThaumicExploration.charmTaint) {
         		player.removePotionEffect(PotionFluxTaint.fluxTaint.id);	
 				break;
 			}
@@ -248,10 +244,10 @@ public class TXBootsEventHandler
     
     
 
-    if ((event.entity.worldObj.isRemote) && (this.prevStep.containsKey(Integer.valueOf(event.entity.entityId))) && ((((EntityPlayer)event.entity).inventory.armorItemInSlot(0) == null) || (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.bootsMeteor.itemID && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.runicBootsMeteor.itemID && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.runicBootsComet.itemID &&((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID != ThaumicExploration.bootsComet.itemID)))
+    if ((event.entity.worldObj.isRemote) && (this.prevStep.containsKey(Integer.valueOf(event.entity.getEntityId()))) && ((((EntityPlayer)event.entity).inventory.armorItemInSlot(0) == null) || (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() != ThaumicExploration.bootsMeteor && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() != ThaumicExploration.runicBootsMeteor && ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() != ThaumicExploration.runicBootsComet &&((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() != ThaumicExploration.bootsComet)))
     {
-      event.entity.stepHeight = ((Float)this.prevStep.get(Integer.valueOf(event.entity.entityId))).floatValue();
-      this.prevStep.remove(Integer.valueOf(event.entity.entityId));
+      event.entity.stepHeight = ((Float)this.prevStep.get(Integer.valueOf(event.entity.getEntityId()))).floatValue();
+      this.prevStep.remove(Integer.valueOf(event.entity.getEntityId()));
     
     }
    
@@ -260,7 +256,7 @@ public class TXBootsEventHandler
   
 
   
-  @ForgeSubscribe
+  @SubscribeEvent
   public void joinWorld(EntityJoinWorldEvent event)
   {
     if ((event.entity instanceof EntityPlayer))
@@ -272,11 +268,11 @@ public class TXBootsEventHandler
   
   HashMap<Integer, Float> prevStep = new HashMap();
   
-  @ForgeSubscribe
+  @SubscribeEvent
   public void playerJumps(LivingEvent.LivingJumpEvent event)
   {
 	  
-    if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID || ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID)) {
+    if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() == ThaumicExploration.bootsMeteor || ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem()== ThaumicExploration.runicBootsMeteor)) {
       if (((EntityPlayer)event.entity).isSneaking()) {
     	  Vec3 vector = event.entityLiving.getLook(0.5F);
 	      double total = Math.abs(vector.zCoord + vector.xCoord);
@@ -303,7 +299,7 @@ public class TXBootsEventHandler
     	  event.entityLiving.motionY += 0.2750000059604645D;
       }
     }
-    else if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID || ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsComet.itemID)) {
+    else if (((event.entity instanceof EntityPlayer)) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0) != null) && (((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() == ThaumicExploration.bootsComet || ((EntityPlayer)event.entity).inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsComet)) {
     	event.entityLiving.motionY += 0.2750000059604645D;
       }
     
@@ -311,7 +307,7 @@ public class TXBootsEventHandler
   
   public void checkAir(EntityPlayer player)
   {  
-    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsMeteor.itemID || player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsMeteor.itemID)) {
+    if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem()== ThaumicExploration.bootsMeteor || player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsMeteor)) {
       
       Vec3 vector = player.getLook(1.0F);
       ItemStack item = player.inventory.armorItemInSlot(0);
@@ -368,7 +364,7 @@ public class TXBootsEventHandler
       item.stackTagCompound.setInteger("smashTicks", ticks);
       item.stackTagCompound.setInteger("airTicks", ticksAir);
     }
-    else if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.bootsComet.itemID || player.inventory.armorItemInSlot(0).getItem().itemID == ThaumicExploration.runicBootsComet.itemID)) {
+    else if ((player.inventory.armorItemInSlot(0) != null) && (player.inventory.armorItemInSlot(0).getItem()== ThaumicExploration.bootsComet|| player.inventory.armorItemInSlot(0).getItem() == ThaumicExploration.runicBootsComet)) {
         
         Vec3 vector = player.getLook(1.0F);
         ItemStack item = player.inventory.armorItemInSlot(0);
@@ -379,8 +375,8 @@ public class TXBootsEventHandler
         }
         for (int x = -5; x < 6; x++) {
       	  for (int z = -5; z < 6; z++) {
-  		      if ((player.worldObj.getBlockId((int) (player.posX + x), (int) (player.posY-1), (int) (player.posZ + z)) == Block.waterMoving.blockID || player.worldObj.getBlockId((int) (player.posX + x), (int) (player.posY-1), (int) (player.posZ + z)) == Block.waterStill.blockID) && player.worldObj.getBlockMaterial((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == Material.water && player.worldObj.getBlockMetadata((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == 0 && !player.isInWater() && (Math.abs(x)+Math.abs(z) < 8)) {
-  		    	  player.worldObj.setBlock((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z), ThaumicExploration.meltyIce.blockID);
+  		      if ((player.worldObj.getBlock((int) (player.posX + x), (int) (player.posY-1), (int) (player.posZ + z)) == Blocks.water || player.worldObj.getBlock((int) (player.posX + x), (int) (player.posY-1), (int) (player.posZ + z)) == Blocks.water) && player.worldObj.getBlock((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)).getMaterial() == Material.water && player.worldObj.getBlockMetadata((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z)) == 0 && !player.isInWater() && (Math.abs(x)+Math.abs(z) < 8)) {
+  		    	  player.worldObj.setBlock((int) (player.posX + x), (int) player.posY-1, (int) (player.posZ + z), ThaumicExploration.meltyIce);
   		    	player.worldObj.spawnParticle("snowballpoof", (int) (player.posX + x), (int) player.posY, (int) (player.posZ + z), 0.0D, 0.025D, 0.0D);
   		      }
       	  }
