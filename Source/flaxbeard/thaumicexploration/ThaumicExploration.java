@@ -441,22 +441,21 @@ public class ThaumicExploration {
 		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setBlockName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setBlockTextureName("thaumicExploration:blankTexture");
 		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setBlockName("thaumicexploration:everfullUrn").setCreativeTab(tab).setBlockTextureName("thaumicExploration:everfullUrn");
 		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setBlockName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setBlockTextureName("thaumicExploration:crucible3");
-		//replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setBlockName("thaumicexploration:replicator").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
-		//meltyIce = new BlockBootsIce(meltyIceID).setBlockName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundTypeGlass).setBlockName("ice").setBlockTextureName("ice");
+		replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setBlockName("thaumicexploration:replicator").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
+		meltyIce = new BlockBootsIce(meltyIceID).setBlockName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundTypeGlass).setBlockName("ice").setBlockTextureName("ice");
 		//taintBerryCrop = new BlockTaintBerries(taintBerryCropID).setBlockName("thaumicexploration:taintBerryCrop").setBlockTextureName("thaumicExploration:berries");
-		//boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("boundChest");
-		//boundJar = new BlockBoundJar(boundJarID).setBlockName("boundJar");
+		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("boundChest");
+		boundJar = new BlockBoundJar(boundJarID).setBlockName("boundJar");
 		
-		//autoSorter = new BlockAutoSorter(autoSorterID, Material.glass).setHardness(4.0F).setBlockName("thaumicexploration:autoSorter").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
-		//floatCandle = new BlockFloatyCandle(floatCandleID).setBlockName("thaumicexploration:floatCandle").setCreativeTab(tab);
+		autoSorter = new BlockAutoSorter(autoSorterID, Material.glass).setHardness(4.0F).setBlockName("thaumicexploration:autoSorter").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
+		floatCandle = new BlockFloatyCandle(floatCandleID).setBlockName("thaumicexploration:floatCandle").setCreativeTab(tab);
 		
-		//GameRegistry.registerBlock(autoSorter, "autoSorter");
-		//GameRegistry.registerBlock(boundChest, "boundChest");
+		GameRegistry.registerBlock(autoSorter, "autoSorter");
+		GameRegistry.registerBlock(boundChest, "boundChest");
 		//GameRegistry.registerBlock(taintBerryCrop, "taintBerryCrop");
-		//GameRegistry.registerBlock(skullCandle, "skullCandle");
-		//GameRegistry.registerBlock(floatCandle, BlockCandleItem.class,"floatCandle");
-		//GameRegistry.registerBlock(meltyIce, "meltyIce");
-		//GameRegistry.registerBlock(boundJar, "boundJar");
+		GameRegistry.registerBlock(floatCandle, BlockCandleItem.class,"floatCandle");
+		GameRegistry.registerBlock(meltyIce, "meltyIce");
+		GameRegistry.registerBlock(boundJar, "boundJar");
 		GameRegistry.registerBlock(thinkTankJar, "thinkTankJar");
 		GameRegistry.registerBlock(everfullUrn, "everfullUrn");
 		GameRegistry.registerBlock(crucibleSouls, "crucibleSouls");
