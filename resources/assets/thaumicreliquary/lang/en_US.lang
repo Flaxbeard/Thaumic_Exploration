@@ -1,0 +1,149 @@
+----Thaumonomicon Entries----
+tr.researchPrefix=[XR]
+tc.research_category.RELIQUARY=Alkahestry
+
+--Holy Hand Grenade
+tr.name.HOLYGRENADE=Holy Hand Grenade
+tr.tag.HOLYGRENADE=First shalt thou take out the Holy Pin...
+tr.text.HOLYGRENADE.1=While tinkering with alchemical explosives, you have developed an weapon that allows you to blow your foes to bits without destroying the world around you. You call this invention the Holy Hand Grenade.<BR><BR>This holy explosive is also intelligent enough to avoid damaging its creator.
+
+--Condensed Potions
+tr.name.CONDPOTS=Condensed Potions
+tr.tag.CONDPOTS=Eye of newt and toe of frog...
+tr.text.CONDPOTS.1=Though a wide variety of potions can be made using a mundane brewing stand, you feel that there is a better way to create these magical concoctions. You have developed a way to create Condensed Potions simply by enchanting the reagents in an Arcane Workbench that mimic many of the behaviors of those created in a brewing stand. First, craft empty vials and fill them with water. Next, create a base potion. Finally, add the required ingredients to create whatever potion you desire.<BR><BR>You are sure this new medium of potion creation will allow for even more extravagant potion types in the future.
+
+--Love Potion
+tr.name.CONDLOVE=Love Potion #9
+tr.tag.CONDLOVE=Can you feel the love tonight?
+tr.text.CONDLOVE.1=You have formulated a new type of condensed potion that is able to cause animals to mate. Simply throw this potion at a group of animals to cause them to fall in love.
+
+--Confusion Potion
+tr.name.CONDCONFUSE=Confusion Serum
+tr.tag.CONDCONFUSE=Is this real life?
+tr.text.CONDCONFUSE.1=You have developed a condensed potion that confuses other players. Use this potion as a method to distract players, or if you desperately need to get away.
+
+--Wither Potion
+tr.name.CONDWITHER=Wither Serum
+tr.tag.CONDWITHER=Power of the Nether
+tr.text.CONDWITHER.1=You have created a condensed potion that holds the power of the Wither. Anything hit by it will start to die away.
+
+--Digging Potion
+tr.name.CONDDIGGING=Elixer of Digging
+tr.tag.CONDDIGGING=I'm a dwarf and I'm digging a hole
+tr.text.CONDDIGGING.1=You have devised a new type of condensed potion that allows you to mine blocks much more quickly while under its effects. This can be used for mining ores or large building projects.
+
+--Jumping Potion
+tr.name.CONDJUMP=Elixer of Bounding
+tr.tag.CONDJUMP=Jump! Jump!
+tr.text.CONDJUMP.1=After trying and failing many times, you have created a potion that allows you to make leaps and bounds much larger than normal.
+
+--Resistance Potion
+tr.name.CONDRESIST=Elixer of Resistance
+tr.tag.CONDRESIST=Can't touch this
+tr.text.CONDRESIST.1=You have found a way to provide additional bodily protection without the use of armor. This comes in the form of a condensed potion. While under its effects, you resist more damage than usual.
+
+--Breathing Potion
+tr.name.CONDBREATHE=Elixer of Breathing
+tr.tag.CONDBREATHE=Just keep swimming
+tr.text.CONDBREATHE.1=You can swim just like a fish when you consume your newly developed Elixer of Breathing. This condensed potion allows for breathing underwater while under its effects.
+
+--Fertilizer
+tr.name.CONDFERT=Fertilizer
+tr.tag.CONDFERT=When bonemeal just isn't enough
+tr.text.CONDFERT.1=While working with condensed potions, you have developed a solution for mass farming. Combining bonemeal with a condensed potion and adding a touch of earthen magic will create a fertilizer that will help a 5x5 area of crops grow.
+
+--Fertilizer
+tr.name.LILY=Lilypad of Fertility
+tr.tag.LILY=Grow faster, damnit!
+tr.text.LILY.1=Infusing a Lilypad with some of your Mystial fertilizer and various types of essentia results in a mystical plant that can speed the growth of other plants.<BR><BR>The Lilypad of Fertility can be placed on water. Any nearby plants will grow much more quickly.
+
+--Glowing Water
+tr.name.GLOWWATER=Glowing Water
+tr.tag.GLOWWATER=Blessed water
+tr.text.GLOWWATER.1=By infusing a vial of water with glowstone and a bit of vis, you have created a holy substance that is very effective in not only killing undead but also in infusing items.
+
+--Glowing Bread
+tr.name.GLOWBREAD=Glowing Bread
+tr.tag.GLOWBREAD=Are you sure this is edible?
+tr.text.GLOWBREAD.1=You have found that combining your mystical Glowing Water with ordinary bread results in a very useful food. This Glowing Bread is able to be eaten very quickly and will fill the entire food bar.
+
+--Destruction Catalyst
+tr.name.DESTCAT=Destruction Catalyst
+tr.tag.DESTCAT=Explosive mining tool
+tr.text.DESTCAT.1=By infusing Alumentum with various alchemical reagents and the power of the Touchstone of Midas, you have created a device that will create explosions in return for gunpowder from your inventory.<BR><BR>On right click, this device will consume three gunpowder, destroying blocks near the point clicked. The Catalyst will only destroy mundane blocks such as dirt and stone. These blocks will not drop and will be destroyed completely.
+
+--Coin of Fortune
+tr.name.COINFORTUNE=Coin of Fortune
+tr.tag.COINFORTUNE=Mystical magnet
+tr.text.COINFORTUNE.1=You have created a mystical coin that is able to attract nearby items and experience. Items close to the you will be automatically added to the your inventory.<BR><BR>Right click to activate or deactivate the coin. It will glow when active. Holding right click while sneaking will increase the range.
+
+--Cross of Mercy
+tr.name.CROSS=Cross of Mercy
+tr.tag.CROSS=The power of Christ compels you
+tr.text.CROSS.1=A golden cross bound by leather and doused with holy water is the perfect tool for hunting unholy monsters. This cross acts similarly to a gold sword, with double the durability. When striking undead, this weapon deals double damage.<BR><BR>It may be wise to carry a Touchstone of Midas while using this weapon, as it breaks quickly.
+
+--Magicbane
+tr.name.MBANE=Magicbane
+tr.tag.MBANE=Nethack and slash
+tr.text.MBANE.1=Your research in the enchantable properties of gold have lead you to develop a magical blade that has a few unusual properties. This dagger is infused with magic, causing it to have a chance to weaken, blind, slow, or confuse the creature unlucky enough to be attacked with it.<BR><BR>This magic has the unfortunate side effect of making the blade unstable and thus very brittle. Consider carrying a Touchstone of Midas with you while using this weapon.<BR><BR>In addition, adding more magic to the blade seems to make it even stronger. For every level of any enchantment added to the blade, the damage increases by one.
+
+--Emperor's Chalice
+tr.name.CHALICE=Emperor's Chalice
+tr.tag.CHALICE=The holy grail
+tr.text.CHALICE.1=You have developed a chalice of water that is eternally full. You can right click on a block to dump water there.<BR><BR>Right clicking while not aiming at a block will cause you to take a sip of the magical water, causing you to lose half a heart but gain half a drumstick of hunger.
+
+--Sojourner's Staff
+tr.name.SOJOURNERSTAFF=Sojourner's Staff
+tr.tag.SOJOURNERSTAFF=Let there be light
+tr.text.SOJOURNERSTAFF.1=You are tired of tirelessly shambling around caves, lighting up every last corner. You have developed a magical staff that will increase torch placing distance dramatically. The staff will absorb torches from your inventory.<BR><BR>Right click on a surface, whether near or far, to place a torch. The staff will expend more torches the further the surface is, approximately one extra torch per six blocks. 
+
+--Void Tears
+tr.name.VOIDTEAR=Void Tear
+tr.tag.VOIDTEAR=Interdimensional storage
+tr.text.VOIDTEAR.1=By studying the properties of Ender teleportation and Ender Chests, you think you have found a way turn a rift normally used for teleportation into a pocket dimension. To access this dimension, you have created the Void Tear.<BR><BR>Right clicking with a Void Tear will consume and contain the most prevalent item in your inventory. Right clicking a chest will do the same for a chest. Right clicking again with a filled Void Tear will release the items back into your inventory.
+
+--Void Satchel
+tr.name.VOIDSATCHEL=Void Satchel
+tr.tag.VOIDSATCHEL=Bottomless bag
+tr.text.VOIDSATCHEL.1=You are not satisfied with storage using Void Tears. It is too time consuming to empty and refill the tears when necessary, and they don't provide the kind of capacity that you require. You have created a way to upgrade Void Tears to Void Satchels.<BR><BR>These satchels can be toggled by right clicking while not looking at a block. When on, they will automatically consume any of their target item from your inventory. Right clicking an inventory will attempt to empty the satchel into the inventory. Right clicking a block will drop a stack from the satchel. Shift right clicking an inventory will absorb the target item.
+tr.text.VOIDSATCHEL.2=Void Satchels can also be upgraded using three empty Void Tears. This will increase the satchel's capacity by 192. There is no limit to the number of times you can upgrade.
+
+--Salamander's Eye
+tr.name.SALEYE=Salamander's Eye
+tr.tag.SALEYE=Projectile deflector
+tr.text.SALEYE.1=Traversing the Nether has always been difficult and dangerous. For a long time, you have wanted some form of protection from the dimension's various hazards. You have developed an item that does just this. You have invented the Salamander's Eye, created by infusing an Eye of Ender with various resources from the Nether.<BR><BR>The Salamander's Eye protects the holder from Ghast and Blaze fireballs, reflecting the former and vaporizing the latter. The eye will also extinguish nearby fires. Keep in mind, this item will only function when held.
+
+--Wraith Eye
+tr.name.WRAITH=Wraith Eye
+tr.tag.WRAITH=Long distance teleportation
+tr.text.WRAITH.1=Teleportation with Ender Pearls is imprecise and expensive. You have developed a better, more accurate method for teleportation by combining your knowledge of Magic Mirrors and Void Tears.<BR><BR>First, you must create a Wraith Node. This does nothing until bound to a Wraith Eye. The Wraith Eye has the same functionality as a Salamander's Eye, but also can be bound to a Wraith Node by right clicking. On right click, you will be teleported back to the Node at the cost of one Ender Pearl.<BR><BR>This will not work across dimensions.
+
+--Cloak of Distortion
+tr.name.CLOAK=Cloak of Distortion
+tr.tag.CLOAK=Now you see me, now you don't
+tr.text.CLOAK.1=You have found a way to harness the Ender pocket dimension for more than just storage. With the Cloak of Distortion, you can use an Ender rift to hide your prescense entirely.<BR><BR>Right clicking with the cloak toggles it on and off. When on, you are rendered invisible. Every two minutes, an Ender Pearl is consumed. The cloak can be stopped at any time without loosing charge.<BR><BR>Holding shift while right clicking will teleport you to where you are looking instantly, at the cost of an Ender Pearl.
+
+--Witherless Rose
+tr.name.ROSE=Witherless Rose
+tr.tag.ROSE=A light shining in the darkness
+tr.text.ROSE.1=You have finally done it. You have vanquished one of the many Withers from this world. In order to keep fighting these horrible creatures, you will need some form of protection. This is why you have created the Witherless Rose.<BR><BR>This holy flower will prevent your hearts from withering away when struck by a Wither Skeleton or a Wither.
+
+--Tome
+tr.name.TOME=Tome of Alkahestry
+tr.tag.TOME=Transfiguration tome
+tr.text.TOME.1=You have pieced together bits and pieces of knowledge you have gained during your research, trying to find the secret to transfiguring materials. Finally, you have found it. The Tome of Alkahestry. A magical book that can transfigure one thing into another.<BR><BR>Simply combine this book with other resources and a reagent. This reagent can be Redstone, Lapis Lazuli, or a block of Lapis.<BR><BR><BR>[A tool such as NEI is reccomended for finding these recipes. There are a lot of them.]
+
+--Altar
+tr.name.ALTAR=Altar of Light
+tr.tag.ALTAR=Glowstone generator
+tr.text.ALTAR.1=The Altar of Light provides a new mthod for creating Glowstone, much more efficiently than that of Alkahestry.<BR><BR>Simply place the Altar in direct sunlight. Provide it with fuel in the form of Redstone dust by right clicking. When the Altar lights up, all there is to do is wait. A block of Glowstone will eventually be produced.
+
+--Compound POtions
+tr.name.CONDCOMP=Compound Potions
+tr.tag.CONDCOMP=C-C-C-COMBO BREAKER
+tr.text.CONDCOMP.1=You have developed a way to combine several condensed potions into compound potions that have several effects.<BR><BR>The Ruination Serum slows, weakens, and poisons.<BR>Alchemical Potence gives a strength and digging boost.<BR>Alchemical Celerity gives a speed and jump boost.<BR>Ablative Protection gives resistance and fire protection.<BR>Grand Panacea cures ailments, heals, and gives regeneration.
+
+--Touchstone of Midas
+tr.name.MIDAS=Touchstone of Midas
+tr.tag.MIDAS=All gold everything
+tr.text.MIDAS.1=In a similar vein to your research into gold transmutation, you have created a device that allows you to repair durability of tools and items constructed out of gold. This mystical touchstone will consume glowstone dust from your inventory, using it to charge itself. It will then deplete its charge as it repairs gold items in your inventory.

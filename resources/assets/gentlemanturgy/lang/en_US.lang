@@ -1,0 +1,14 @@
+# RESEARCH
+gentlemanturgy.prefix=[GT] 
+tc.research_category.GENTALMANTURGY=Gentalmanturgy
+
+# Items
+item.gentlemanturgy:thaumonocle.name=Thaumonocle
+item.gentlemanturgy:suitfeets.name=Gentlmenturge's Loafers
+item.gentlemanturgy:suitlegs.name=Gentlmenturge's Pants
+item.gentlemanturgy:suittop.name=Gentlmenturge's Blazer
+
+# -- Smashing
+gt.reserch.name.SMASHING=Smashing
+gt.reserch.lore.SMASHING=Nigel thinks you could look quite smashing
+gt.reserch.page.SMASHING.0=HAI KAYTXBY
