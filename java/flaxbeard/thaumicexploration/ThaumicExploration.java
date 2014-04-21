@@ -1,0 +1,723 @@
+package flaxbeard.thaumicexploration;
+
+
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityList.EntityEggInfo;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
+
+import org.apache.commons.lang3.tuple.MutablePair;
+
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.wands.StaffRod;
+import thaumcraft.api.wands.WandCap;
+import thaumcraft.api.wands.WandRod;
+import thaumcraft.common.blocks.BlockCandleItem;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.lib.crafting.ThaumcraftCraftingManager;
+import baubles.api.BaubleType;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.FMLEventChannel;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import flaxbeard.thaumicexploration.block.BlockAutoSorter;
+import flaxbeard.thaumicexploration.block.BlockBootsIce;
+import flaxbeard.thaumicexploration.block.BlockBoundChest;
+import flaxbeard.thaumicexploration.block.BlockBoundJar;
+import flaxbeard.thaumicexploration.block.BlockCrucibleSouls;
+import flaxbeard.thaumicexploration.block.BlockEverfullUrn;
+import flaxbeard.thaumicexploration.block.BlockFloatyCandle;
+import flaxbeard.thaumicexploration.block.BlockReplicator;
+import flaxbeard.thaumicexploration.block.BlockThinkTank;
+import flaxbeard.thaumicexploration.block.BlockTrashJar;
+import flaxbeard.thaumicexploration.common.CommonProxy;
+import flaxbeard.thaumicexploration.enchantment.EnchantmentBinding;
+import flaxbeard.thaumicexploration.enchantment.EnchantmentDisarm;
+import flaxbeard.thaumicexploration.enchantment.EnchantmentNightVision;
+import flaxbeard.thaumicexploration.entity.EntityTaintacleMinion;
+import flaxbeard.thaumicexploration.event.TXBootsEventHandler;
+import flaxbeard.thaumicexploration.event.TXEventHandler;
+import flaxbeard.thaumicexploration.event.TXTickHandler;
+import flaxbeard.thaumicexploration.gui.TXGuiHandler;
+import flaxbeard.thaumicexploration.integration.TTIntegration;
+import flaxbeard.thaumicexploration.item.ItemBauble;
+import flaxbeard.thaumicexploration.item.ItemBaubleDiscountRing;
+import flaxbeard.thaumicexploration.item.ItemBlankSeal;
+import flaxbeard.thaumicexploration.item.ItemBrain;
+import flaxbeard.thaumicexploration.item.ItemChestSeal;
+import flaxbeard.thaumicexploration.item.ItemChestSealLinked;
+import flaxbeard.thaumicexploration.item.ItemFoodTalisman;
+import flaxbeard.thaumicexploration.item.ItemStabilizerBelt;
+import flaxbeard.thaumicexploration.item.ItemTXArmorSpecial;
+import flaxbeard.thaumicexploration.item.ItemTaintSeedFood;
+import flaxbeard.thaumicexploration.misc.TXPotion;
+import flaxbeard.thaumicexploration.misc.TXTaintPotion;
+import flaxbeard.thaumicexploration.research.ModRecipes;
+import flaxbeard.thaumicexploration.research.ModResearch;
+import flaxbeard.thaumicexploration.tile.TileEntityAutoSorter;
+import flaxbeard.thaumicexploration.tile.TileEntityBoundChest;
+import flaxbeard.thaumicexploration.tile.TileEntityBoundJar;
+import flaxbeard.thaumicexploration.tile.TileEntityCrucibleSouls;
+import flaxbeard.thaumicexploration.tile.TileEntityEverfullUrn;
+import flaxbeard.thaumicexploration.tile.TileEntityFloatyCandle;
+import flaxbeard.thaumicexploration.tile.TileEntityReplicator;
+import flaxbeard.thaumicexploration.tile.TileEntityThinkTank;
+import flaxbeard.thaumicexploration.tile.TileEntityTrashJar;
+import flaxbeard.thaumicexploration.wand.StaffRodTransmutative;
+import flaxbeard.thaumicexploration.wand.WandRodAmberOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodBreadOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodNecromancerOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodTransmutationOnUpdate;
+import flaxbeard.thaumicexploration.wand.WandRodTransmutative;
+
+
+@Mod(modid = "ThaumicExploration", name = "Thaumic Exploration", version = "0.6.0", dependencies="required-after:Thaumcraft;after:ThaumicTinkerer")
+
+public class ThaumicExploration {
+	
+    @Instance("ThaumicExploration")
+    public static ThaumicExploration instance;
+    
+    public static FMLEventChannel channel;
+
+    public static ArrayList<MutablePair<Item, Integer>> allowedItems = new ArrayList<MutablePair<Item, Integer>>();
+	public static Item pureZombieBrain;
+	public static int pureZombieBrainID;
+	public static Item blankSeal;
+	public static int blankSealID;
+	public static Item chestSeal;
+	public static int chestSealID;
+	public static Item chestSealLinked;
+	public static int chestSealLinkedID;
+	public static Item jarSeal;
+	public static int jarSealID;
+	public static Item jarSealLinked;
+	public static int jarSealLinkedID;
+	public static Item transmutationCore;
+	public static int transmutationCoreID;
+	public static Item transmutationStaffCore;
+	public static Item amberCore;
+	public static int amberCoreID;
+	public static Item amberStaffCore;
+	public static int amberStaffCoreID;
+	public static Item necroStaffCore;
+	public static Item breadCore;
+	public static int breadCoreID;
+	public static Item sojournerCap;
+	public static int sojournerCapID;
+	public static Item sojournerCapUncharged;
+	public static int sojournerCapUnchargedID;
+	public static Item mechanistCap;
+	public static int mechanistCapID;
+	public static Item mechanistCapUncharged;
+	public static int mechanistCapUnchargedID;
+	public static Item theCandle;
+	public static int theCandleID;
+	
+	//public static EnumArmorMaterial armorMaterialCrystal;
+	public static Item maskEvil;
+	public static int maskEvilID;
+	public static Item focusNecromancy;
+	public static int focusNecromancyID;
+	
+	public static Item bootsMeteor;
+	public static int bootsMeteorID;
+	public static Item bootsComet;
+	public static int bootsCometID;
+	
+	public static Item charmNoTaint;
+	public static int charmNoTaintID;
+	public static Item charmTaint;
+	public static int charmTaintID;
+	public static Item talismanFood;
+	public static int talismanFoodID;
+	
+	public static Item tentacleRing;
+	public static Item stabilizerBelt;
+	public static Item discountRing;
+	
+	public static Item enhancedHelmetRunic;
+	public static Item enhancedChestRunic;
+	public static Item enhancedLegsRunic;
+	public static Item enhancedBootsRunic;
+	public static Item enhancedHelmetRunic2;
+	public static Item enhancedChestRunic2;
+	public static Item enhancedLegsRunic2;
+	public static Item enhancedBootsRunic2;
+	public static int enhancedHelmetRunicID;
+	public static int enhancedChestRunicID;
+	public static int enhancedLegsRunicID;
+	public static int enhancedBootsRunicID;
+	public static int enhancedHelmetRunic2ID;
+	public static int enhancedChestRunic2ID;
+	public static int enhancedLegsRunic2ID;
+	public static int enhancedBootsRunic2ID;
+	
+	public static Item taintBerry;
+	public static int taintBerryID;
+	
+	public static Item itemAltar;
+	public static int itemAltarID;
+	
+	public static Block boundChest;
+	public static int boundChestID;
+	public static Block boundJar;
+	public static int boundJarID;
+	public static Block thinkTankJar;
+	public static int thinkTankJarID;
+	public static Block everfullUrn;
+	public static int everfullUrnID;
+	public static Block autoSorter;
+	public static int autoSorterID;
+	
+	public static Block trashJar;
+	
+	public static Block necroPedestal;
+	public static int necroPedestalID ;
+	public static Block necroFire;
+	public static int necroFireID;
+	
+	public static Block crucibleSouls;
+	public static int crucibleSoulsID;
+	public static Block taintBerryCrop;
+	public static int taintBerryCropID;
+	public static Block meltyIce;
+	public static int meltyIceID;
+	public static Block replicator;
+	public static int replicatorID;
+	public static Block skullCandle;
+	public static int skullCandleID;
+	public static Block floatCandle;
+	public static int floatCandleID;
+	
+	public static WandRod WAND_ROD_CRYSTAL;
+	public static WandRod STAFF_ROD_CRYSTAL;
+	public static WandRod WAND_ROD_AMBER;
+	public static WandRod WAND_ROD_NECRO;
+	public static WandRod WAND_ROD_BREAD;
+	public static StaffRod STAFF_ROD_AMBER;
+	
+	public static WandCap WAND_CAP_SOJOURNER;
+	public static WandCap WAND_CAP_MECHANIST;
+	
+	public static StaffRod STAFF_ROD_NECRO;
+	
+	public static int everfullUrnRenderID;
+	public static int crucibleSoulsRenderID;
+	public static int replicatorRenderID;
+	public static int candleSkullRenderID;
+	public static int necroPedestalRenderID;
+	public static int floatCandleRenderID;
+	public static int trashJarRenderID;
+	public static CreativeTabs tab;
+	
+	public static boolean allowBoundInventories;
+	public static boolean allowReplication;
+	public static boolean allowMagicPlankReplication;
+	public static boolean allowModWoodReplication;
+	public static boolean allowModStoneReplication;
+	public static boolean allowCrucSouls;
+	public static boolean allowThinkTank;
+	public static boolean allowFood;
+	public static boolean allowUrn;
+	public static boolean allowBoots;
+	public static boolean allowSojourner;
+	public static boolean allowMechanist;
+	public static boolean allowEnchants;
+	public static boolean allowTainturgy;
+	
+	public static Aspect fakeAspectNecro;
+	
+	public static boolean allowOsmotic;
+	
+	public static boolean prefix;
+	
+	public static boolean brainsGolem;
+	public static boolean taintBloom;
+	public static boolean breadWand;
+	
+	public static int potionBindingID;
+	public static int potionTaintWithdrawlID;
+	
+	public static Enchantment enchantmentBinding;
+	public static Enchantment enchantmentNightVision;
+	public static Enchantment enchantmentDisarm;
+	
+	public static int enchantmentBindingID;
+	public static int enchantmentNightVisionID;
+	public static int enchantmentDisarmID;
+	
+	
+	public static Potion potionBinding;
+	public static Potion potionTaintWithdrawl;
+	
+	@SidedProxy(clientSide = "flaxbeard.thaumicexploration.client.ClientProxy", serverSide = "flaxbeard.thaumicexploration.common.CommonProxy")
+	public static CommonProxy proxy;
+
+	private TXTickHandler tickHandler;
+	private TXBootsEventHandler entityEventHandler;
+	//private TXArmorEventHandler entityEventHandler2;
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		
+	    //GameRegistry.registerWorldGenerator(this.worldGen = new WorldGenTX());
+	   
+		Potion[] potionTypes = null;
+
+		for (Field f : Potion.class.getDeclaredFields()) {
+			f.setAccessible(true);
+			try {
+			if (f.getName().equals("potionTypes") || f.getName().equals("field_76425_a")) {
+			Field modfield = Field.class.getDeclaredField("modifiers");
+			modfield.setAccessible(true);
+			modfield.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+	
+			potionTypes = (Potion[])f.get(null);
+			final Potion[] newPotionTypes = new Potion[256];
+			System.arraycopy(potionTypes, 0, newPotionTypes, 0, potionTypes.length);
+			f.set(null, newPotionTypes);
+			}
+			}
+			catch (Exception e) {
+			}
+		}
+		
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		config.load();
+		
+
+		potionTaintWithdrawlID = config.get("Potion", "Taint Withdrawl", 32).getInt();
+		potionBindingID = config.get("Potion", "Binding", 31).getInt();
+
+		enchantmentBindingID = config.get("Enchantment", "Binding", 77).getInt();
+		enchantmentNightVisionID = config.get("Enchantment", "Night Vision", 78).getInt();
+		enchantmentDisarmID = config.get("Enchantment", "Disarming", 79).getInt();
+
+		//allowOsmotic = config.get("Miscellaneous", "Add new enchantments to Thaumic Tinkerer's Osmotic Enchanter (Requires TT Build 72+)", true).getBoolean(true);
+		prefix = config.get("Miscellaneous", "Display [TX] prefix before Thaumic Exploration research", true).getBoolean(true);
+		breadWand = config.get("Easter Eggs", "Enable Thaumic Frenchurgy", false).getBoolean(true);
+		brainsGolem = config.get("Miscellaneous", "Use Purified Brains in advanced golems", true).getBoolean(true);
+		//taintBloom = config.get("Miscellaneous", "Move the Etheral Bloom to the Tainturgy tab", true).getBoolean(true);
+		allowBoundInventories = config.get("Miscellaneous", "Enable bound inventories", true).getBoolean(true);
+		allowReplication = config.get("Miscellaneous", "Enable Thaumic Replicator", true).getBoolean(true);
+		allowCrucSouls = config.get("Miscellaneous", "Enable Crucible of Souls", true).getBoolean(true);
+		allowThinkTank = config.get("Miscellaneous", "Enable Think Tank", true).getBoolean(true);
+		allowFood = config.get("Miscellaneous", "Enable Talisman of Nourishment", true).getBoolean(true);
+		allowUrn = config.get("Miscellaneous", "Enable Everfull Urn", true).getBoolean(true);
+		allowBoots = config.get("Miscellaneous", "Enable Boots of the Meteor/Comet", true).getBoolean(true);
+		allowSojourner = config.get("Miscellaneous", "Enable Sojourner's Wand Caps", true).getBoolean(true);
+		allowMechanist = config.get("Miscellaneous", "Enable Mechanist's Wand Caps", true).getBoolean(true);
+		allowEnchants = config.get("Miscellaneous", "Enable TX Enchantments", true).getBoolean(true);
+		allowTainturgy = config.get("Miscellaneous", "Enable Wispy Dreamcatcher", true).getBoolean(true);
+		allowMagicPlankReplication = config.get("Replicator", "Allow replication of Greatwood/Silverwood planks", true).getBoolean(true);
+		allowModWoodReplication = config.get("Replicator", "Allow replication of other mods' logs and planks", true).getBoolean(true);
+		allowModStoneReplication = config.get("Replicator", "Allow replication of other mods' stone blocks", true).getBoolean(true);
+		
+		config.save();
+		tab = new TXTab(CreativeTabs.getNextID(), "thaumicExploration");
+		thinkTankJar = new BlockThinkTank(thinkTankJarID, false).setBlockName("thaumicexploration:thinkTankJar").setCreativeTab(tab).setBlockTextureName("thaumicExploration:blankTexture");
+		everfullUrn = new BlockEverfullUrn(everfullUrnID).setHardness(2.0F).setBlockName("thaumicexploration:everfullUrn").setCreativeTab(tab).setBlockTextureName("thaumicExploration:everfullUrn");
+		crucibleSouls = new BlockCrucibleSouls(crucibleSoulsID).setHardness(2.0F).setBlockName("thaumicexploration:crucibleSouls").setCreativeTab(tab).setBlockTextureName("thaumicExploration:crucible3");
+		replicator = new BlockReplicator(replicatorID).setHardness(4.0F).setBlockName("thaumicexploration:replicator").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
+		meltyIce = new BlockBootsIce(meltyIceID).setBlockName("thaumicexploration:meltyIce").setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundTypeGlass).setBlockName("ice").setBlockTextureName("ice");
+		//taintBerryCrop = new BlockTaintBerries(taintBerryCropID).setBlockName("thaumicexploration:taintBerryCrop").setBlockTextureName("thaumicExploration:berries");
+		boundChest = new BlockBoundChest(boundChestID, 0).setHardness(2.5F).setStepSound(Block.soundTypeWood).setBlockName("boundChest");
+		boundJar = new BlockBoundJar(boundJarID).setBlockName("boundJar");
+		
+		autoSorter = new BlockAutoSorter(autoSorterID, Material.glass).setHardness(4.0F).setBlockName("thaumicexploration:autoSorter").setCreativeTab(tab).setBlockTextureName("thaumicexploration:replicatorBottom");
+		floatCandle = new BlockFloatyCandle(floatCandleID).setBlockName("thaumicexploration:floatCandle").setCreativeTab(tab);
+	    trashJar = new BlockTrashJar().setBlockName("thaumicexploration:trashJar");
+	    
+		GameRegistry.registerBlock(autoSorter, "autoSorter");
+		GameRegistry.registerBlock(trashJar, "trashJar");
+		GameRegistry.registerBlock(boundChest, "boundChest");
+		//GameRegistry.registerBlock(taintBerryCrop, "taintBerryCrop");
+		GameRegistry.registerBlock(floatCandle, BlockCandleItem.class,"floatCandle");
+		GameRegistry.registerBlock(meltyIce, "meltyIce");
+		GameRegistry.registerBlock(boundJar, "boundJar");
+		GameRegistry.registerBlock(thinkTankJar, "thinkTankJar");
+		GameRegistry.registerBlock(everfullUrn, "everfullUrn");
+		GameRegistry.registerBlock(crucibleSouls, "crucibleSouls");
+		GameRegistry.registerBlock(replicator, "replicator");
+
+		//Items
+		transmutationCore = new Item().setUnlocalizedName("thaumicexploration:transmutationCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation");
+		GameRegistry.registerItem(transmutationCore, "transmutationCore");
+		transmutationStaffCore = new Item().setUnlocalizedName("thaumicexploration:transmutationStaffCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodTransmutation_staff");
+		GameRegistry.registerItem(transmutationStaffCore, "transmutationStaffCore");
+		talismanFood = (new ItemFoodTalisman(talismanFoodID)).setUnlocalizedName("thaumicexploration:talismanFood").setCreativeTab(tab).setTextureName("thaumicexploration:talismanFood");
+		GameRegistry.registerItem(talismanFood, "talismanFood");
+		amberCore = new Item().setUnlocalizedName("thaumicexploration:amberCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber");
+		GameRegistry.registerItem(amberCore, "amberCore");
+		amberStaffCore = new Item().setUnlocalizedName("thaumicexploration:amberStaffCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodAmber_staff");
+		GameRegistry.registerItem(amberStaffCore, "amberStaffCore");
+		necroStaffCore = new Item().setUnlocalizedName("thaumicexploration:necroStaffCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodNecro_staff");
+		GameRegistry.registerItem(necroStaffCore, "necroStaffCore");
+		if (this.breadWand) {
+			breadCore = new Item().setUnlocalizedName("thaumicexploration:breadCore").setCreativeTab(tab).setTextureName("thaumicexploration:rodBread");
+			GameRegistry.registerItem(breadCore, "breadCore");
+		}
+		sojournerCap = new Item().setUnlocalizedName("thaumicexploration:capSojourner").setCreativeTab(tab).setTextureName("thaumicexploration:capSojournerCharged");
+		GameRegistry.registerItem(sojournerCap, "sojournerCap");
+		sojournerCapUncharged = new Item().setUnlocalizedName("thaumicexploration:capSojournerInert").setCreativeTab(tab).setTextureName("thaumicexploration:capSojourner");
+		GameRegistry.registerItem(sojournerCapUncharged, "sojournerCapUncharged");
+		
+		mechanistCap = new Item().setUnlocalizedName("thaumicexploration:capMechanist").setCreativeTab(tab).setTextureName("thaumicexploration:capMechanistCharged");
+		GameRegistry.registerItem(mechanistCap, "mechanistCap");
+		mechanistCapUncharged = new Item().setUnlocalizedName("thaumicexploration:capMechanistInert").setCreativeTab(tab).setTextureName("thaumicexploration:capMechanist");
+		GameRegistry.registerItem(mechanistCapUncharged, "mechanistCapUncharged");
+		
+		pureZombieBrain = (new ItemBrain(pureZombieBrainID)).setUnlocalizedName("thaumicexploration:pureZombieBrain").setCreativeTab(tab).setTextureName("thaumicexploration:pureZombieBrain");
+		GameRegistry.registerItem(pureZombieBrain, "pureZombieBrain");
+		blankSeal = (new ItemBlankSeal(blankSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealBlank"));
+		GameRegistry.registerItem(blankSeal, "blankSeal");
+		chestSeal = (new ItemChestSeal(chestSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
+		GameRegistry.registerItem(chestSeal, "chestSeal");
+		chestSealLinked = (new ItemChestSealLinked(chestSealLinkedID).setTextureName("thaumicexploration:sealChest").setUnlocalizedName("thaumicexploration:chestSeal"));
+		GameRegistry.registerItem(chestSealLinked, "chestSealLinked");
+		jarSeal = (new ItemChestSeal(jarSealID).setCreativeTab(tab).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
+		GameRegistry.registerItem(jarSeal, "jarSeal");
+		jarSealLinked = (new ItemChestSealLinked(jarSealLinkedID).setTextureName("thaumicexploration:sealJar").setUnlocalizedName("thaumicexploration:jarSeal"));
+		GameRegistry.registerItem(jarSealLinked, "jarSealLinked");
+		charmNoTaint = new Item().setUnlocalizedName("thaumicexploration:dreamcatcher").setCreativeTab(tab).setTextureName("thaumicexploration:dreamcatcher");
+		GameRegistry.registerItem(charmNoTaint, "charmNoTaint");
+		charmTaint = new Item().setUnlocalizedName("thaumicexploration:ringTaint").setCreativeTab(tab).setTextureName("thaumicexploration:taintRing");
+		GameRegistry.registerItem(charmTaint, "charmTaint");
+		//maskEvil = new ItemTXArmorSpecialDiscount(maskEvilID, ThaumcraftApi.armorMatSpecial, 2, 0).setUnlocalizedName("thaumicexploration:maskEvil").setCreativeTab(tab).setTextureName("thaumicexploration:maskEvil");
+		//GameRegistry.registerItem(maskEvil, "maskEvil");
+		bootsMeteor = new ItemTXArmorSpecial(bootsMeteorID, ThaumcraftApi.armorMatSpecial, 4, 3).setUnlocalizedName("thaumicexploration:bootsMeteor").setCreativeTab(tab).setTextureName("thaumicexploration:bootsMeteor");
+		GameRegistry.registerItem(bootsMeteor, "bootsMeteor");
+		bootsComet = new ItemTXArmorSpecial(bootsCometID, ThaumcraftApi.armorMatSpecial, 4, 3).setUnlocalizedName("thaumicexploration:bootsComet").setCreativeTab(tab).setTextureName("thaumicexploration:bootsComet");
+		GameRegistry.registerItem(bootsComet, "bootsComet");
+
+		taintBerry = new ItemTaintSeedFood(taintBerryID, 1, 0.3F, Blocks.tnt, ConfigBlocks.blockTaint).setCreativeTab(tab).setUnlocalizedName("thaumicexploration:taintBerry").setTextureName("thaumicExploration:taintBerry");
+		GameRegistry.registerItem(taintBerry, "taintBerry");
+		
+		tentacleRing = new ItemBauble(BaubleType.RING).setCreativeTab(tab).setUnlocalizedName("thaumicexploration:tentacleRing").setTextureName("thaumicExploration:taintaclering");
+		GameRegistry.registerItem(tentacleRing, "tentacleRing");
+		
+		stabilizerBelt = new ItemStabilizerBelt().setCreativeTab(tab).setUnlocalizedName("thaumicexploration:stabilizerBelt").setTextureName("thaumicExploration:stabilizerBelt");
+		GameRegistry.registerItem(stabilizerBelt, "stabilizerBelt");
+		
+		discountRing = new ItemBaubleDiscountRing().setCreativeTab(tab).setUnlocalizedName("thaumicexploration:discountRing").setTextureName("thaumicExploration:discountRing");
+		GameRegistry.registerItem(discountRing, "discountRing");
+	}
+	
+	
+
+	@EventHandler
+	public void load(FMLInitializationEvent event) {
+		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("tExploration");
+		//fakeAspectNecro = new FauxAspect("Necromantic Energy", 0x870404, null, new ResourceLocation("thaumicexploration", "textures/tabs/necroAspect.png"), 771);
+		this.tickHandler = new TXTickHandler();
+		FMLCommonHandler.instance().bus().register(this.tickHandler);
+	    
+	    this.entityEventHandler = new TXBootsEventHandler();
+	    MinecraftForge.EVENT_BUS.register(this.entityEventHandler);
+	    
+	   // this.entityEventHandler2 = new TXArmorEventHandler();
+	    //inecraftForge.EVENT_BUS.register(this.entityEventHandler2);
+	    
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new TXGuiHandler());
+		
+		everfullUrnRenderID = RenderingRegistry.getNextAvailableRenderId();
+		crucibleSoulsRenderID = RenderingRegistry.getNextAvailableRenderId();
+		replicatorRenderID = RenderingRegistry.getNextAvailableRenderId();
+		candleSkullRenderID = RenderingRegistry.getNextAvailableRenderId();
+		necroPedestalRenderID = RenderingRegistry.getNextAvailableRenderId();
+		floatCandleRenderID = RenderingRegistry.getNextAvailableRenderId();
+		trashJarRenderID = RenderingRegistry.getNextAvailableRenderId();
+		//Creative Tab
+		
+		
+		//EventHandler
+		MinecraftForge.EVENT_BUS.register(new TXEventHandler());
+
+		//Tiles
+		GameRegistry.registerTileEntity(TileEntityFloatyCandle.class, "tileEntityFloatyCandle");
+		GameRegistry.registerTileEntity(TileEntityAutoSorter.class, "tileEntityAutoSorter");
+		GameRegistry.registerTileEntity(TileEntityBoundChest.class, "tileEntityBoundChest");
+		GameRegistry.registerTileEntity(TileEntityBoundJar.class, "tileEntityBoundJar");
+		GameRegistry.registerTileEntity(TileEntityThinkTank.class, "tileEntityThinkTank");
+		GameRegistry.registerTileEntity(TileEntityEverfullUrn.class, "tileEntityEverfullUrn");
+		GameRegistry.registerTileEntity(TileEntityCrucibleSouls.class, "tileEntityCrucibleSouls");
+		GameRegistry.registerTileEntity(TileEntityReplicator.class, "tileEntityReplicator");
+		GameRegistry.registerTileEntity(TileEntityTrashJar.class, "tileEntityTrashJar");
+		//GameRegistry.registerTileEntity(TileEntityNecroPedestal.class, "tileEntityNecroPedestal");
+		//GameRegistry.registerTileEntity(TileEntityNecroFire.class, "tileEntityNecroFire");
+		//Blocks
+		
+		
+		//Wands
+		STAFF_ROD_AMBER = new StaffRod("AMBER",25,new ItemStack(ThaumicExploration.amberStaffCore),18,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
+		WAND_ROD_AMBER = new WandRod("AMBER",10,new ItemStack(ThaumicExploration.amberCore),8,new WandRodAmberOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodAmber.png"));
+		WAND_ROD_CRYSTAL = new WandRodTransmutative("TRANSMUTATION",75,new ItemStack(ThaumicExploration.transmutationCore),6,new WandRodTransmutationOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/0.png"));
+		STAFF_ROD_CRYSTAL = new StaffRodTransmutative("TRANSMUTATION",175,new ItemStack(ThaumicExploration.transmutationStaffCore),14,new WandRodTransmutationOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/0.png"));
+		STAFF_ROD_NECRO = new StaffRod("NECROMANCER",200,new ItemStack(ThaumicExploration.necroStaffCore),15,new WandRodNecromancerOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodNecro.png"));
+		//STAFF_ROD_NECRO.setRunes(true);
+		if (this.breadWand) {
+			WAND_ROD_BREAD = new WandRod("BREAD",39,new ItemStack(ThaumicExploration.breadCore),8,new WandRodBreadOnUpdate(), new ResourceLocation("thaumicexploration:textures/models/rodBread.png"));
+		}
+		WAND_CAP_SOJOURNER = new WandCap("SOJOURNER", 0.95F, new ItemStack(ThaumicExploration.sojournerCap), 6);
+		WAND_CAP_SOJOURNER.setTexture(new ResourceLocation("thaumicexploration:textures/models/capSojourner.png"));
+		
+		WAND_CAP_MECHANIST = new WandCap("MECHANIST", 0.95F, new ItemStack(ThaumicExploration.mechanistCap), 6);
+		WAND_CAP_MECHANIST.setTexture(new ResourceLocation("thaumicexploration:textures/models/capMechanist.png"));
+		
+		//WandRod.rods.put("transmutation1", WAND_ROD_CRYSTAL1);
+		enchantmentBinding = new EnchantmentBinding(enchantmentBindingID, 1);
+		enchantmentNightVision = new EnchantmentNightVision(enchantmentNightVisionID, 1);
+		enchantmentDisarm = new EnchantmentDisarm(enchantmentDisarmID, 1);
+		if (Loader.isModLoaded("ThaumicTinkerer")) {
+			TTIntegration.registerEnchants();
+		}
+	    EntityRegistry.registerModEntity(EntityTaintacleMinion.class, "TaintacleMinion", 0, ThaumicExploration.instance, 64, 3, false);
+//		enhancedHelmetRunic = new ItemEnhancedRunicArmor(1, enhancedHelmetRunicID, ThaumcraftApi.armorMatSpecial, 0, 0).setUnlocalizedName("thaumicexploration:enhancedHelmetRunic").setCreativeTab(tab);
+//		enhancedChestRunic = new ItemEnhancedRunicArmor(1,enhancedChestRunicID, ThaumcraftApi.armorMatSpecial, 0, 1).setUnlocalizedName("thaumicexploration:enhancedChestplateRunic").setCreativeTab(tab);
+//		enhancedLegsRunic = new ItemEnhancedRunicArmor(1,enhancedLegsRunicID, ThaumcraftApi.armorMatSpecial, 0, 2).setUnlocalizedName("thaumicexploration:enhancedLeggingsRunic").setCreativeTab(tab);
+//		enhancedBootsRunic = new ItemEnhancedRunicArmor(1,enhancedBootsRunicID, ThaumcraftApi.armorMatSpecial, 0, 3).setUnlocalizedName("thaumicexploration:enhancedBootsRunic").setCreativeTab(tab);
+//		enhancedHelmetRunic2 = new ItemEnhancedRunicArmor(2, enhancedHelmetRunic2ID, ThaumcraftApi.armorMatSpecial, 0, 0).setUnlocalizedName("thaumicexploration:enhancedHelmetRunic");
+//		enhancedChestRunic2 = new ItemEnhancedRunicArmor(2,enhancedChestRunic2ID, ThaumcraftApi.armorMatSpecial, 0, 1).setUnlocalizedName("thaumicexploration:enhancedChestplateRunic");
+//		enhancedLegsRunic2 = new ItemEnhancedRunicArmor(2,enhancedLegsRunic2ID, ThaumcraftApi.armorMatSpecial, 0, 2).setUnlocalizedName("thaumicexploration:enhancedLeggingsRunic");
+//		enhancedBootsRunic2 = new ItemEnhancedRunicArmor(2,enhancedBootsRunic2ID, ThaumcraftApi.armorMatSpecial, 0, 3).setUnlocalizedName("thaumicexploration:enhancedBootsRunic");
+
+		potionBinding = (new TXPotion(potionBindingID, false, 0)).setIconIndex(0, 0).setPotionName("potion.binding");
+		potionTaintWithdrawl = (new TXTaintPotion(potionTaintWithdrawlID, true, 0)).setPotionName("potion.taintWithdrawl");
+		
+		
+		proxy.registerRenderers();
+	}
+	
+	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		//Researches, Thaumcraft Recipes
+		ModRecipes.initRecipes();
+		ModResearch.initResearch();
+		//NecromanticAltarAPI.initNecromanticRecipes();
+		proxy.setUnicode();
+
+		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone),0));
+		String[] ores = OreDictionary.getOreNames();
+	    for (String ore : ores) {
+	    	if (ore != null) {
+	    		if (ore.equals("logWood")) {
+	    			for (ItemStack is : OreDictionary.getOres(ore)) {
+	    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+	    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+	    				if (!(is.getItem() == Item.getItemFromBlock(ConfigBlocks.blockMagicalLog)) && ot.getAspects().length > 0)
+	    					allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+	    	        }
+	    		}
+	    		if (ore.equals("treeLeaves")) {
+	    			for (ItemStack is : OreDictionary.getOres(ore)) {
+	    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+	    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+	    				if (!(is.getItem() == Item.getItemFromBlock(ConfigBlocks.blockMagicalLeaves)) && ot.getAspects().length > 0)
+	    					allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+	    	        }
+	    		}
+	    		if (allowModWoodReplication) {
+		    		if (allowMagicPlankReplication) {
+			    		if (ore.equals("plankWood")) {
+			    			for (ItemStack is : OreDictionary.getOres(ore)) {
+			    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+			    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+			    		        if (ot.getAspects().length > 0)
+			    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+			    	        }
+			    		}
+		    		}
+		    		else
+		    		{
+			    		if (ore.equals("plankWood")) {
+			    			for (ItemStack is : OreDictionary.getOres(ore)) {
+			    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+			    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+			    		        if (!(is.getItem() == Item.getItemFromBlock(ConfigBlocks.blockWoodenDevice)) && ot.getAspects().length > 0)
+			    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+			    	        }
+			    		}
+		    		}
+		    		
+		    		if (ore.equals("slabWood")) {
+		    			for (ItemStack is : OreDictionary.getOres(ore)) {
+		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+		    		        if (ot.getAspects().length > 0)
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+		    	        }
+		    		}
+		    		if (ore.equals("stairWood")) {
+		    			for (ItemStack is : OreDictionary.getOres(ore)) {
+		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+		    		        if (ot.getAspects().length > 0)
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+		    	        }
+		    		}
+	    		}
+	    		else
+	    		{
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.wooden_slab),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.birch_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.oak_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.jungle_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.spruce_stairs),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.log),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.log2),OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.planks),OreDictionary.WILDCARD_VALUE));
+	    			if (allowMagicPlankReplication) {
+	    				allowedItems.add(MutablePair.of(Item.getItemFromBlock(ConfigBlocks.blockWoodenDevice),6));
+	    				allowedItems.add(MutablePair.of(Item.getItemFromBlock(ConfigBlocks.blockWoodenDevice),7));
+	    			}	
+	    		}
+	    		if (allowModStoneReplication) {
+		    		if (ore.equals("stone")) {
+		    			for (ItemStack is : OreDictionary.getOres(ore)) {
+		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+		    		        if (ot.getAspects().length > 0)
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+		    	        }
+		    		}
+		    		if (ore.equals("cobblestone")) {
+		    			for (ItemStack is : OreDictionary.getOres(ore)) {
+		    				AspectList ot = ThaumcraftCraftingManager.getObjectTags(is);
+		    		        ot = ThaumcraftCraftingManager.getBonusTags(is, ot);
+		    		        if (ot.getAspects().length > 0)
+		    		        	allowedItems.add(MutablePair.of(is.getItem(),is.getItemDamage()));
+		    	        }
+		    		}
+	    		}
+	    		else
+	    		{
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone), OreDictionary.WILDCARD_VALUE));
+	    			allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.cobblestone), OreDictionary.WILDCARD_VALUE));
+	    		}
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.mossy_cobblestone), OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),0));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),3));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_stairs), OreDictionary.WILDCARD_VALUE));
+	    		
+	    		//All sandstone, stairs, slab
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.sand),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.sandstone),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.sandstone_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),1));
+	    		
+	    		//All stone bricks, stairs, slab
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.brick_block),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.brick_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),5));
+	    		
+	    		//Bricks, stairs, slab
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stonebrick),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_brick_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),4));
+	    		
+	    		//All quartz, stairs, slab
+	    		//allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.blockNetherQuartz),OreDictionary.WILDCARD_VALUE));
+	    		//allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stairsNetherQuartz),OreDictionary.WILDCARD_VALUE));
+	    		//allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stoneSingleSlab),7));
+	    		
+	    		//Netherbrick, stairs, slab
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.nether_brick),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.nether_brick_stairs),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.stone_slab),6));
+	    		
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.soul_sand),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.gravel),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.glass),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.grass),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.dirt),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.snow),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.clay),OreDictionary.WILDCARD_VALUE));
+	    		allowedItems.add(MutablePair.of(Item.getItemFromBlock(Blocks.hardened_clay),OreDictionary.WILDCARD_VALUE));
+	    	}
+	    }
+	}
+	
+
+
+	public void addRecipes()
+	{
+		
+	}
+	
+	public void registerEntity(Class<? extends Entity> entityClass, String entityName, int bkEggColor, int fgEggColor) {
+		int id = EntityRegistry.findGlobalUniqueEntityId();
+
+		EntityRegistry.registerGlobalEntityID(entityClass, entityName, id);
+		EntityList.entityEggs.put(Integer.valueOf(id), new EntityEggInfo(id, bkEggColor, fgEggColor));
+	}
+	
+	public void addSpawn(Class<? extends EntityLiving> entityClass, int spawnProb, int min, int max, BiomeGenBase[] biomes) {
+		if (spawnProb > 0) {
+			EntityRegistry.addSpawn(entityClass, spawnProb, min, max, EnumCreatureType.monster, biomes);
+		}
+	}
+
+	private void addAchievementName(String ach, String name)
+	{
+	        LanguageRegistry.instance().addStringLocalization("achievement." + ach, "en_US", name);
+	}
+
+	private void addAchievementDesc(String ach, String desc)
+	{
+	        LanguageRegistry.instance().addStringLocalization("achievement." + ach + ".desc", "en_US", desc);
+	}
+
+
+	private class TXTab extends CreativeTabs {
+
+		public TXTab(int par1, String par2Str) {
+			super(par1, par2Str);
+	
+		}
+		
+        
+      
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem() {
+		
+			return Item.getItemFromBlock(ThaumicExploration.thinkTankJar);
+		}	
+		
+	}
+}
