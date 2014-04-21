@@ -1,10 +1,13 @@
 ----Item Names----
+item.thaumicexploration:tentacleRing.name=Taintacle Ring
+item.thaumicexploration:stabilizerBelt.name=Thaumostatic Stabilizer
 item.thaumicexploration:pureZombieBrain.name=Cured Zombie Brain
 item.thaumicexploration:transmutationCore.name=Transmutative Rod
+item.thaumicexploration:transmutationStaffCore.name=Transmutative Staff Core
 item.thaumicexploration:amberCore.name=Amber Rod
 item.thaumicexploration:amberStaffCore.name=Amber Staff Core
 item.thaumicexploration:breadCore.name=Baguette Rod
-item.thaumicexploration:necroCore.name=Necromancer's Rod
+item.thaumicexploration:necroStaffCore.name=Necromancer's Staff Core
 item.thaumicexploration:capSojourner.name=Sojourner's Cap
 item.thaumicexploration:capSojournerInert.name=Inert Sojourner's Cap
 item.thaumicexploration:capMechanist.name=Mechanist's Cap
@@ -31,6 +34,14 @@ thaumicexploration.bread1=Please eat me.
 thaumicexploration.bread2=Are you feeling hungry?
 thaumicexploration.bread3=Bonjour, monsieur.
 thaumicexploration.bread4=Mangez-moi, s'il vous plait.
+
+
+item.thaumicexploration:discountRing:0.name=Ring of Air
+item.thaumicexploration:discountRing:1.name=Ring of Earth
+item.thaumicexploration:discountRing:2.name=Ring of Fire
+item.thaumicexploration:discountRing:3.name=Ring of Water
+item.thaumicexploration:discountRing:4.name=Ring of Order
+item.thaumicexploration:discountRing:5.name=Ring of Entropy
 
 tc.aspect.Necromantic Energy=Energy of the Undead
 
@@ -115,6 +126,7 @@ tile.thaumicexploration:thinkTankJar.name=Think Tank
 tile.thaumicexploration:everfullUrn.name=Everfull Urn
 tile.thaumicexploration:crucibleSouls.name=Crucible of Souls
 tile.thaumicexploration:replicator.name=Thaumic Replicator
+tile.thaumicexploration:trashJar.name=Oblivion Jar
 
 tile.thaumicexploration:floatCandle.0.name=White Floating Candle
 tile.thaumicexploration:floatCandle.1.name=Orange Floating Candle
@@ -137,16 +149,37 @@ tile.thaumicexploration:floatCandle.15.name=Black Floating Candle
 te.researchPrefix=[TX]
 tc.research_category.TAINT=Tainturgy
 tc.research_category.NECROMANCY=Necromancy
+tc.research_category.TX=Thaumic Esoterica
+
+--Oblivion Jar
+te.name.TRASHJAR=Oblivion Jar
+te.tag.TRASHJAR=Essentia disposal
+te.text.TRASHJAR.1=While void jars are very useful in getting rid of large amounts of a certain type of essentia, you often find your infusion room overflowing with several types. Instead of wasting time making a void jar for every mystical aspect, you decided that there must be an easier solution. That solution has manifested itself in the form of the oblivion jar.<BR><BR>While significantly more expensive than its void or warded counterparts, only one oblivion jar is necessary to handle all of the excess essentia from a network. It will obliterate all essentia that enters the jar, much like a filled void jar does.
+te.text.TRASHJAR.2=The oblivion jar has the lowest suction of any jar, meaning that it will only take essentia that has nowhere else to go. Golems may interact with this jar as well, if they do not find another jar that can handle the essentia they are carrying.
+
+--Taintacle Ring
+te.name.TENTACLERING=Taintacle Ring
+te.tag.TENTACLERING=Henturgy
+te.text.TENTACLERING.1=You have found a way to harness the knowledge you have gained from researching tainted lands. You have discovered a way to summon small taintacles to aid you in combat, similarily to the large taintacles you have found in your travels.<BR><BR>Wearing this ring in one of your ring slots activates this effect. Any time that you take damage and are on solid land, a small taintacle will sprout, attacking nearby foes.
+
+--Discount Rings
+te.name.DISCOUNTRINGS=Shard Rings
+te.tag.DISCOUNTRINGS=Conserving vis
+te.text.DISCOUNTRINGS.1=You have found a way to reduce the amount of vis used by casting wands. Simply carve the mystical shards that you find underground into the shape of a ring, and give them a touch of magic.<BR><BR>A ring can be made for each of the six primal aspects. You may wear up to two of these rings at a time. Two rings of the same aspect will stack their discounts.
+
+--Thaumostatic Stabilizer
+te.name.STABILIZERBELT=Thaumostatic Stabilizer
+te.tag.STABILIZERBELT=Knockback nullifier
+te.text.STABILIZERBELT.1=Using similar technology to that found in the thaumostatic harness, you've created a special belt that nullifies the effect of knockback.<BR><BR>Any time you take damage, instead of being knocked around, you will instead remain in place. You have found this device to be extremely useful for not only flying using the harness, but also and travel at night.
 
 --Floating Candles
 te.name.FLOATCANDLE=Floating Candles
 te.tag.FLOATCANDLE=Wingardium Leviosa
 te.text.FLOATCANDLE.1=You always have felt that tallow candles are missing something... A touch of magic and an Aer shard should be enough to make them look right at home in any respected wizarding school. Floating candles can be placed in midair without a surface beneath them. These candles bob pleasingly, and add a touch of magic to any room.<BR><BR>Unfortunately, the candles don't seem to have an effect on infusion. You are sure that this will be fixed in the near future.
 
-
 --Flesh Curing
 te.name.FLESHCURE=Flesh Purification
-te.tag.FLESHCURE=Mystical Cleansing
+te.tag.FLESHCURE=Making things better
 te.text.FLESHCURE.1=By imbuing rotten flesh with certain aspects, you have found that you are able to remove nearly all traces of disease and decomposition from the flesh, rendering it much more useful.<BR><BR>Although this discovery may not be particularly useful, you are sure it will lead to exciting things.
 
 --Brain Curing
@@ -199,6 +232,16 @@ te.name.ROD_AMBER_staff=Amber Staff Core
 te.tag.ROD_AMBER_staff=Regenerative vis storage
 te.text.ROD_AMBER_staff.1=A staff core crafted from amber can store 25 vis of each type.<BR>Like the wand core it will slowly replenish its vis stores.
 
+--Transmutation Staff Core
+te.name.ROD_TRANSMUTATION_staff=Transmutative Staff Core
+te.tag.ROD_TRANSMUTATION_staff=One thing into another
+te.text.ROD_TRANSMUTATION_staff.1=A staff core crafted from a primal charm and various shards can store 175 vis of each type.<BR>Like the wand core it transmutate vis forms when over 90% capacity in a particular type.
+
+--Necromancer's Staff Core
+te.name.ROD_NECROMANCER_staff=Necromancer's Staff Core
+te.tag.ROD_NECROMANCER_staff=The power of the undead
+te.text.ROD_NECROMANCER_staff.1=You have created a horrifying tool by infusing a Bone Staff Core with remnants of the undead.<BR><BR>This staff core is the perfect tool for the bloodthirsty thaumaturge. It boasts a large capacity of 200 vis, and receives four times the normal amount of vis from killed monsters. In addition, this staff is an even more proficient at melee combat. Striking a monster begins to wither their life force away. Unfortunately, this does not come without downsides. The dark magic used to infuse the staff makes it less receptive to vis obtained from other means, only effectively receiving 75% of the vis an ordinary wand would from nodes or other sources.
+
 --Bread Wand Core
 te.name.ROD_BREAD=Baguette Wand Core
 te.tag.ROD_BREAD=Frenchman's vis storage
@@ -207,12 +250,12 @@ te.text.ROD_BREAD.1=Bonjour! Yesterday, you bought one too many baguettes. It is
 --Sojourner's Wand Cap
 te.name.CAP_SOJOURNER=Sojourner's Wand Caps
 te.tag.CAP_SOJOURNER=Sentient wand caps
-te.text.CAP_SOJOURNER.1=Even with the Wand Recharge Pedestal, refilling your wand has been a chore. One must go through the work of constructing the pedestal and placing nodes in its vicinity. You have developed a special wand cap that will passively drain nearby nodes in a similar fashion to the Wand Recharge Pedestal when the wand is held in the hand.<BR><BR>This cap is more efficient in channeling vis than Gold Wand Caps but less efficient than Thaumium Wand Caps.
+te.text.CAP_SOJOURNER.1=Even with the wand recharge pedestal, refilling your wand has been a chore. One must go through the work of constructing the pedestal and placing nodes in its vicinity. You have developed a special wand cap that will passively drain nearby nodes in a similar fashion to the Wand Recharge Pedestal when the wand is held in the hand.<BR><BR>This cap is more efficient in channeling vis than gold wand caps but less efficient than thaumium wand caps.
 
 --Mechanist's Wand Cap
 te.name.CAP_MECHANIST=Mechanist's Wand Caps
 te.tag.CAP_MECHANIST=Mechanical wand caps
-te.text.CAP_MECHANIST.1=You have researched nodes extensively, and you feel that you have reached a point in which you can no longer improve the draining speed of nodes without improving your wands themselves. You have created a mechanical wand cap that is able to deconstruct and harvest vis from a node much more quickly than usual, using a combination of gadgetry and magic.<BR><BR>This cap is more efficient in channeling vis than Gold Wand Caps but less efficient than Thaumium Wand Caps.
+te.text.CAP_MECHANIST.1=You have researched nodes extensively, and you feel that you have reached a point in which you can no longer improve the draining speed of nodes without improving your wands themselves. You have created a mechanical wand cap that is able to deconstruct and harvest vis from a node much more quickly than usual, using a combination of gadgetry and magic.<BR><BR>This cap is more efficient in channeling vis than gold wand caps but less efficient than thaumium wand caps.
 
 --Wispy Dreamcatcher
 te.name.DREAMCATCHER=Wispy Dreamcatcher
@@ -263,12 +306,12 @@ te.text.ENHANCEDRUNICARMOR.2=Keep in mind that the inital creation of the Enhanc
 --Transmutative Wand Core
 te.name.ROD_TRANSMUTATION=Transmutative Wand Core
 te.tag.ROD_TRANSMUTATION=One thing into another
-te.text.ROD_TRANSMUTATION.1=While experimenting with the properties of Primal Charms, you have found that you can sporadically convert one form of vis into another. You have found this property to be too unreliable to use for most purposes, but if a charm is infused with certain materials, it can be used as a wand core with unique properties.<BR><BR>When the wand is filled at over 90% capacity of a certain aspect, this vis will be converted into other forms of vis, albeit at a low ratio.<BR><BR>This wand also boasts a higher vis capacity than a mundane Greatwood wand, holding up to 75 vis of each type.
+te.text.ROD_TRANSMUTATION.1=While experimenting with the properties of primal charms, you have found that you can sporadically convert one form of vis into another. You have found this property to be too unreliable to use for most purposes, but if a charm is infused with certain materials, it can be used as a wand core with unique properties.<BR><BR>When the wand is filled at over 90% capacity of a certain aspect, this vis will be converted into other forms of vis, albeit at a low ratio.<BR><BR>This wand also boasts a higher vis capacity than a mundane greatwood wand, holding up to 75 vis of each type.
 
 --Necro Wand
 te.name.ROD_NECROMANCER=Necromancer's Wand Core
 te.tag.ROD_NECROMANCER=Evil vis storage
-te.text.ROD_NECROMANCER.1=You have always found finding a node to charge your depleted wand to be a nuisance. To remedy this, you have developed a wand core that harnesses the energy of the dead more efficiently.<BR><BR>Vis orbs collected from the remains of dead monsters yeild twice the vis, charging your wand quickly. Unfortunately, the dark energies used to infuse this wand are not as receptive to other forms of vis. When draining nodes or obtaining vis from other means, approximately a fourth is lost. This wand core has storage that rivals that of Silverwood, making it a formidible option when choosing which core to use.
+te.text.ROD_NECROMANCER.1=You have always found finding a node to charge your depleted wand to be a nuisance. To remedy this, you have developed a wand core that harnesses the energy of the dead more efficiently.<BR><BR>Vis orbs collected from the remains of dead monsters yeild twice the vis, charging your wand quickly. Unfortunately, the dark energies used to infuse this wand are not as receptive to other forms of vis. When draining nodes or obtaining vis from other means, approximately a fourth is lost. This wand core has storage that rivals that of silverwood, making it a formidible option when choosing which core to use.
 
 --Necromantic Energy
 te.name.NECROENERGY=Necromantic Energy
@@ -284,6 +327,6 @@ te.text.NECROINFUSION.3=An example setup for the Necromantic Infusion Altar can 
 
 --Taint Basics
 te.name.TAINTBASICS=Taint
-te.tag.TAINTBASICS=Henturgy
+te.tag.TAINTBASICS=Evil magic
 te.text.TAINTBASICS.1=Sometimes, Thaumaturgy goes horribly wrong. Miracles become twisted calamities and the very landscape twists into hideous forms. Tainted Lands are places infected by the sick runoff of magical workings, flux. Local flora and fauna become warped and mutated into forms hostile to normal life and the very ground of a tainted land infects those who tread upon its pulsing fibres.
 te.text.TAINTBASICS.2=Tainted Lands can be found naturally in the world, but can also form when a careless Thaumaturge allows flux goo to stagnate for too long. They are recognizable by their telltale purple fibres and bright violet stalks. Left alone, the tainted land will gradually extend its tendrils outwards, infecting more and more of the surrounding land. Dirt becomes thick, pulpy Tainted Soil while trees and other natural materials are slowly covered in fibres and converted into structurally unsound crust which can collapse or melt into flux goo at any moment.
