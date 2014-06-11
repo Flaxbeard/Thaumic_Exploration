@@ -155,36 +155,36 @@ te.tag.TENTACLERING=Henturgy
 te.text.TENTACLERING.1=你找到了一种方法利用从研究腐化之地所得的知识.你能召唤出小触手怪协助战斗,类似你旅途中所见的腐化触手怪.<BR><BR>在你的一个指环栏里装备上就能激活该效果.你在土地上受到伤害的时候,会长出一个小触手怪,攻击它附近的敌人.
 
 --Thaumostatic Stabilizer
-te.name.STABILIZERBELT=Thaumostatic Stabilizer
-te.tag.STABILIZERBELT=Knockback nullifier
-te.text.STABILIZERBELT.1=Using similar technology to that found in the thaumostatic harness, you've created a special belt that nullifies the effect of knockback. Any time you take damage, instead of being knocked around, you will instead remain in place. You have found this device to be extremely useful for not only flying using the harness, but also combat and travel at night.
+te.name.STABILIZERBELT=奥法加护腰带
+te.tag.STABILIZERBELT=天国的击退
+te.text.STABILIZERBELT.1=利用类似奥法缰绳中发现的技术,你做出了一条能无视击退的特殊腰带.每当受伤害时,你将停在原地而不是被击退.这个装备不管是在战斗,夜间旅行还是穿戴缰绳飞行时都很实用.
 
 --Floating Candles
-te.name.FLOATCANDLE=Floating Candles
-te.tag.FLOATCANDLE=Wingardium Leviosa
-te.text.FLOATCANDLE.1=You always have felt that tallow candles are missing something... A touch of magic and an Aer shard should be enough to make them look right at home in any respected wizarding school. Floating candles can be placed in midair without a surface beneath them. These candles bob pleasingly, and add a touch of magic to any room.<BR><BR>Unfortunately, the candles don't seem to have an effect on infusion. You are sure that this will be fixed in the near future.
+te.name.FLOATCANDLE=浮空蜡烛
+te.tag.FLOATCANDLE=Wingardium Leviosa(浮空咒)
+te.text.FLOATCANDLE.1=你总觉得油烛还少些什么...利用在魔法学校所学施上一点魔法配合风之碎片让它们看着更舒服些.浮空蜡烛能直接放置在半空中无需支撑,这些蜡烛上下缓慢浮动,给空间内添上魔法的氛围.<BR><BR>不幸的是,这些蜡烛对注魔似乎毫无作用.你确信在不远的将来能解决这个问题.
 
 --Flesh Curing
-te.name.FLESHCURE=Flesh Purification
-te.tag.FLESHCURE=Making things better
-te.text.FLESHCURE.1=By imbuing rotten flesh with certain aspects, you have found that you are able to remove nearly all traces of disease and decomposition from the flesh, rendering it much more useful.<BR><BR>Although this discovery may not be particularly useful, you are sure it will lead to exciting things.
+te.name.FLESHCURE=腐肉炼制
+te.tag.FLESHCURE=使事情变得更好
+te.text.FLESHCURE.1=给腐肉注入特定的要素源质, 你发现这能使你移除腐肉中几乎所有的腐烂和毒害作用,使它变得更有用.<BR><BR>尽管这不是十分实用的，你相信它也能做出些绝妙的东西.
 
 --Brain Curing
-te.name.BRAINCURE=Brain Sanitization
-te.tag.BRAINCURE=Brain washing
-te.text.BRAINCURE.1=You have discovered that by using a process similar to purifying zombie villagers, you can reverse the effects of zombification on the brain. These cured brains exhibit much more intellectual capacity than their diseased counterparts, so you hope they will prove useful in future creations.<BR><BR>Note that any type and any duration of weakening potion will work.
+te.name.BRAINCURE=僵脑净化
+te.tag.BRAINCURE=不要放弃治疗
+te.text.BRAINCURE.1=你意识到通过类似净化僵尸村民的过程,你可以将大脑僵尸化的过程逆转.这些净化的大脑有着高于僵尸之脑的智慧,所以你希望它们能在以后的创造中大显身手.<BR><BR>注意任何种类和时长的虚弱药水都可用.
 TO BE IMPLEMENTED: The brains also serve as a bait for zombified creatures, when dropped or placed on an arcane pedestal.
 
 --Think Tank
-te.name.THINKTANK=Think Tank
+te.name.THINKTANK=冥想之缸
 te.tag.THINKTANK=All the way from the Big MT
-te.text.THINKTANK.1=Your search for a way to automate research has finally come to an end. You have found that purified zombie brains make the perfect research aide. Placing a few of them in a warded jar with some thaumic devices and supplying them with an ample amount of books will result in a quantity of knowledge fragments. The system is not perfect, and the supplied books are destroyed in the process.
-te.text.THINKTANK.2=This 'think tank' has very particular placement requirements. To construct a working think tank, you must place the tank on top of a bookshelf, with nothing occupying the space in a 3x3x3 cube around the tank except for the bookshelf it is placed on. Note that a wand does not need to be used when setting up your think tank.
+te.text.THINKTANK.1=自动化研究的探索最终结束了.你发现净化的僵尸之脑能提供极好的研究协助.把几个连同一些神秘设备放入罐子中提供充足的书就能产生一定量的知识碎片.这个系统并不完美,并且所提供的书也在过程中消耗掉了.
+te.text.THINKTANK.2=冥想之缸有着很特别的放置要求.要创建一个工作的冥想之缸,你必须将它放在书架上,以它为中心3x3x3范围内没有其它占位的东西除了书架.注意安装冥想之缸的时候不需要用到法杖.
 
 --Chest Sealing
-te.name.CHESTSEAL=Seal of Chest Binding
-te.tag.CHESTSEAL=Magical inventory linking
-te.text.CHESTSEAL.1=By soaking a mundane seal made of tallow in a concoction of essentia, you have discovered a way to bind chests so that they share their contents. These seals can be dyed various colors for sorting purposes, but an unlimited number of bound chest networks can be created.<BR><BR>By right clicking on a chest with a chest binding seal, you can create a new network. Right clicking on a bound chest will link the seal to that network. Right clicking on an unbound chest with a linked seal will add that chest to the linked network. Note that only empty chests are able to be bound.
+te.name.CHESTSEAL=箱子封蜡
+te.tag.CHESTSEAL=神奇的容器连接
+te.text.CHESTSEAL.1=将普通的油脂制成的封蜡浸泡在各种源质的混合物中,你发现了一种方法让箱子相互绑定从而共享所有物品.出于区分的目的可以给封蜡染上不同的颜色,而可创建的箱子绑定网络数量是无限制的.<BR><BR>用箱子封蜡右击箱子,你能创建一个网络.右击绑定箱子会将封蜡与该网络关联.再用已关联的封蜡右击未绑定的箱子会将它他加入连接网络.注意只有空箱子才能被绑定.
 
 --Jar Sealing
 te.name.JARSEAL=Seal of Jar Binding
