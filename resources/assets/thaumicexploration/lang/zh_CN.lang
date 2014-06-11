@@ -144,15 +144,15 @@ tc.research_category.NECROMANCY=死灵学
 tc.research_category.TX=秘术学
 
 --Oblivion Jar
-te.name.TRASHJAR=Oblivion Jar
-te.tag.TRASHJAR=Essentia disposal
-te.text.TRASHJAR.1=While void jars are very useful in getting rid of large amounts of a certain type of essentia, you often find your infusion room overflowing with several types. Instead of wasting time making a void jar for every mystical aspect, you decided that there must be an easier solution. That solution has manifested itself in the form of the oblivion jar.<BR><BR>While significantly more expensive than its void or warded counterparts, only one oblivion jar is necessary to handle all of the excess essentia from a network. It will obliterate all essentia that enters the jar, much like a filled void jar does.
-te.text.TRASHJAR.2=The oblivion jar has the lowest suction of any jar, meaning that it will only take essentia that has nowhere else to go. Golems may interact with this jar as well, if they do not find another jar that can handle the essentia they are carrying.
+te.name.TRASHJAR=泯灭之罐
+te.tag.TRASHJAR=源质销毁
+te.text.TRASHJAR.1=尽管虚空罐子在大量消除某种源质时很有用,多数情况下你的注魔室总是溢满了多种源质.与其浪费时间给每种准备一个虚空罐子,你觉得还有更简单的解决方法. 显然这个方法就是使用泯灭之罐.<BR><BR>虽然比起作为原料的虚空罐子和守卫着玻璃要昂贵些，但一个管道系统中仅需一个泯灭之罐就可以处理所有过剩的要素源质.它会像盛满的虚空罐子一样消除所有进入其中的源质.
+te.text.TRASHJAR.2=泯灭之罐的吸力在所有罐子中是最弱的,这意味着它只会接受那些无处可去的要素源质.傀儡也能与它交互,前提是他们找不到其它能放入他们所带源质的罐子.
 
 --Taintacle Ring
-te.name.TENTACLERING=Taintacle Ring
+te.name.TENTACLERING=腐化指环
 te.tag.TENTACLERING=Henturgy
-te.text.TENTACLERING.1=You have found a way to harness the knowledge you have gained from researching tainted lands. You have discovered a way to summon small taintacles to aid you in combat, similarily to the large taintacles you have found in your travels.<BR><BR>Wearing this ring in one of your ring slots activates this effect. Any time that you take damage and are on solid land, a small taintacle will sprout, attacking nearby foes.
+te.text.TENTACLERING.1=你找到了一种方法利用从研究腐化之地所得的知识.你能召唤出小触手怪协助战斗,类似你旅途中所见的腐化触手怪.<BR><BR>在你的一个指环栏里装备上就能激活该效果.你在土地上受到伤害的时候,会长出一个小触手怪,攻击它附近的敌人.
 
 --Thaumostatic Stabilizer
 te.name.STABILIZERBELT=Thaumostatic Stabilizer
