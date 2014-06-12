@@ -187,62 +187,62 @@ te.tag.CHESTSEAL=神奇的容器连接
 te.text.CHESTSEAL.1=将普通的油脂制成的封蜡浸泡在各种源质的混合物中,你发现了一种方法让箱子相互绑定从而共享所有物品.出于区分的目的可以给封蜡染上不同的颜色,而可创建的箱子绑定网络数量是无限制的.<BR><BR>用箱子封蜡右击箱子,你能创建一个网络.右击绑定箱子会将封蜡与该网络关联.再用已关联的封蜡右击未绑定的箱子会将它他加入连接网络.注意只有空箱子才能被绑定.
 
 --Jar Sealing
-te.name.JARSEAL=Seal of Jar Binding
-te.tag.JARSEAL=Essentia, essentia everywhere
-te.text.JARSEAL.1=By adjusting the mixture of aspects that you soak the tallow seal in to account for essentia's mystical properties, you have found that you are able to bind essentia containers, in particular, warded jars. Much like your previous binding seals, the jar binding seal can be dyed and an unlimited amount of networks can be created.<BR><BR>See your notes on bound chest seals for information on how to create networks. Note that only empty jars are able to be bound. You can not bind void jars or jars with labels.<BR><BR>Sealed jars have a higher suction than unlabeled jars but lower than labeled jars.
+te.name.JARSEAL=罐子封蜡
+te.tag.JARSEAL=源质,无处不在的源质
+te.text.JARSEAL.1=通过调整油脂封蜡浸泡的要素混合来探究源质的神秘性,使你能绑定要素源质容器,尤其是,要素罐子.就像之前的封蜡一样,罐子封蜡也能染色并且有无限制的网络数量.<BR><BR>如何创建网络参见箱子封蜡绑定相关页面.注意只有空的罐子才能绑定.你无法绑定虚空罐子或是标签罐子.<BR><BR>封蜡罐子有比未贴标签的罐子强,标签罐子弱的吸力.
 
 --Everfull Urn
-te.name.URN=Everfull Urn
-te.tag.URN=It seems familiar... 
-te.text.URN.1=You have read much about an 'Everfull Urn' in your research, a mystical device created by the great Thaumaturge Azanor that acted as an endless source of water. You have finally constructed a device that can do that and more.<BR><BR>Your Everfull Urn can not only supply water to an infinite amount of buckets, it can also be pumped out of the top to an external tank. Your urn also has the ability to fill any nearby crucible, and extinguish nearby players that are on fire.
-te.text.URN.1B=You have read much about an 'Everfull Urn' in your research, a mystical device created by the great Thaumaturge Azanor that acted as an endless source of water. You have finally constructed a device that can do that and more.<BR><BR>Your Everfull Urn can not only supply water to an infinite amount of buckets, it can also be pumped out of the top to an external tank. Your urn also has the ability to fill any nearby crucible, and extinguish nearby players that are on fire.<BR><BR>The Urn is also able to fill nearby Petal Apothecaries, if one chooses to dabble in floral magic.
+te.name.URN=无尽之壶
+te.tag.URN=似曾相识... 
+te.text.URN.1=你在研究中读到了许多关于'无尽之壶'的东西,一个由伟大的神秘使Azanor创作的神秘装置,作为一个无限水源而工作.你终于做出了一个能那样工作并有其他功能的装置.<BR><BR>你的无尽之壶不仅可以装满无限桶水,它也能从顶部用管道导出水到外部容器.你的壶也能主动填满附近的坩埚,给着火的玩家灭火.
+te.text.URN.1B=你在研究中读到了许多关于'无尽之壶'的东西,一个由伟大的神秘使Azanor创作的神秘装置,作为一个无限水源而工作.你终于做出了一个能那样工作并有其他功能的装置.<BR><BR>你的无尽之壶不仅可以装满无限桶水,它也能从顶部用管道导出水到外部容器.你的壶也能主动填满附近的坩埚,给着火的玩家灭火.<BR><BR>The Urn is also able to fill nearby Petal Apothecaries, if one chooses to dabble in floral magic.
 
 --Crucible of Souls
-te.name.CRUCSOULS=Crucible of Souls
-te.tag.CRUCSOULS=Caution: Keep out of reach of children.
-te.text.CRUCSOULS.1=You have discovered a way to take advantage of a previously untapped source of essentia - that of living creatures. Infusing an alchemical furnace with various occult reagents and precise quantities of essentia, will create a crucible of souls, a device that will seek out the nearest living creature and slowly drain their life force, retrieving essentia at the final blow. This comes at the cost of the normal loot the creature would drop. This essentia can then be piped out of any face except the top via essentia tubes.
-te.text.CRUCSOULS.2=The Crucible of Souls is very unstable, and has a high probability of converting some of the essentia to flux or breaking it down into its component parts. You should make preparations to dispose of this flux before it causes a problem.<BR><BR>You have managed to install a basic safeguard so the device will not attack humans, but keep your pets at a safe distance. Magical golems should also be ignored by the device.
+te.name.CRUCSOULS=灵魂坩埚
+te.tag.CRUCSOULS=注意:远离儿童.
+te.text.CRUCSOULS.1=你已发现了一种方法利用从未开发过的源质来源-活的生物.给炼金炉注入多种神秘药剂和精确数量的源质,就做出了一个灵魂坩埚,一个会搜寻附近的生物并缓慢抽取它们生命力的装置,最后一击时抽取出要素源质.这个过程的代价就是消除了生物正常的掉落物.产生的源质能用管道在除了顶部以外的面导出.
+te.text.CRUCSOULS.2=灵魂坩埚十分不稳定,且有很大的概率将一些源质转为咒波或是分解为低级要素源质.你得在出现问题前做些处理咒波的准备.<BR><BR>你给它装上了基础的保护措施使得这个装置不会攻击人类,但请让你的宠物远离.神秘的傀儡也应不.
 
 --Replicator
-te.name.REPLICATOR=Thaumic Replicator
-te.tag.REPLICATOR=Equivalent exchange
-te.text.REPLICATOR.1=You have been able to break down blocks and items into essentia with an alchemical furnace, now finally you have found a way to do the opposite. You have created a device that can replicate simple building blocks using essentia.<BR><BR>By right clicking the Thaumic Replicator with a block, you can set the template. Right clicking with a wand starts the replication process. Simply look at the Replicator with Goggles of Revealing to see what essentia is neccesary, and place this essentia in nearby jars like you would for an infusion.
-te.text.REPLICATOR.2=This essentia will then form into the block that you set as a template. This block must be removed before starting the process again. Right clicking will remove any blocks in the replicator and right clicking again will reset the template.<BR><BR>This process can also be automated by starting replication with a redstone signal and removing blocks with a hopper.
+te.name.REPLICATOR=神秘复制器
+te.tag.REPLICATOR=等价交换
+te.text.REPLICATOR.1=你能用炼金炉把方块分解为要素源质,现在你找到了一种方法反其道而行.你做出了一个用源质就能复制简单建筑方块的装置.<BR><BR>手持方块右击神秘复制器,就能设定模板.再用法杖右击启动复制器.带上揭示之护目镜就能看到复制器需要哪些源质,就像注魔那样由附近的罐子提供要素源质.
+te.text.REPLICATOR.2=这些要素源质就会将模板设定的方块塑造出来.再次启动复制前需要取下造出的方块.右击会取下复制器上的任何方块,再次右击将会重置模板.<BR><BR>这个过程也能自动进行,用红石信号开启复制和漏斗导出方块.
 
 --Amber Wand Core
-te.name.ROD_AMBER=Amber Wand Core
-te.tag.ROD_AMBER=Regenerative vis storage
-te.text.ROD_AMBER.1=You have finally found a practical use for amber, in the form of a wand core. Amber serves as a poor conduit for vis, and thus can only hold 10 vis of each type, but it has other benefits.<BR><BR>Amber cores seem to store a fleeting memory of vis when empty. By harnessing this memory, you have created a wand core that can replenish all forms of vis at a rather quick rate when not at full capacity. While many of the other wand cores you have created have had regenerative properties, the amber core regenerates one point of every type of vis, instead of one type in particular, at two times the rate.
+te.name.ROD_AMBER=琥珀杖柄
+te.tag.ROD_AMBER=再生的魔力储存
+te.text.ROD_AMBER.1=最终你发现了琥珀实用的一面,用在制作杖柄上.琥珀的魔力储存容量很少, 尽管每种只能储存10vis,但它有其它的长处.<BR><BR>琥珀杖柄在空的时候似乎能储存闪现的魔力.通过这一点,你做出了一个可以在魔力未满时快速补充所有魔力的杖柄.尽管你做出的其它一些杖柄也有回复魔力的能力,琥珀杖柄以两倍速回复每种要素1vis而不是单独限定某一种.
 
 --Amber Staff Core
-te.name.ROD_AMBER_staff=Amber Staff Core
-te.tag.ROD_AMBER_staff=Regenerative vis storage
-te.text.ROD_AMBER_staff.1=A staff core crafted from amber can store 25 vis of each type.<BR>Like the wand core it will slowly replenish its vis stores.
+te.name.ROD_AMBER_staff=琥珀杖芯
+te.tag.ROD_AMBER_staff=再生的魔力储存
+te.text.ROD_AMBER_staff.1=由琥珀制成的杖芯,可储存各种要素25vis.<BR>同琥珀杖柄一样它也会缓慢恢复魔力储存.
 
 --Transmutation Staff Core
-te.name.ROD_TRANSMUTATION_staff=Transmutative Staff Core
-te.tag.ROD_TRANSMUTATION_staff=One thing into another
-te.text.ROD_TRANSMUTATION_staff.1=A staff core crafted from a primal charm and various shards can store 175 vis of each type.<BR>Like the wand core it transmutate vis forms when over 90% capacity in a particular type.
+te.name.ROD_TRANSMUTATION_staff=元化杖芯
+te.tag.ROD_TRANSMUTATION_staff=一个变为另一个
+te.text.ROD_TRANSMUTATION_staff.1=由元始魔力和各种元素碎片做成的杖芯,可储存各种要素175vis.<BR>就像元化杖柄那样它会将某一超出容量90%的要素转化为其他要素.
 
 --Necromancer's Staff Core
-te.name.ROD_NECROMANCER_staff=Necromancer's Staff Core
-te.tag.ROD_NECROMANCER_staff=The power of the undead
-te.text.ROD_NECROMANCER_staff.1=You have created a horrifying tool by infusing a Bone Staff Core with remnants of the undead.<BR><BR>This staff core is the perfect tool for the bloodthirsty thaumaturge. It boasts a large capacity of 200 vis, and receives four times the normal amount of vis from killed monsters. In addition, this staff is an even more proficient at melee combat. Striking a monster begins to wither their life force away. Unfortunately, this does not come without downsides. The dark magic used to infuse the staff makes it less receptive to vis obtained from other means, only effectively receiving 75% of the vis an ordinary wand would from nodes or other sources.
+te.name.ROD_NECROMANCER_staff=亡灵杖芯
+te.tag.ROD_NECROMANCER_staff=亡灵的力量
+te.text.ROD_NECROMANCER_staff.1=通过向白骨杖芯注入亡灵的遗留之物你做出了一个骇人的杖芯.<BR><BR>这个杖芯对嗜血的法师来说是绝佳的选择.它拥有200vis的储存上限,并且4倍获得杀怪掉落的要素.此外,这个杖芯是个近身战斗的能手.击打怪物会施加凋零的力量.不幸的是, 这也带来了缺点.用于注入的黑魔法是的它对其他途径的魔力接收能力更弱,只相当于普通法杖从节点或是其他途径接收量的75%.
 
 --Bread Wand Core
-te.name.ROD_BREAD=Baguette Wand Core
-te.tag.ROD_BREAD=Frenchman's vis storage
-te.text.ROD_BREAD.1=Bonjour! Yesterday, you bought one too many baguettes. It is a shame to let this beautiful bread go to waste, so you have developed a way to use this bread as a wand core. Bon Appetit!
+te.name.ROD_BREAD=面包杖柄
+te.tag.ROD_BREAD=法式魔力储存
+te.text.ROD_BREAD.1=Bonjour(法语你好)!昨天,你给我买了太多的法式长棍.无法就这样放着这些面包浪费,所以你想方设法将面包做成了杖柄. Bon Appetit(法语祝好胃口)!
 
 --Sojourner's Wand Cap
-te.name.CAP_SOJOURNER=Sojourner's Wand Caps
-te.tag.CAP_SOJOURNER=Sentient wand caps
-te.text.CAP_SOJOURNER.1=Even with the wand recharge pedestal, refilling your wand has been a chore. One must go through the work of constructing the pedestal and placing nodes in its vicinity. You have developed a special wand cap that will passively drain nearby nodes in a similar fashion to the Wand Recharge Pedestal when the wand is held in the hand.<BR><BR>This cap is more efficient in channeling vis than gold wand caps but less efficient than thaumium wand caps.
+te.name.CAP_SOJOURNER=索杰纳杖端
+te.tag.CAP_SOJOURNER=灵性的法杖杖端
+te.text.CAP_SOJOURNER.1=即便有了法杖充能基座,充能仍然是个烦心事.需要经过安装充能基座和在附近放置节点的过程.你做出了个特别的杖端,被拿在手上时它会像法杖充能基座那样被动从周围的节点中抽取魔力.<BR><BR>这个杖端在传输魔力上能力介于金杖端和神秘杖端之间.
 
 --Mechanist's Wand Cap
-te.name.CAP_MECHANIST=Mechanist's Wand Caps
-te.tag.CAP_MECHANIST=Mechanical wand caps
-te.text.CAP_MECHANIST.1=You have researched nodes extensively, and you feel that you have reached a point in which you can no longer improve the draining speed of nodes without improving your wands themselves. You have created a mechanical wand cap that is able to deconstruct and harvest vis from a node much more quickly than usual, using a combination of gadgetry and magic.<BR><BR>This cap is more efficient in channeling vis than gold wand caps but less efficient than thaumium wand caps.
+te.name.CAP_MECHANIST=机械杖端
+te.tag.CAP_MECHANIST=机械师的法杖端
+te.text.CAP_MECHANIST.1=广泛研究了节点,你意识到你已经到了除改良法杖本身提升传输速度外别无他法的地步.做出了一个能比普通杖端更快从节点解构并吸收魔力的杖端,结合了机械与魔法.<BR><BR>这个杖端在传输魔力上能力介于金杖端和神秘杖端之间.
 
 --Wispy Dreamcatcher
 te.name.DREAMCATCHER=Wispy Dreamcatcher
