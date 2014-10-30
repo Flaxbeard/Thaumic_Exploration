@@ -50,7 +50,7 @@ public class TXResearchItem extends ResearchItem {
         public ResearchItem setPages(ResearchPage... par) {
                 for (ResearchPage page : par) {
 	                	if (page.type == PageType.TEXT) {
-	                    	System.out.println("TEXT IS: " + (page.text.split("#")[0].equals("NE")) + "'" + page.text.split("#")[0] + "'");
+	                    	//System.out.println("TEXT IS: " + (page.text.split("#")[0].equals("NE")) + "'" + page.text.split("#")[0] + "'");
 	                        page.text = "te.text." + key + "." + page.text;
 	                	}
 
