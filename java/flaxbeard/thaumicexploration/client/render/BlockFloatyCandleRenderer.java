@@ -19,7 +19,7 @@ public class BlockFloatyCandleRenderer
 {
   public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
   {
-    Color c = new Color(thaumcraft.common.lib.Utils.colors[metadata]);
+    Color c = new Color(thaumcraft.common.lib.utils.Utils.colors[metadata]);
     float r = c.getRed() / 255.0F;
     float g = c.getGreen() / 255.0F;
     float b = c.getBlue() / 255.0F;
