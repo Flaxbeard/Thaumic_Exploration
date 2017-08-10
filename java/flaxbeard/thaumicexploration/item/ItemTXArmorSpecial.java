@@ -9,12 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thaumcraft.api.IRepairable;
+import thaumcraft.api.IRunicArmor;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.Config;
 import thaumcraft.common.items.armor.Hover;
 import flaxbeard.thaumicexploration.ThaumicExploration;
 
-public class ItemTXArmorSpecial extends ItemArmor implements IRepairable{
+public class ItemTXArmorSpecial extends ItemArmor implements IRepairable, IRunicArmor{
 
         public ItemTXArmorSpecial(int par1, ItemArmor.ArmorMaterial par2EnumArmorMaterial,
                         int par3, int par4) {
@@ -32,6 +33,11 @@ public class ItemTXArmorSpecial extends ItemArmor implements IRepairable{
         @Override
         public EnumRarity getRarity(ItemStack par1ItemStack) {
                 return EnumRarity.rare;
+        }
+        
+        @Override
+        public int getRunicCharge(ItemStack itemstack) {
+                return 0;
         }
 
 
